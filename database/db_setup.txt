@@ -1,4 +1,11 @@
 -- ---
+-- Globals
+-- ---
+
+-- SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+-- SET FOREIGN_KEY_CHECKS=0;
+
+-- ---
 -- Table 'games'
 -- 
 -- ---
@@ -23,7 +30,6 @@ DROP TABLE IF EXISTS `Players(in-game)`;
 		
 CREATE TABLE `Players(in-game)` (
   `id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
-  `playerID` INTEGER NULL DEFAULT NULL,
   `income` INTEGER NULL DEFAULT NULL,
   `wallet` INTEGER NULL DEFAULT NULL,
   `character` INTEGER NULL DEFAULT NULL,
@@ -44,7 +50,6 @@ CREATE TABLE `users` (
   `email` INTEGER NULL DEFAULT NULL,
   `password` INTEGER NULL DEFAULT NULL,
   `avatar` INTEGER NULL DEFAULT NULL,
-  `statsID` INTEGER NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
 KEY (),
 KEY ()
@@ -70,24 +75,6 @@ CREATE TABLE `units(in-game)` (
 );
 
 -- ---
--- Table 'buildings(in-game)'
--- 
--- ---
-
-DROP TABLE IF EXISTS `buildings(in-game)`;
-		
-CREATE TABLE `buildings(in-game)` (
-  `id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
-  `buildingID` INTEGER NULL DEFAULT NULL,
-  `posX` INTEGER NULL DEFAULT NULL,
-  `posY` INTEGER NULL DEFAULT NULL,
-  `health` INTEGER NULL DEFAULT NULL,
-  `userID` INTEGER NULL DEFAULT NULL,
-  `type` INTEGER NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-);
-
--- ---
 -- Table 'buildingTypes'
 -- 
 -- ---
@@ -96,7 +83,6 @@ DROP TABLE IF EXISTS `buildingTypes`;
 		
 CREATE TABLE `buildingTypes` (
   `id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
-  `captureTime` INTEGER NULL DEFAULT NULL,
   `sprite` INTEGER NULL DEFAULT NULL,
   `type(factory,base,city)` INTEGER NULL DEFAULT NULL,
   `income` INTEGER NULL DEFAULT NULL,
@@ -114,7 +100,6 @@ CREATE TABLE `chat` (
   `id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
   `userID` INTEGER NULL DEFAULT NULL,
   `message` INTEGER NULL DEFAULT NULL,
-  `gameID` INTEGER NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 );
 
@@ -143,9 +128,9 @@ DROP TABLE IF EXISTS `characters`;
 CREATE TABLE `characters` (
   `id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
   `name` INTEGER NULL DEFAULT NULL,
-  `ability` INTEGER NULL DEFAULT NULL,
+  `passive` INTEGER NULL DEFAULT NULL,
   `sprite` INTEGER NULL DEFAULT NULL,
-  `speciality` INTEGER NULL DEFAULT NULL,
+  `special` INTEGER NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 );
 
@@ -210,9 +195,27 @@ DROP TABLE IF EXISTS `mapTerrain`;
 CREATE TABLE `mapTerrain` (
   `id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
   `mapID` INTEGER NULL DEFAULT NULL,
-  `terrainID` INTEGER NULL DEFAULT NULL,
+  `type` INTEGER NULL DEFAULT NULL,
   `xCoord` INTEGER NULL DEFAULT NULL,
   `yCoord` INTEGER NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+);
+
+-- ---
+-- Table 'buildings(in-game)'
+-- 
+-- ---
+
+DROP TABLE IF EXISTS `buildings(in-game)`;
+		
+CREATE TABLE `buildings(in-game)` (
+  `id` INTEGER NULL AUTO_INCREMENT DEFAULT NULL,
+  `buildingID` INTEGER NULL DEFAULT NULL,
+  `posX` INTEGER NULL DEFAULT NULL,
+  `posY` INTEGER NULL DEFAULT NULL,
+  `health` INTEGER NULL DEFAULT NULL,
+  `owner` INTEGER NULL DEFAULT NULL,
+  `type` INTEGER NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 );
 
@@ -220,18 +223,15 @@ CREATE TABLE `mapTerrain` (
 -- Foreign Keys 
 -- ---
 
-ALTER TABLE `games` ADD FOREIGN KEY (map) REFERENCES `maps` (`id`);
-ALTER TABLE `games` ADD FOREIGN KEY (players) REFERENCES `Players(in-game)` (`id`);
-ALTER TABLE `Players(in-game)` ADD FOREIGN KEY (id) REFERENCES `users` (`id`);
-ALTER TABLE `Players(in-game)` ADD FOREIGN KEY (character) REFERENCES `characters` (`id`);
-ALTER TABLE `users` ADD FOREIGN KEY (statsID) REFERENCES `stats` (`id`);
-ALTER TABLE `units(in-game)` ADD FOREIGN KEY (id) REFERENCES `games` (`id`);
-ALTER TABLE `units(in-game)` ADD FOREIGN KEY (type) REFERENCES `unitTypes` (`id`);
-ALTER TABLE `buildings(in-game)` ADD FOREIGN KEY (id) REFERENCES `games` (`id`);
-ALTER TABLE `buildings(in-game)` ADD FOREIGN KEY (type) REFERENCES `buildingTypes` (`id`);
-ALTER TABLE `chat` ADD FOREIGN KEY (gameID) REFERENCES `games` (`id`);
+ALTER TABLE `Players(in-game)` ADD FOREIGN KEY (id) REFERENCES `games` (`id`);
+ALTER TABLE `users` ADD FOREIGN KEY (id) REFERENCES `Players(in-game)` (`id`);
+ALTER TABLE `users` ADD FOREIGN KEY (id) REFERENCES `stats` (`id`);
+ALTER TABLE `units(in-game)` ADD FOREIGN KEY (unitID) REFERENCES `games` (`id`);
+ALTER TABLE `units(in-game)` ADD FOREIGN KEY (unitID) REFERENCES `unitTypes` (`id`);
+ALTER TABLE `chat` ADD FOREIGN KEY (id) REFERENCES `games` (`id`);
 ALTER TABLE `mapTerrain` ADD FOREIGN KEY (mapID) REFERENCES `maps` (`id`);
-ALTER TABLE `mapTerrain` ADD FOREIGN KEY (terrainID) REFERENCES `terrainTypes` (`id`);
+ALTER TABLE `buildings(in-game)` ADD FOREIGN KEY (buildingID) REFERENCES `buildingTypes` (`id`);
+ALTER TABLE `buildings(in-game)` ADD FOREIGN KEY (buildingID) REFERENCES `games` (`id`);
 
 -- ---
 -- Table Properties
@@ -241,7 +241,6 @@ ALTER TABLE `mapTerrain` ADD FOREIGN KEY (terrainID) REFERENCES `terrainTypes` (
 -- ALTER TABLE `Players(in-game)` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 -- ALTER TABLE `users` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 -- ALTER TABLE `units(in-game)` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
--- ALTER TABLE `buildings(in-game)` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 -- ALTER TABLE `buildingTypes` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 -- ALTER TABLE `chat` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 -- ALTER TABLE `maps` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
@@ -250,6 +249,7 @@ ALTER TABLE `mapTerrain` ADD FOREIGN KEY (terrainID) REFERENCES `terrainTypes` (
 -- ALTER TABLE `terrainTypes` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 -- ALTER TABLE `stats` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 -- ALTER TABLE `mapTerrain` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+-- ALTER TABLE `buildings(in-game)` ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ---
 -- Test Data
@@ -257,21 +257,19 @@ ALTER TABLE `mapTerrain` ADD FOREIGN KEY (terrainID) REFERENCES `terrainTypes` (
 
 -- INSERT INTO `games` (`id`,`map`,`totalTurns`,`players`,`currentPlayerTurn`) VALUES
 -- ('','','','','');
--- INSERT INTO `Players(in-game)` (`id`,`playerID`,`income`,`wallet`,`character`,`specialMeter`) VALUES
--- ('','','','','','');
--- INSERT INTO `users` (`id`,`name`,`email`,`password`,`avatar`,`statsID`) VALUES
--- ('','','','','','');
+-- INSERT INTO `Players(in-game)` (`id`,`income`,`wallet`,`character`,`specialMeter`) VALUES
+-- ('','','','','');
+-- INSERT INTO `users` (`id`,`name`,`email`,`password`,`avatar`) VALUES
+-- ('','','','','');
 -- INSERT INTO `units(in-game)` (`id`,`unitID`,`posX`,`posY`,`health`,`playerID`,`terrain`,`type`) VALUES
 -- ('','','','','','','','');
--- INSERT INTO `buildings(in-game)` (`id`,`buildingID`,`posX`,`posY`,`health`,`userID`,`type`) VALUES
--- ('','','','','','','');
--- INSERT INTO `buildingTypes` (`id`,`captureTime`,`sprite`,`type(factory,base,city)`,`income`) VALUES
--- ('','','','','');
--- INSERT INTO `chat` (`id`,`userID`,`message`,`gameID`) VALUES
+-- INSERT INTO `buildingTypes` (`id`,`sprite`,`type(factory,base,city)`,`income`) VALUES
 -- ('','','','');
+-- INSERT INTO `chat` (`id`,`userID`,`message`) VALUES
+-- ('','','');
 -- INSERT INTO `maps` (`id`,`name`,`numPlayers`,`mapImage`) VALUES
 -- ('','','','');
--- INSERT INTO `characters` (`id`,`name`,`ability`,`sprite`,`speciality`) VALUES
+-- INSERT INTO `characters` (`id`,`name`,`passive`,`sprite`,`special`) VALUES
 -- ('','','','','');
 -- INSERT INTO `unitTypes` (`id`,`type(infantry,tank,plane,etc)`,`sprite`,`cost`,`damage`,`health`,`range`,`speed(movement)`,`movementType`) VALUES
 -- ('','','','','','','','','');
@@ -279,5 +277,7 @@ ALTER TABLE `mapTerrain` ADD FOREIGN KEY (terrainID) REFERENCES `terrainTypes` (
 -- ('','','','','');
 -- INSERT INTO `stats` (`id`,`wins`,`losses`,`totalMatches`) VALUES
 -- ('','','','');
--- INSERT INTO `mapTerrain` (`id`,`mapID`,`terrainID`,`xCoord`,`yCoord`) VALUES
+-- INSERT INTO `mapTerrain` (`id`,`mapID`,`type`,`xCoord`,`yCoord`) VALUES
 -- ('','','','','');
+-- INSERT INTO `buildings(in-game)` (`id`,`buildingID`,`posX`,`posY`,`health`,`owner`,`type`) VALUES
+-- ('','','','','','','');
