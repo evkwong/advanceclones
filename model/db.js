@@ -1,13 +1,14 @@
-require('pg');
+var pg = require('pg');
 
 var username = 'postgres';
 var password = '';
 var host = 'localhost';
+var dbName = 'advanceClonesDB';
 
 var conStringPri = 'postgres://' + username + ':' + password + '@' + host + 
-  '/postgres';
+'/postgres';
 var conStringPost = 'postgres://' + username + ':' + password + '@' + host + 
-  '/' + dbName;
+'/' + dbName;
 
 pg.connect(conStringPri, function(err, client, done) { // connect to postgres db
   if (err)
@@ -19,8 +20,12 @@ pg.connect(conStringPri, function(err, client, done) { // connect to postgres db
 
     pg.connect(conStringPost, function(err, clientOrg, done) {
       // create the table
-      clientOrg.query('CREATE TABLE IF NOT EXISTS ' + tableName + ' ' +
-          '(...some sql...)';
-          });
-      });
+      clientOrg.query('CREATE TABLE IF NOT EXISTS users ' + 
+          '(id SERIAL PIMARY KEY, name VARCHAR (20) UNIQUE NOT NULL,' +
+          'email VARCHAR (30) NOT NULL,' +
+          'password VARCHAR (30) NOT NULL,' + 
+          'avatar INTEGER);'
+          );
     });
+  });
+});
