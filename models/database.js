@@ -1,7 +1,7 @@
 const pg = require('pg');
 var fs = require('fs');
 
-var sql = fs.readFileSync('db_setupExp.sql').toString();
+var sql = fs.readFileSync('db_setupNoComment.sql').toString();
 
 const connectionString = process.env.DATABASE_URL || 'postgres://evan:evanWong@localhost:5432/advanceClones';
 
