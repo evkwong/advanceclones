@@ -1,9 +1,9 @@
 const pg = require('pg');
 var fs = require('fs');
 
-var sql = fs.readFileSync('db_setupNoComment.sql').toString();
+var sql = fs.readFileSync('db_setup.sql').toString();
 
-const connectionString = process.env.DATABASE_URL || 'postgres://evan:evanWong@localhost:5432/advanceClones';
+const connectionString = process.env.DATABASE_URL || 'postgres://evan:evanWong@localhost:5432/advanceclones';
 
 const client = new pg.Client(connectionString);
 client.connect();
