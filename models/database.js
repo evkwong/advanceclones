@@ -1,25 +1,11 @@
 const pg = require('pg');
+var fs = require('fs');
 
-var sql = fs.readFileSync('db_setup.sql').toString();
+var sql = fs.readFileSync('db_setupExp.sql').toString();
 
-pg.connect('postgres://localhost:3000/advwanceClones', function( err, client, done) {
-    if(err) {
-      console.log( 'error: ', err);
-      process.exit(1);
-    }
+const connectionString = process.env.DATABASE_URL || 'postgres://evan:evanWong@localhost:5432/advanceClones';
 
-    client.query( sql, function( err, result ) {
-      done();
-
-      if( err ) {
-        console.log( 'error: ', err );
-        process.exit(1);
-      }
-
-      process.exit(0);
-    });
-});
-
-const query = client.query(
-    'CREATE TABLE items(id SERIAL PRIMARY KEY, text VARCHAR(40) not null, complete BOOLEAN)');
+const client = new pg.Client(connectionString);
+client.connect();
+const query = client.query(sql);
 query.on('end', () => { client.end(); });
