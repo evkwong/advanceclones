@@ -16,5 +16,9 @@ block content
     div.actions
       input(type="submit", value="Sign In")
 
-    div.actions
-      input(type="submit", value="Sign Up")
+  button(onclick="move()") Registration
+
+script.
+  function move() {
+    window.location.href = '/registration'
+  }
