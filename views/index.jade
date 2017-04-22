@@ -2,55 +2,19 @@ extends layout
 
 doctype html
 html(lang='en')
-	head
-		meta(charset='utf-8')
-		title Advance Wars Clone - Homepage
-		meta(name='viewport', content='width=device-width, initial-scale=1.0')
-		meta(name='description', content='Website for SFSU Csc667 Final Project')
-		meta(name='author', content='Jason Newman, Josh Nagel, Evan Wong, Davy Khok')
-		//link(href='/css/bootstrap.css', rel='stylesheet')
-		style(type='text/css').
-			body {
-				padding-top: 40px;
-				padding-bottom: 40px;
-				background-image: url('http://www.tokkoro.com/picsup/2000933-advance-wars__32.jpg');
-				background-position: center;
-			}
-			.form-signin {
-				max-width: 400px;
-				padding: 20px 30px 30px;
-				margin: 0 auto 20px;
-				background-color: #fff;
-				border: 1px solid #000;
-				border-radius: 5px;
-				box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-			}
-			.form-signin .form-signin-heading,
-			.form-signin .checkbox {
-				margin-bottom: 10px;
-			}
-			.form-signin input[type="text"],
-			.form-signin input[type="password"] {
-				font-size:16px;
-				height:auto;
-				margin-bottom:15px;
-				padding: 7px 9px;
-			}
-			.form-signin .button {
-				margin-right:16px;
-			}
-		//link(href='/css/bootstrap-responsive.css', rel='stylesheet')
-	body
-		.container
-			form.form-signin
-				h2.form-signin-heading Login
-				input.input-block-level(type='text', placeholder='Username or Email address')
-				input.input-block-level(type='password', placeholder='Password')
-				label.checkbox
-					input(type='checkbox', value='remember-me')
-					| Remember Me
-				button.btn.btn-large.btn-primary(type='submit') Sign In
-				//this works a.btn.btn-large.btn-primary(href='') Sign In
-				//this works a.btn.btn-large.btn-primary(href='') Sign Up
-				button.btn.btn-large.btn-primary(type='submit') Sign Up
-				
+
+block content
+  h1= title
+  form(name="add-estimation", method="post")
+    div.input
+      span.label Username
+      input(type="text", name="Username")
+    div.input
+      span.label Password
+      input(type="text", name="Password")
+
+    div.actions
+      input(type="submit", value="Sign In")
+
+    div.actions
+      input(type="submit", value="Sign Up")
