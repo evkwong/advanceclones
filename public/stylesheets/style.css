@@ -6,3 +6,41 @@ body {
 a {
   color: #00B7FF;
 }
+
+body.index_page{
+  font:14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  padding-top:40px;
+  padding-bottom:40px;
+  background-image:url('https://www.tokkoro.com/picsup/2000933-advance-wars__32.jpg');
+  background-position:center;
+}
+
+.container.center_div{
+  margin:0 auto;
+  width:100%;
+}
+
+.form-signin{
+  max-width:400px;
+  padding:20px, 30px, 30px;
+  margin:210px, auto, 20px;
+  background-color:#fff;
+  border:1px solid #000;
+  border-radius:5px;
+  box-shadow:0 1px 2px rgba(0,0,0,0.05);
+}
+
+.form-signin .form-signin-heading, .form-signin .checkbox{
+  margin-bottom:10px;
+}
+
+.form-signin input[type="text"], .form-signin input[type="password"]{
+  font-size:16px;
+  height:auto;
+  margin-bottom:15px;
+  padding:7px 9px;
+}
+
+.form-signin .botton{
+  margin-right:16px;
+}
