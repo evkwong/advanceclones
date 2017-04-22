@@ -4,21 +4,21 @@ doctype html
 html(lang='en')
 
 block content
+  script.
+    function move() {
+      window.location.href = '/registration'
+    }
+
   h1= title
   form(name="add-estimation", method="post")
     div.input
       span.label Username
-      input(type="text", name="Username")
+      input(type="text", name="username")
     div.input
       span.label Password
-      input(type="text", name="Password")
+      input(type="text", name="password")
 
     div.actions
       input(type="submit", value="Sign In")
 
   button(onclick="move()") Registration
-
-script.
-  function move() {
-    window.location.href = '/registration'
-  }
