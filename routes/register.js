@@ -1,6 +1,8 @@
 var express = require('express');
 var bycrypt = require('bcrypt');
+var db = exports.db;
 var router = express.Router();
+
 
 //var db = ;
 
