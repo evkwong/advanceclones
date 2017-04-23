@@ -1,15 +1,16 @@
-//var pgPromise = require('pg-promise')();
-const pg = require('pg');
+var pgp = require('pg-promise')();
+//const pg = require('pg');
 var fs = require('fs'); //File sync.
 var sql = fs.readFileSync('db_setup.sql').toString();
 //var testString = 'postgres://evan:evanWong@localhost:5432/advanceclones';
 var testString = 'postgres://gojirra:skratch5@localhost:5432/advanceclones';
 
 const connectionString = process.env.DATABASE_URL || testString;
-//var db = pgPromise(connectionString);
-//exports.db = db;
+var db = pgp(connectionString);
+db.connect();
+db.query(sql);
+exports.db = db; //Export reference to database.
 
-const client = new pg.Client(connectionString);
-client.connect();
-const query = client.query(sql);
-query.on('end', () => { client.end(); });
+//const client = new pgp.Client(connectionString);
+//const query = db.query(sql);
+//query.on('end', () => { client.end(); });
