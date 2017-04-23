@@ -7,7 +7,7 @@ a {
   color: #00B7FF;
 }
 
-body.index_page{
+.index-page{
   font:14px "Lucida Grande", Helvetica, Arial, sans-serif;
   padding-top:40px;
   padding-bottom:40px;
@@ -15,7 +15,7 @@ body.index_page{
   background-position:center;
 }
 
-.container.center_div{
+.container.center-div{
   margin:0 auto;
   width:100%;
 }
