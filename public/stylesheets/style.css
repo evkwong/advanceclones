@@ -46,3 +46,57 @@ a {
 .form-signin .botton{
   margin-right:16px;
 }
+
+.lobby-page{
+	padding-top:60px;
+}
+
+.logo{
+	float:left;
+	padding-right:50px;
+	width:15%;
+	display:inline;
+}
+
+.user-logo{
+	float:right;
+	padding-left:250px;
+	width:15%;
+	display:inline;
+}
+
+.header_content h1{
+	margin:0px;
+	display:inline;
+	color:black;
+	vertical-align:top;
+}
+
+.body_content{
+
+}
+
+.table_content{
+	padding:14px;
+	text-align:center;
+}
+
+table{
+	width:100%;
+	margin:20px auto;
+	table-layout:auto; //also try table-layout:fixed;
+}
+
+table, td, th{
+	border-collapse:collapse;
+}
+
+th, td{
+	padding:10px;
+	border:solid 1px;
+	text-align:center;
+}
+
+.chat_content{
+
+}
