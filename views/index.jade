@@ -11,16 +11,17 @@ html(lang='en')
 		link(href='/stylesheets/bootstrap.css', rel='stylesheet')
 		link(href='/stylesheets/style.css', rel='stylesheet')
 	body
-		div.index-page
-			div.container.center-div
-				form.form-signin
-					h2.form-signin-heading Login
-					input.input-block-level(type='text', placeholder='Username or Email address')
-					input.input-block-level(type='password', placeholder='Password')
-					label.checkbox
-						input(type='checkbox', value='remember-me')
-						| Remember Me
-					form(action='' method='get')
-						input(type='submit' value='Sign In')
-					form(action='' method='get')
-						input(type='submit' value='Sign Up')
+		block content
+			div.index-page
+				div.container.center-div
+					form.form-signin
+						h2.form-signin-heading Login
+						input.input-block-level(type='text', placeholder='Username or Email address')
+						input.input-block-level(type='password', placeholder='Password')
+						label.checkbox
+							input(type='checkbox', value='remember-me')
+							| Remember Me
+						form(action='' method='get')
+							input(type='submit' value='Sign In')
+						form(action='' method='get')
+							input(type='submit' value='Sign Up')
