@@ -6,8 +6,9 @@ router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
 
-router.get('/register', function(req, res){
+router.post('/register', function(req, res){
 	//Do something.
+	console.log('Post request to /users')
 });
 
 router.get('/login', function(req, res){
