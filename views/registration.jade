@@ -4,16 +4,11 @@ doctype html
 html(lang='en')
 
 block content
-  script.
-    function move() {
-      window.location.href = '/'
-    }
-
   head
     title= title
 
   h1= title
-  form(name="register-user", method="post")
+  form(name="register-user", method="post", action="/users/register")
     div.input
       span.label Enter a username: 
       input(type="text", name="username")
@@ -35,5 +30,4 @@ block content
     div.actions
       input(type="submit", value="Register")
 
-    button(onclick="move()") Cancel
 
