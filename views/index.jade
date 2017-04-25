@@ -2,23 +2,25 @@ extends layout
 
 doctype html
 html(lang='en')
-
-block content
-  script.
-    function move() {
-      window.location.href = '/registration'
-    }
-
-  h1= title
-  form(name="add-estimation", method="post")
-    div.input
-      span.label Username
-      input(type="text", name="username")
-    div.input
-      span.label Password
-      input(type="text", name="password")
-
-    div.actions
-      input(type="submit", value="Sign In")
-
-  button(onclick="move()") Registration
+	head
+		meta(charset='utf-8')
+		title Advance Wars Clone - Homepage
+		meta(name='viewport', content='width=device-width, initial-scale=1.0')
+		meta(name='description', content='Website for SFSU Csc667 Final Project')
+		meta(name='author', content='Jason Newman, Josh Nagel, Evan Wong, Davy Khok')
+		link(href='/stylesheets/bootstrap.css', rel='stylesheet')
+		link(href='/stylesheets/style.css', rel='stylesheet')
+	body
+		div.index-page
+			div.container.center-div
+				form.form-signin
+					h2.form-signin-heading Login
+					input.input-block-level(type='text', placeholder='Username or Email address')
+					input.input-block-level(type='password', placeholder='Password')
+					label.checkbox
+						input(type='checkbox', value='remember-me')
+						| Remember Me
+					form(action='' method='get')
+						input(type='submit' value='Sign In')
+					form(action='' method='get')
+						input(type='submit' value='Sign Up')
