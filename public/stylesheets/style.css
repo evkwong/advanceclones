@@ -6,3 +6,97 @@ body {
 a {
   color: #00B7FF;
 }
+
+.index-page{
+  font:14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  padding-top:40px;
+  padding-bottom:40px;
+  background-image:url('https://www.tokkoro.com/picsup/2000933-advance-wars__32.jpg');
+  background-position:center;
+  background-size:cover;
+  background-repeat:no-repeat;
+}
+
+.container.center-div{
+  margin:0 auto;
+  width:100%;
+}
+
+.form-signin{
+  max-width:400px;
+  padding:20px, 30px, 30px;
+  margin:210px, auto, 20px;
+  background-color:#fff;
+  border:1px solid #000;
+  border-radius:5px;
+  box-shadow:0 1px 2px rgba(0,0,0,0.05);
+}
+
+.form-signin .form-signin-heading, .form-signin .checkbox{
+  margin-bottom:10px;
+}
+
+.form-signin input[type="text"], .form-signin input[type="password"]{
+  font-size:16px;
+  height:auto;
+  margin-bottom:15px;
+  padding:7px 9px;
+}
+
+.form-signin .botton{
+  margin-right:16px;
+}
+
+.lobby-page{
+	padding-top:60px;
+}
+
+.logo{
+	float:left;
+	padding-right:50px;
+	width:15%;
+	display:inline;
+}
+
+.user-logo{
+	float:right;
+	padding-left:250px;
+	width:15%;
+	display:inline;
+}
+
+.header_content h1{
+	margin:0px;
+	display:inline;
+	color:black;
+	vertical-align:top;
+}
+
+.body_content{
+
+}
+
+.table_content{
+	padding:14px;
+	text-align:center;
+}
+
+table{
+	width:100%;
+	margin:20px auto;
+	table-layout:auto; //also try table-layout:fixed;
+}
+
+table, td, th{
+	border-collapse:collapse;
+}
+
+th, td{
+	padding:10px;
+	border:solid 1px;
+	text-align:center;
+}
+
+.chat_content{
+
+}
