@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) { //Is next needed here?
 router.post('/register', function(req, res){
 	//Do something.
 	console.log('Post request to /users');
-	console.log(req.method, req.url);
+	console.log('Username is:', req.body.username, 'Password is:', req.body.password);
 });
 
 router.get('/login', function(req, res){
