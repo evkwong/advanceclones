@@ -1,0 +1,4 @@
+name,sprite,defenseBonus,moveChange
+plains,,0,0
+forest,,1,-1
+mountain,,2,-1
