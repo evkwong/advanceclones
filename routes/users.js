@@ -13,7 +13,7 @@ router.post('/register', function(req, res){
 	console.log('Post request to /users');
 	const user = req.body;
 	//var post = {id: 'DEFAULT', name: req.body.username, email: req.body.email, password: req.body.password, avatar: req.body.avatar};
-	db.one('INSERT INTO users(id, name, email, password, avatar) VALUES($1, $2, $3, $4, $5) RETURNING name;', ['DEFAULT', user.username, user.email, user.password, user.avatar])
+	db.one('INSERT INTO users(name, email, password, avatar) VALUES($1, $2, $3, $4) RETURNING name;', [user.username, user.email, user.password, user.avatar])
 		.then(data => {
 			console.log('Success!', data.id);
 		})
