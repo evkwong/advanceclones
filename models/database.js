@@ -1,8 +1,8 @@
 var pgp = require('pg-promise')();
 //const pg = require('pg');
 var fs = require('fs'); //File sync.
-var sql = fs.readFileSync('db_setup.sql').toString();
-var testString = 'postgres://vampireSnakes:blehssss@localhost:5432/advanceclones';
+var sql = fs.readFileSync('db_schema.sql').toString();
+var testString = 'postgres://vampiresnakes:blehssss@localhost:5432/advanceclones';
 
 const connectionString = process.env.DATABASE_URL || testString;
 var db = pgp(connectionString);
