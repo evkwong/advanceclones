@@ -10,4 +10,8 @@ router.get('/registration', function(req, res, next) {
   res.render('registration.jade', { title: 'Registration'});
 });
 
+router.get('/lobby', function(req,res, next) {
+  res.render('lobby.jade', { title: 'Lobby'});
+});
+
 module.exports = router;
