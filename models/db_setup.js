@@ -1,9 +1,6 @@
-//This file is not currently working.
-
-/*
 var fs = require('fs'); //File sync.
-var sql = fs.readFileSync('../models/db_schema.sql').toString();
-//var pgpString = 'postgres://vampireSnakes:blehssss@localhost:5432/advanceclones';
+var sql = fs.readFileSync('db_schema.sql').toString();
+//var pgpString = 'postgres://vampiresnakes:blehssss@localhost:5432/advanceclones';
 
 var db = require('../routes/database');
 
@@ -15,4 +12,3 @@ var db = require('../routes/database');
 //Create tables in db.
 db.query(sql);
 //db.end();
-*/
