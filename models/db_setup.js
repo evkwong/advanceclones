@@ -1,21 +1,18 @@
-var pgp = require('pg-promise')();
-//const pg = require('pg');
+//This file is not currently working.
+
+/*
 var fs = require('fs'); //File sync.
 var sql = fs.readFileSync('../models/db_schema.sql').toString();
-var testString = 'postgres://vampireSnakes:blehssss@localhost:5432/advanceclones';
+//var pgpString = 'postgres://vampireSnakes:blehssss@localhost:5432/advanceclones';
 
-const connectionString = process.env.DATABASE_URL || testString;
-var db = pgp(connectionString);
-db.connect();
+var db = require('../routes/database');
+
+//Moved to /database route.
+//const connectionString = process.env.DATABASE_URL || pgpString; 
+//var db = pgp(connectionString);
+
+//db.connect();
+//Create tables in db.
 db.query(sql);
-db.close();
-
-/*exports.connectDB = function(input) {
-	db.connect(
-)};*/
-
-module.exports = db; //Export reference to database.
-
-//const client = new pgp.Client(connectionString);
-//const query = db.query(sql);
-//query.on('end', () => { client.end(); });
+//db.end();
+*/
