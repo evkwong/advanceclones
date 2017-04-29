@@ -4,11 +4,16 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var expressValidator = require('express-validator');
+var app = express();
+
+//App variables.
+app.set('port', (process.env.PORT || 3000));
+app.set('user', null);
 
 var index = require('./routes/index');
+//var db = require('./routes/database');
 var users = require('./routes/users');
-
-var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -17,11 +22,30 @@ app.set('view engine', 'jade');
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
+//Express Validator
+app.use(expressValidator({
+  errorFormatter: function(param, msg, value) {
+      var namespace = param.split('.')
+      , root    = namespace.shift()
+      , formParam = root;
+
+    while(namespace.length) {
+      formParam += '[' + namespace.shift() + ']';
+    }
+    return {
+      param : formParam,
+      msg   : msg,
+      value : value
+    };
+  }
+}));
+
+//Do not move these for some reason : (.
 app.use('/', index);
 app.use('/users', users);
 
@@ -43,8 +67,8 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-app.listen(3000, function() {
-  console.log('Example')
+app.listen(app.get('port'), function() {
+  console.log('Application started and listening on port:', app.get('port'));
 });
 
 module.exports = app;
