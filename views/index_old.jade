@@ -14,16 +14,17 @@ html(lang='en')
 		block content
 			div.index-page
 				div.container.center-div
-					form(name="login-user", method="post", action="/users/login")
-						div.input
-							span.label Username:
-							input(type="text", name="username")
-						div.input
-							span.label Password:
-							input(type="text", name="password")
-						div.actions
-							input(type="submit", value="Login")
-					br
-					a(href='./lobby') Test Link to Lobby
-					br
-					a(href='./registration') Sign Up
+					form.form-signin
+						h2.form-signin-heading Login
+						input.input-block-level(type='text', placeholder='Username or Email address')
+						input.input-block-level(type='password', placeholder='Password')
+						label.checkbox
+							input(type='checkbox', value='remember-me')
+							| Remember Me
+						br
+						form(action='', method='get')
+							
+							input(type='submit', value='Sign Up')
+						a(href='./lobby') Test Link to Lobby
+						br
+						a(href='./registration') Sign Up

@@ -9,8 +9,7 @@ router.get('/', function(req, res, next) { //Is next needed here?
 });
 
 router.post('/register', function(req, res){
-	//Do something.
-	console.log('Post request to /users');
+	console.log('Post request to /users/register');
 	const user = req.body;
 	req.checkBody('name', 'Name is required.').notEmpty();
 	req.checkBody('email', 'Email is required.').notEmpty();
@@ -20,7 +19,7 @@ router.post('/register', function(req, res){
 
 	var errors = req.validationErrors();
 
-	if (errors) {
+	if(errors) {
 		res.render('registration', {
 			errors:errors
 		});
@@ -41,13 +40,22 @@ router.post('/register', function(req, res){
 });
 
 router.post('/login', function(req, res){
+	console.log('Post request to /users/login');
 	const user = req.body;
-	const name = user.name;
+	const name = user.username;
 
-	const query = db.query('SELECT * FROM users WHERE name = $1', [name]);
-	if (query.password == user.password) {
-		app.user = name;
-	}
+
+	db.one('SELECT * FROM users WHERE name = $1;', [name])
+		.then(data => {
+			if (name = data.name){
+				console.log('Logged in!');
+				req.app.set('user', name);
+				console.log('User:', req.app.get('user'));
+			}
+		})
+		.catch(error => {
+			console.log('Error:', error);
+		})
 
 });
 
