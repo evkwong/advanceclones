@@ -7,6 +7,10 @@ var bodyParser = require('body-parser');
 var expressValidator = require('express-validator');
 var app = express();
 
+//App variables.
+app.set('port', (process.env.PORT || 3000));
+app.set('user', null);
+
 var index = require('./routes/index');
 //var db = require('./routes/database');
 var users = require('./routes/users');
@@ -15,11 +19,16 @@ var users = require('./routes/users');
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
+app.use('/', index);
+app.use('/users', users);
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
 //Express Validator
 app.use(expressValidator({
   errorFormatter: function(param, msg, value) {
@@ -37,12 +46,6 @@ app.use(expressValidator({
     };
   }
 }));
-
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/', index);
-app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -62,8 +65,8 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-app.listen(process.env.PORT || 3000, function() {
-  console.log('Example')
+app.listen(app.get('port'), function() {
+  console.log('Application started and listening on port:', app.get('port'));
 });
 
 module.exports = app;

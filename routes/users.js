@@ -41,7 +41,14 @@ router.post('/register', function(req, res){
 });
 
 router.post('/login', function(req, res){
-	//Login logic.
+	const user = req.body;
+	const name = user.name;
+
+	const query = db.query('SELECT * FROM users WHERE name = $1', [name]);
+	if (query.password == user.password) {
+		app.user = name;
+	}
+
 });
 
 module.exports = router;
