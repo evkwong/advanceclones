@@ -22,8 +22,10 @@ html(lang='en')
 							input(type='checkbox', value='remember-me')
 							| Remember Me
 						br
-						form(action='', method='get')
+						form(action='', method='POST')
 							input(type='button', value='Sign In')
-							//thinking I need another form here because this button goes to a different page
-							input(type='button', value='Sign Up')
-						a(href='../lobby.jade') Test Link to Lobby //will remove this after testing
+							form(action='./registration.jade', method='POST')
+								input(type='button', value='Sign Up')
+						form(action='./lobby', method='POST')
+							input(type='button', value='Lobby')						
+//a(href='/lobby.jade') Test Link to Lobby //will remove this after testing
