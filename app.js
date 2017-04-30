@@ -8,7 +8,6 @@ var expressValidator = require('express-validator');
 var app = express();
 
 //App variables.
-app.set('port', (process.env.PORT || 3000));
 app.set('user', null);
 
 var index = require('./routes/index');
@@ -65,10 +64,6 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
-});
-
-app.listen(app.get('port'), function() {
-  console.log('Application started and listening on port:', app.get('port'));
 });
 
 module.exports = app;
