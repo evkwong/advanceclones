@@ -30,7 +30,7 @@ router.post('/register', function(req, res){
 
 	db.one('INSERT INTO users(name, email, password, avatar) VALUES($1, $2, $3, $4) RETURNING name;', [user.username, user.email, user.password, user.avatar])
 		.then(data => {
-			console.log('Success!', data.id);
+			console.log('Success!', data.id, 'User $1 registered!', [user.username]);
 			//req.flash('success_msg', 'You have successfully registered!'); //Install flash.
 			res.redirect('/');
 		})
