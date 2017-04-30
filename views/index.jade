@@ -2,27 +2,26 @@ extends layout
 
 doctype html
 html(lang='en')
-	head
-		meta(charset='utf-8')
-		title Advance Wars Clone - Homepage
-		meta(name='viewport', content='width=device-width, initial-scale=1.0')
-		meta(name='description', content='Website for SFSU Csc667 Final Project')
-		meta(name='author', content='Jason Newman, Josh Nagel, Evan Wong, Davy Khok')
-		link(href='/stylesheets/bootstrap.css', rel='stylesheet', type='text/css')
-		link(href='/stylesheets/style.css', rel='stylesheet', type='text/css')
 	body
 		block content
 			div.index-page
 				div.container.center-div
-					form(name="login-user", method="post", action="/users/login")
-						div.input
-							span.label Username:
-							input(type="text", name="username")
-						div.input
-							span.label Password:
-							input(type="text", name="password")
+					form(class='form-signin', name='login-user', method='post', action='/users/login')
+						h2.form-signin-heading Login
+						div.input.input-block-level
+							//span.label Username:
+							input(type="text", name="username", placeholder="Username")
+						div.input.input-block-level
+							//span.label Password:
+							input(type="text", name="password", placeholder="Password")
+						label.checkbox
+							input(type='checkbox', value='remember-me')
+							| Remember Me
 						div.actions
 							input(type="submit", value="Login")
+						form(class='form-signin', name='signup-user', method='post', action='./registration')
+							div.input.input-block-level
+							input(type='submit', value='Sign Up', name='signup')
 					br
 					a(href='./lobby') Test Link to Lobby
 					br
