@@ -1,7 +1,9 @@
-var bcrypt = require('bcryptjs');
 var express = require('express');
+var bcrypt = require('bcryptjs');
 var db = require('./database');
 var User = require('../models/user');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy.
 var router = express.Router();
 
 
@@ -61,26 +63,56 @@ router.post('/register', function(req, res){
 });
 
 //User login.
-router.post('/login', function(req, res){
-	console.log('Post request to /users/login');
-	const name = username;
+passport.use(new LocalStrategy(
+  function(username, password, done) {
+    User.findOne({ username: username }, function(err, user) {
+      if (err) { return done(err); }
+      if (!user) {
+        return done(null, false, { message: 'Incorrect username.' });
+      }
+      if (!user.validPassword(password)) {
+        return done(null, false, { message: 'Incorrect password.' });
+      }
+
+      User.comparePassword
+
+      return done(null, user);
+    });
+  }
+));
+
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function(err, user) {
+    done(err, user);
+  });
+});
+
+router.post('/login',
+	passport.authenticate('local', {successRedirect:'/', failureRedirect:'/users/login', failureFlash: true}), 
+	function(req, res){
+		console.log('Post request to /users/login');
+		res.redirect('/');
 
 
-		
+		const name = username;
 
-	db.one('SELECT * FROM users WHERE name = $1;', [name])
-		.then(data => {
-			if (name = data.name){ //Change to password
-				console.log('Logged in!');
-				req.app.set('user', name);
-				console.log('User:', req.app.get('user'));
+		db.one('SELECT * FROM users WHERE name = $1;', [name])
+			.then(data => {
+				if (name = data.name){ //Change to password
+					console.log('Logged in!');
+					req.app.set('user', name);
+					console.log('User:', req.app.get('user'));
 
-				var user = new User(username, email, avatar);
-			}
-		})
-		.catch(error => {
-			console.log('Error:', error);
-		})
+					var user = new User(username, email, avatar);
+				}
+			})
+			.catch(error => {
+				console.log('Error:', error);
+			})
 
 });
 
