@@ -7,6 +7,34 @@ a {
   color: #00B7FF;
 }
 
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    /*background-color: #333;*/
+}
+
+li {
+    float: left;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover {
+    background-color: #d9d9d9;
+}
+
+.active {
+    background-color: #4CAF50;
+}
+
 .index-page{
 	font:14px "Lucida Grande", Helvetica, Arial, sans-serif;
 	padding-top:40px;
@@ -51,7 +79,7 @@ a {
 
 .logo{
 	float:left;
-	padding-right:50px;
+	//padding-right:50px;
 	width:15%;
 	display:inline;
 }
@@ -70,6 +98,10 @@ a {
 	vertical-align:top;
 }
 
+h3[name='header_title']{
+	float:center;
+}
+
 .body_content{
 
 }
@@ -80,9 +112,9 @@ a {
 }
 
 table{
-	width:100%;
+	width:75%;
 	margin:20px auto;
-	table-layout:auto; //also try table-layout:fixed;
+	table-layout:fixed;
 }
 
 table, td, th{
@@ -96,7 +128,10 @@ th, td{
 }
 
 .chat_content{
-
+	float:right;
+	border:1px solid #000;
+	border-radius:5px;
+	box-shadow:0 1px 2px rgba(0,0,0,0.05);
 }
 
 input[name='username'], input[name='password']{
