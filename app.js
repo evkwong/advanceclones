@@ -28,7 +28,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 //Express Validator
-/*app.use(expressValidator({
+app.use(expressValidator({
   errorFormatter: function(param, msg, value) {
       var namespace = param.split('.')
       , root    = namespace.shift()
@@ -43,7 +43,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
       value : value
     };
   }
-}));*/
+}));
 
 //Do not move these for some reason : (.
 app.use('/', index);

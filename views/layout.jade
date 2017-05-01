@@ -1,6 +1,7 @@
 doctype html
 html
 head
+
 	meta(charset='utf-8')
 	meta(name='viewport', content='width=device-width, initial-scale=1.0')
 	meta(name='description', content='Website for SFSU Csc667 Final Project')
@@ -9,6 +10,8 @@ head
 	link(href='/stylesheets/style.css', rel='stylesheet', type='text/css')
 	link(href='/stylesheets/bootstrap-responsive.css', rel='stylesheet', type='text/css')
 	body
+		script(src='/socket.io/socket.io.js')
+		script(src='/javascripts/chat.js')
 		block content
 			.container
 				div.header_content
@@ -17,4 +20,4 @@ head
 							img(src='', alt='user photo')
 							a(id='login-out', href='#') Logout
 						a(href='#'): img.logo(src='#', alt='game logo')
-		script(src='/socket.io/socket.io.js')
+		
