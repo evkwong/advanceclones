@@ -1,5 +1,6 @@
 doctype html
 html
+
 	head
 		meta(charset='utf-8')
 		meta(name='viewport', content='width=device-width, initial-scale=1.0')
@@ -36,3 +37,25 @@ html
 								li
 									a(href='/lobby') Lobby
 	block content
+
+head
+
+	meta(charset='utf-8')
+	meta(name='viewport', content='width=device-width, initial-scale=1.0')
+	meta(name='description', content='Website for SFSU Csc667 Final Project')
+	meta(name='author', content='Jason Newman, Josh Nagel, Evan Wong, Davy Khok')
+	link(href='/stylesheets/bootstrap.css', rel='stylesheet', type='text/css')
+	link(href='/stylesheets/style.css', rel='stylesheet', type='text/css')
+	link(href='/stylesheets/bootstrap-responsive.css', rel='stylesheet', type='text/css')
+	<script src='/socket.io/socket.io.js'></script>
+	body
+		block content
+			.container
+				div.header_content
+					div.login
+						div.user-logo
+							img(src='', alt='user photo')
+							a(id='login-out', href='#') Logout
+						a(href='#'): img.logo(src='#', alt='game logo')
+		
+
