@@ -67,8 +67,4 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-app.listen(app.get('port'), function() {
-  console.log('Application started and listening on port:', app.get('port'));
-});
-
 module.exports = app;
