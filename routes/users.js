@@ -14,7 +14,7 @@ router.get('/', function(req, res, next) {
 
 //User registration.
 router.post('/register', function(req, res){
-	req.checkBody('username', 'Name is required.').notEmpty();
+	req.checkBody('username', 'Username is required.').notEmpty();
 	req.checkBody('email', 'Email is required.').notEmpty();
 	req.checkBody('email', 'That is not a valid email.').isEmail();
 	req.checkBody('password', 'Password is required.').notEmpty();
@@ -34,7 +34,7 @@ router.post('/register', function(req, res){
 		var password = req.body.password;
 		var avatar = req.body.avatar;
 
-		var user = new User(username, email, password, avatar);
+		var user = new User(-1, username, email, password, avatar);
 		User.storeUser(user, function(err, user){
 			if(err) throw err;
 			console.log(user);
@@ -89,7 +89,7 @@ passport.use(new LocalStrategy(
   			if(err) throw err;
 
   			if(success) {
-  				console.log('User successfully logged in:', user.username);
+  				console.log('User successfully logged in:', user);
   				return done(null, user);
   			}
   			else {

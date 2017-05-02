@@ -2,7 +2,8 @@ var db = require ('../routes/database');
 var bcrypt = require('bcryptjs');
 var saltRounds = 10;
 
-function User (username, email, password, avatar) {
+function User (id, username, email, password, avatar) {
+	this.id = id;
 	this.username = username;
 	this.email = email;
 	this.password = password;
@@ -19,24 +20,21 @@ module.exports.storeUser = function(user, callback){
 			var email = user.email;
 			var avatar = user.avatar;
 			var password = hash;
-			console.log('Hashed password:', password);
 
-			db.query('INSERT INTO users(name, email, password, avatar) VALUES($1, $2, $3, $4) RETURNING name;',
+			db.query('INSERT INTO users(username, email, password, avatar) VALUES($1, $2, $3, $4);',
 				[username, email, password, avatar])
 				.then(data => {
-					console.log('Success!', 'User ' + username + ' registered!');
 					req.flash('success', 'You have successfully registered! Please log in.');
-					res.redirect('../../');
 				})
 				.catch(error => {
-					callback();
+					callback(error, false);
 				})
 		});
 	});
 }
 
 module.exports.getByUsername = function(username, callback) {
-    db.oneOrNone('SELECT * FROM users WHERE name = $1;', [username])
+    db.oneOrNone('SELECT * FROM users WHERE username = $1;', [username])
 		.then(data => {
 			callback(null, data);
 		})
