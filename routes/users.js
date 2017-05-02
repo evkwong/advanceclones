@@ -64,21 +64,22 @@ router.post('/register', function(req, res){
 //User login.
 passport.use(new LocalStrategy(
   function(username, password, done) {
-    db.one('SELECT * FROM users WHERE name = $1;', [name])
-			.then(data => {
-				if (password == data.password){
-					console.log('Logged in!');
-					
-					var user = new User(username, email, avatar);
-				}
-				else {
-					return done(null, false, {message: 'Incorrect password.'});
-  }
-				}
-			})
-			.catch(error => {
-				console.log('Error:', error);
-			})
+    db.one('SELECT * FROM users WHERE name = $1;', [username])
+		.then(data => {
+			if (password == data.password){
+				console.log('Logged in!');
+
+				var user = new User(username, email, avatar);
+			}
+			else {
+				console.log('Login fail!');
+				return done(null, false, {message: 'Incorrect password.'});
+			}
+		})
+		.catch(error => {
+			console.log('Error:', error);
+			return done(null, false, {message: 'User does not exist.'});
+		})
 
 
       return done(null, user);

@@ -12,7 +12,6 @@ var path = require('path');
 
 //App variables.
 var app = express();
-app.set('user', null); //DEPRICATED
 var index = require('./routes/index');
 var users = require('./routes/users');
 
