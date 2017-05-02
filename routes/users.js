@@ -1,5 +1,5 @@
 var express = require('express');
-var bcrypt = require('bcryptjs');
+//var bcrypt = require('bcryptjs');
 var db = require('./database');
 var User = require('../models/user');
 var passport = require('passport');
@@ -28,61 +28,98 @@ router.post('/register', function(req, res){
 		});
 	}
 	else {
-		console.log('No errors. Creating new user.');
+		console.log('No errors. Attempting to store new user.');
 		var username = req.body.username;
 		var email = req.body.email;
 		var password = req.body.password;
 		var avatar = req.body.avatar;
 
-		//Hash password and store user in database function.
-		storeUser = function(username, email, password, avatar){
-			bcrypt.genSalt(10, function(err, salt) {
-				bcrypt.hash(password, salt, function(err, hash) {
-					console.log('Original password:', password);
-					password = hash;
-					console.log('New password:', password);
+		var user = new User(username, email, password, avatar);
+		User.storeUser(user, function(err, user){
+			if(err) throw err;
+			console.log(user);
+		});
 
-					db.one('INSERT INTO users(name, email, password, avatar) VALUES($1, $2, $3, $4) RETURNING name;',
-						[username, email, password, avatar])
-						.then(data => {
-							console.log('Success!', 'User ' + username + ' registered!');
-							req.flash('success', 'You have successfully registered!');
-							res.redirect('../../');
-						})
-						.catch(error => {
-							console.log('Error:', error);
-						})
+		console.log(user, 'successfully registered!');
+		req.flash('success', 'You have registerd successfully.');
+		res.redirect('../');
 
+		//DEPRECATED CODE
+		/*
+			//Hash password and store user in database function.
+			storeUser = function(username, email, password, avatar){
+				bcrypt.genSalt(10, function(err, salt) {
+					bcrypt.hash(password, salt, function(err, hash) {
+						console.log('Original password:', password);
+						password = hash;
+						console.log('New password:', password);
+
+						db.one('INSERT INTO users(name, email, password, avatar) VALUES($1, $2, $3, $4) RETURNING name;',
+							[username, email, password, avatar])
+							.then(data => {
+								console.log('Success!', 'User ' + username + ' registered!');
+								req.flash('success', 'You have successfully registered!');
+								res.redirect('../../');
+							})
+							.catch(error => {
+								console.log('Error:', error);
+							})
+
+					});
 				});
-			});
-		}
+			}
 
-		storeUser(username, email, password, avatar);
+			storeUser(username, email, password, avatar);
+		*/
 	}
 });
 
 //User login.
 passport.use(new LocalStrategy(
   function(username, password, done) {
-    db.one('SELECT * FROM users WHERE name = $1;', [username])
-		.then(data => {
-			if (password == data.password){
-				console.log('Logged in!');
+  	User.getByUsername(username, function(err, user) {
+  		if(err) throw err;
 
-				var user = new User(username, email, avatar);
-			}
-			else {
-				console.log('Login fail!');
-				return done(null, false, {message: 'Incorrect password.'});
-			}
-		})
-		.catch(error => {
-			console.log('Error:', error);
-			return done(null, false, {message: 'User does not exist.'});
-		})
+  		if(!user) {
+  			return done(null, false, {message: 'Incorrect username.'});
+  		}
+
+		//Checks password if a user is returned without errors.
+  		User.checkPassword(user, password, function(err, success) {
+  			if(err) throw err;
+
+  			if(success) {
+  				console.log('User successfully logged in:', user.username);
+  				return done(null, user);
+  			}
+  			else {
+  				return done(null, false, {message: 'Incorrect password.'})
+  			}
+  		});
+  	});
+
+  	//DEPRICATED CODE
+  	/*
+	    db.one('SELECT * FROM users WHERE name = $1;', [username])
+			.then(data => {
+				if (password == data.password){
+					console.log('Logged in!');
+
+					//var user = new User(username, email, avatar);
+				}
+				else {
+					console.log('Login fail!');
+					return done(null, false, {message: 'Incorrect password.'});
+				}
+			})
+			.catch(error => {
+				console.log('Error:', error);
+				return done(null, false, {message: 'User does not exist.'});
+			})
 
 
-      return done(null, user);
+	      return done(null, user);
+      */
   }
 ));
 
@@ -91,16 +128,14 @@ passport.serializeUser(function(user, done) {
 });
 
 passport.deserializeUser(function(id, done) {
-  User.findById(id, function(err, user) {
+  User.getByID(id, function(err, user) {
     done(err, user);
   });
 });
 
 router.post('/login',
-	passport.authenticate('local', {successRedirect:'/', failureRedirect:'/users/login', failureFlash: true}), 
+	passport.authenticate('local', {successRedirect:'/lobby', failureRedirect:'/', failureFlash: true}), 
 	function(req, res){
-		console.log('Post request to /users/login');
-		res.redirect('/');
 		
 });
 
