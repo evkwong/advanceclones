@@ -6,7 +6,7 @@ html(lang='en')
 		title Advance Wars Clone - Game Lobby
 	block content
 		.container
-			h1(id='title') Advance Wars Clone Game Lobby
+			h1(id='title') Welcome to the Game Lobby
 		div.body_content
 			img(src='', alt='create game')
 			form(action='', method='get')
@@ -23,6 +23,14 @@ html(lang='en')
 							td
 								form(action='', method='get')
 									input(type='submit', value='Join Game')
-
-			div.chat_content
-				h3 Chat box goes here
+				body
+					script(src='http://code.jquery.com/jquery-1.11.1.js')
+					script(src='/javascripts/chat_test.js')
+					div.chat_content
+						h3 Chat box goes here
+							<ul id="messages"></ul>
+							<form action="">
+							<input id = "m" autocomplete="off" /><button>Send</button>
+							</form>
+							
+							
