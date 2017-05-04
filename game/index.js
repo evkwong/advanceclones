@@ -1,12 +1,13 @@
-var express = require('express');
-var path = require('path');
-var app = express();
-var advclones = require('./advclones');
+var socketIO = require('socket.io');
+var advClones = require('./advClones');
 
-var server = require('http').createServer(app).listen(process.env.PORT || 3001);
+var socket = (app, server) => {
+		var io = socketIO(server);
+		app.set('io', io);
 
-var io = require('socket.io').listen(server);
-
-io.sockets.on('connection', function(socket)) {
-		advclones.initialize(io, socket);
+		io.on('connection', function(client) {
+				console.log('User connected');
+				advClones.initialize(io, client);
+				});
+		});
 }
