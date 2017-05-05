@@ -9,10 +9,8 @@ html(lang='en')
 			h1(id='title') Welcome to the Game Lobby
 		div.body_content
 			img(src='', alt='create game')
-			form(action='./createGame', method='post')
+			form(action='', method='get')
 				input(type='submit', value='Create Game')
-			form(action='./testGame', method='post')
-				input(type='submit', value='Test Game page')
 			div.table_content
 				table#lobby-table
 					thead
@@ -23,14 +21,16 @@ html(lang='en')
 					tbody
 						tr
 							td
-								form(action='', method='post')
+								form(action='', method='get')
 									input(type='submit', value='Join Game')
-			
-			div.chat_content
-				h3 Chat box goes here
-					ul(id='messages')
-						form(action='', method ='post')
-							input(id = 'm', autocomplete='off', type='button', value='Send')
-
-script(src='http://code.jquery.com/jquery-1.11.1.js')
-script(src='/javascripts/chat_test.js')			
+				body
+					script(src='http://code.jquery.com/jquery-1.11.1.js')
+					script(src='/javascripts/chat_test.js')
+					div.chat_content
+						h3 Chat box goes here
+							<ul id="messages"></ul>
+							<form action="">
+							<input id = "m" autocomplete="off" /><button>Send</button>
+							</form>
+							
+							
