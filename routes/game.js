@@ -67,6 +67,8 @@ router.post('/join_game', function(req, res) {
 	var specialMeter = 0;
 
 	console.log(User.username, 'has joined the game');
+
+	res.render('game'); //Display game page.
 });
 
 router.post('build_unit', function(req, res) {
