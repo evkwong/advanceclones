@@ -13,7 +13,7 @@ exports.initialize = function (indexIO, indexSocket) {
 }
 
 function createGame()	{
-
+	
 }
 
 function joinGame()	{
