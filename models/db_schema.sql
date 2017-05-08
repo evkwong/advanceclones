@@ -26,9 +26,10 @@ CREATE TABLE IF NOT EXISTS stats
 CREATE TABLE IF NOT EXISTS games
 (
   id SERIAL PRIMARY KEY,
+  title VARCHAR(50) NOT NULL,
   map INTEGER NOT NULL,
   totalTurns INTEGER,
-  players INTEGER,
+  totalPlayers INTEGER,
   currentPlayerTurn INTEGER
 );
 
@@ -36,6 +37,9 @@ CREATE TABLE IF NOT EXISTS games
 CREATE TABLE IF NOT EXISTS players
 (
   id SERIAL PRIMARY KEY,
+  username VARCHAR(25),
+  gameID INTEGER,
+  userID INTEGER,
   income INTEGER,
   wallet INTEGER,
   co INTEGER,
@@ -47,11 +51,11 @@ CREATE TABLE IF NOT EXISTS players
 CREATE TABLE IF NOT EXISTS units
 (
   id SERIAL PRIMARY KEY,
-  unitID INTEGER,
+  gameID INTEGER,
+  owner INTEGER,
   posX INTEGER,
   posY INTEGER,
   health INTEGER,
-  ownerID INTEGER,
   type INTEGER
 );
 
@@ -74,11 +78,12 @@ CREATE TABLE IF NOT EXISTS unitTypes
 CREATE TABLE IF NOT EXISTS buildings
 (
   id SERIAL PRIMARY KEY,
+  gameID INTEGER,
   buildingID INTEGER,
+  owner INTEGER,
   posX INTEGER,
   posY INTEGER,
   health INTEGER,
-  owner INTEGER,
   type INTEGER
 );
 
@@ -131,14 +136,3 @@ CREATE TABLE IF NOT EXISTS characters
   special VARCHAR(25),
   specialDescription VARCHAR(100)
 );
-
--- Foreign Keys
--- ALTER TABLE Players ADD FOREIGN KEY (id) REFERENCES games (id);
--- ALTER TABLE users ADD FOREIGN KEY (id) REFERENCES Players(in-game) (id);
--- ALTER TABLE users ADD FOREIGN KEY (id) REFERENCES stats (id);
--- ALTER TABLE units ADD FOREIGN KEY (unitID) REFERENCES games (id);
--- ALTER TABLE units ADD FOREIGN KEY (unitID) REFERENCES unitTypes (id);
--- ALTER TABLE chat ADD FOREIGN KEY (id) REFERENCES games (id);
--- ALTER TABLE mapTerrain ADD FOREIGN KEY (mapID) REFERENCES maps (id);
--- ALTER TABLE buildings ADD FOREIGN KEY (buildingID) REFERENCES buildingTypes (id);
--- ALTER TABLE buildings ADD FOREIGN KEY (buildingID) REFERENCES games (id);
