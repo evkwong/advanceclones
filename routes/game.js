@@ -3,7 +3,8 @@ var router = express.Router();
 var db = require('../routes/database');
 var User = require('../models/user')
 
-router.post('/new_game', function(req, res){
+
+router.post('/new_game', function(req, res) {
 	req.checkBody('title', 'A title for your game is required.').notEmpty();
 
 	var errors = req.validationErrors();
@@ -94,9 +95,8 @@ router.post('build_unit', function(req, res) {
 			console.log('Unit', unitType.name, 'added to list of in game units!');
 		})
 		.catch(error => {
-			throw error;
+			//throw error;
 		})
-	}
 });
 
 router.post('move_unit', function(req, res) {
@@ -119,3 +119,5 @@ router.post('kill_unit', function(req, res) {
 
 	unitType = db.oneOrNone('DELETE FROM units WHERE id = $1;', [unitID]);
 });
+
+module.exports = router;
