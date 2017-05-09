@@ -22,9 +22,9 @@ router.get('/createGame', function(req,res,next){
 });
 
 //Flash messages
-if(error.length > 0){
-	req.flash('error', error);
-	res.redirect('/', {message:req.flash('error')});
-}
+//if(error.length > 0){
+//	req.flash('error', error);
+//	res.redirect('/', {message:req.flash('error')});
+//}
 
 module.exports = router;
