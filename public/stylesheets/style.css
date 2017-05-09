@@ -109,14 +109,11 @@ h3[name='header_title']{
 .table_content{
 	padding:14px;
 	text-align:center;
-	width:75%;
-	margin:auto;
-	float:left;
 }
 
 table{
 	width:75%;
-	margin:auto;
+	margin:20px auto;
 	table-layout:fixed;
 }
 
@@ -132,7 +129,6 @@ th, td{
 
 .chat_content{
 	float:right;
-	margin:auto;
 	border:1px solid #000;
 	border-radius:5px;
 	box-shadow:0 1px 2px rgba(0,0,0,0.05);
