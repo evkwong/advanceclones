@@ -23,6 +23,7 @@ var init = (app, server) => {
       socket.join("game");
       console.log("player joins a game");
       players.push(socket);
+      console.log(players.length);
    })
        
 
