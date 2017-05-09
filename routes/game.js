@@ -42,8 +42,6 @@ router.post('/new_game', function(req, res) {
 		var co = 0;
 		var specialMeter = 0;
 
-		console.log(User.username, 'has joined the game as player 1.');
-
 		/*
 		db.query('INSERT INTO players(username, gameID, userID, income, wallet, co, specialMeter) VALUES($1, $2, $3, $4);',
 				[username, gameID, userID, income, wallet, co, specialMeter])
@@ -53,6 +51,9 @@ router.post('/new_game', function(req, res) {
 				.catch(error => {
 					callback(error, false);
 				})*/
+
+
+		res.render('/views/game.jade');
 
 	}
 });
