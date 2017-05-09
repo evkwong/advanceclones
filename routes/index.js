@@ -16,4 +16,8 @@ router.get('/lobby', function(req,res, next) {
   res.render('lobby.jade', { title: 'Lobby'});
 });
 
+router.get('/test', function(req, res, next) {
+  res.render('test.jade', {title: 'Test'});
+});
+
 module.exports = router;

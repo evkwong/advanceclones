@@ -6,6 +6,8 @@ var init = (app, server) => {
   
   app.set('io', io)
   
+  let players = [];
+  
   io.on('connection', socket => {
     console.log('client connected')
       
@@ -16,6 +18,13 @@ var init = (app, server) => {
     socket.on('disconnect', data => {
       console.log('client disconnected')
     })
+    
+    socket.on('connectGame', function(){
+      socket.join("game");
+      console.log("player joins a game");
+      players.push(socket);
+   })
+       
 
    // socket.on(USER_JOINED, data => io.emit(USER_JOINED, data))
    // socket.on(MESSAGE_SEND, data => io.emit(MESSAGE_SEND, data))
