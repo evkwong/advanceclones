@@ -79,4 +79,11 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+//flash error messages
+app.use(function(req,res,next){
+	res.locals.success_messages = req.flash('success_messages');
+	res.locals.error_messages = req.flash('error_messages');
+	next();
+});
+
 module.exports = app;
