@@ -71,6 +71,13 @@ app.use(function(req, res, next) {
   next(err);
 });
 
+//flash error messages
+app.use(function(req,res,next){
+	res.locals.success_messages = req.flash('success_messages');
+	res.local.error_messages = req.flash('error_messages');
+	next();
+});
+
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
@@ -80,13 +87,6 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
-});
-
-//flash error messages
-app.use(function(req,res,next){
-	res.locals.success_messages = req.flash('success_messages');
-	res.locals.error_messages = req.flash('error_messages');
-	next();
 });
 
 module.exports = app;
