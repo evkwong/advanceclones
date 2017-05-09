@@ -9,9 +9,11 @@ html(lang='en')
 			h1(id='title') Welcome to the Game Lobby
 		div.body_content
 			img(src='', alt='create game')
-			form(action='./createGame', method='post')
+			a(href='/createGame') Create Game
+			a(href='/testGame') Test Game Page
+			form(class='form-createGame', name='game-creation', action='./createGame', method='post')
 				input(type='submit', value='Create Game')
-			form(action='./testGame', method='post')
+			form(class='form-gamePage', name='game-page', action='./testGame', method='post')
 				input(type='submit', value='Test Game page')
 			div.table_content
 				table#lobby-table
