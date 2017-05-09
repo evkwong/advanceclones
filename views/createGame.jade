@@ -2,39 +2,40 @@ extends layout
 
 doctype html
 html(lang='en')
-	head
-		meta(charset='utf-8')
-		title Advance Wars Clone - Create Game
-		meta(nam'viewport', content='width=device-width, initial-scale=1.0')
-		meta(name='description', content='Website for SFSU Csc667 Final Project')
-		meta(name='author', content='Josh Nagel, Jason Newman, Evan Wong, Davy Khok')
-		link(href='/stylesheets/bootstrap.css', rel='stylesheet', type='text/css')
-		link(href='/stylesheets/style.css', rel='stylesheet', type='text/css')
-	body
-		block content
-			.container
-			div.header_content
-				div.login
-					div.user-logo
-						img(src='', alt='user photo')
-						a=(href='#', id='logout') Logout
-					a(href='#'): img.logo(src='#', alt='game logo')
-					h1(id='title') Advance Wars Clone Create Game
-			div.body_content
-				label Map
-					select.selectpicker(title='Choose one of the following...')
-						option 1
-						option 2
-						option 3
-						option 4
-				label Game Title
-					form(action='#', method='get')
-						input(type='text', placeholder='Enter Name of Game Here')
-				label Additional Game Options
-					form(action='#', method='get')
-						input(type='checkbox', value='add_opt1')
-						input(type='checkbox', value='add_opt2')
-						input(type='checkbox', value='add_opt3')
-				form(action='#', method='get')
-					input(type='button', value='Cancel')
-					input(type='button', value='Create Game')//i think i need to put this in a separate form tag, again goes to different page on completion
+	block content
+		.container
+		div.header_content
+			div.login
+				div.user-logo
+					img(src='', alt='user photo')
+					a=(href='#', id='logout') Logout
+				a(href='#')
+					img.logo(src='#', alt='game logo')
+				h1(id='title') Advance Wars Clone Create Game
+		div.body_content
+			label Map
+				select.selectpicker(title='Choose one of the following...')
+					option 1)Test 1
+					option 2)Test 2
+					option 3)Test 3
+					option 4)Test 4
+			label Game Title
+				form(action='#', method='post')
+					input(type='text', placeholder='Enter Name of Game Here')
+			label Additional Game Options
+				form(action='#', method='post')
+					input(type='checkbox', value='add_opt1')
+					input(type='checkbox', value='add_opt2')
+					input(type='checkbox', value='add_opt3')
+			form(action='#', method='post')
+				input(type='button', value='Cancel')
+			form(action='game/new_game', method='post')
+				input(type='button', value='Create Game')
+			div.chat_content
+				h3 Chat box goes here
+					ul(id='messages')
+						form(action='', method='post')
+							input(id='m', autocomplete='off', type='button', value='Send')
+
+script(src='http://code.jquery.com/jquery-1.11.1.js')
+script(src='/javascripts/chat_test.js')
