@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var db = require('../routes/database');
+var path = require('path');
 
 
 router.post('/new_game', function(req, res) {
@@ -22,6 +23,7 @@ router.post('/new_game', function(req, res) {
 		var totalPlayers = 1;
 		var currentPlayerTurn = 1;
 
+		//Insert into DB.
 		db.one('INSERT INTO games(title, map, totalTurns, totalPlayers, currentPlayerTurn) VALUES($1, $2, $3, $4, $5) RETURNING id',
 			[title, map, totalTurns, totalPlayers, currentPlayerTurn])
 			.then(data => {
@@ -51,15 +53,17 @@ router.post('/new_game', function(req, res) {
 				throw err;
 			});
 
-		
-		res.render('testGame', {title: title});
+		//Send variables to game js.
+		//res.send(path.basename('/images/map_' + map + '.png'));
+		var mapPath = path.basename('/images/map_' + map + '.png');
+		res.render('testGame', {title: title, mapPath: mapPath});
 
 	}
 });
 
 router.post('/join_game', function(req, res) {
 	//Add user into DB.
-	var username = User.username;
+	var username = req.user.username;
 	var gameID = req.body.gameID;
 	var userID = req.user.id;
 	var income = 1000;
@@ -67,7 +71,7 @@ router.post('/join_game', function(req, res) {
 	var co = 0;
 	var specialMeter = 0;
 
-	console.log(req.body.username, 'has joined the game');
+	console.log(username, 'has joined the game.');
 
 	res.render('testGame'); //Display game page.
 });
@@ -128,5 +132,12 @@ router.post('kill_unit', function(req, res) {
 		});
 });
 */
+
+module.exports.getGameList = function() {
+	list = db.many('SELECT * FROM games');
+	console.log("List of games:", list);
+
+	return list;
+};
 
 module.exports = router;

@@ -22,6 +22,7 @@ router.post('/register', function(req, res){
 	var errors = req.validationErrors();
 
 	if(errors) {
+		console.log('Errors:', errors);
 		res.render('registration', {
 			errors:errors
 		});
