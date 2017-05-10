@@ -2,8 +2,16 @@ extends layout
 
 doctype html
 html
-		body
+		block content
+				img#background(src='/images/map_01.png')
 				canvas#gameDraw(width='1900', height='1000')
 
-				script(src='/socket.io/socket.io.js')
-				script(src='/game/test.js')
+				//script(src='/game/test.js')
+
+				script.
+						window.onload = function() {
+							var c = document.getElementById("gameDraw");
+							var ctx = c.getContext("2d");
+							var img = document.getElementById("background");
+							ctx.drawImage(img, 10, 10);
+						}

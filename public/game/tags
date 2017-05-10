@@ -1,3 +1,0 @@
-!_TAG_FILE_SORTED	2	/0=unsorted, 1=sorted, 2=foldcase/
-canvas	/home/evan/advanceclones/public/game/test.js	/^const gameDraw = {$/;"	p	language:JavaScript	class:const
-socketIO	/home/evan/advanceclones/public/game/test.js	/^var socketIO = require('socket.io');$/;"	v	language:JavaScript

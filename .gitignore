@@ -1,4 +1,5 @@
 /node_modules
+/bin/tags
 /routes/tags
-/game/tags
+/public/game/tags
 /tags
