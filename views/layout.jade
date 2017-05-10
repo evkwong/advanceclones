@@ -10,15 +10,16 @@ html
 		link(href='/stylesheets/bootstrap-responsive.css', rel='stylesheet', type='text/css')
 	body
 		script(src='/socket.io/socket.io.js')
-		//- 
-			#err
-				if errors
-					for each errors
-						div(class='alert alert-danger')
-							var msg = {errMsg:'Shit be broke!'}
-
 		.container
 			div.header_content
+			
+				#Errors
+					if errors
+						h3 Form Errors!
+						h4 Please check to make sure you've entered the correct information.
+						each error in errors
+							div(class='alert alert-danger')
+								strong=error.msg
 				div.login
 					h3(name='header_title') Advance Wars Clone - Csc 667 - Fighting Mongooses
 					div.user-logo
