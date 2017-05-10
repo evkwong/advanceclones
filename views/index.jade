@@ -4,29 +4,6 @@ doctype html
 html(lang='en')
 	body
 		block content
-			div.index-page
-				div.container.center-div
-					form(class='form-signin', name='login-user', method='post', action='/users/login')
-						h2.form-signin-heading Login
-						div.input.input-block-level
-							//span.label Username:
-							input(type="text", name="username", placeholder="Username")
-						div.input.input-block-level
-							//span.label Password:
-							input(type="text", name="password", placeholder="Password")
-						label.checkbox
-							input(type='checkbox', value='remember-me')
-							| Remember Me
-						div.actions
-							input(type="submit", value="Login")
-							form(class='form-signin', name='signup-user', method='post', action='./registration')
-								input(type='submit' value='Sign Up' name='signup')
-					br
-					a(href='./lobby') Test Link to Lobby
-					br
-					a(href='./game') Test Link to Game
-					br
-					a(href='./registration') Sign Up
 			//-
 					div.index-page
 						div.container.center-div
@@ -59,5 +36,7 @@ html(lang='en')
 							button.btn.btn-primary(type='submit') Log in
 			br
 			a(href='./lobby') Test Link to Lobby
+			br
+			a(href='./game') Test Link to Game
 			br
 			a(href='./registration') Sign Up

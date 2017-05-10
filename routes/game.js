@@ -134,6 +134,10 @@ router.post('kill_unit', function(req, res) {
 });
 */
 
+router.get('/images/map_0.png', function(req,res) {
+		res.sendFile(path.resolve(__dirname, '/images/map_0.png'));
+});
+
 module.exports.getGameList = function() {
 	list = db.many('SELECT * FROM games');
 	console.log("List of games:", list);

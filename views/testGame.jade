@@ -1,18 +1,18 @@
 extends layout
 
 doctype html
-html(lang='en')
-	body
+html
 		block content
-			div.gamePage
-				h2 test display
-				div.container.center-div
-					canvas(id='gameCanvas', name='game-screen')
-			div.chat_content
-				h3 Chat box goes here
-					ul(id='messages')
-						form(action='', method='post')
-							input(id='m', autocomplete='off', type='button', value='Send')
+				img#background(src='/images/map_0.png')
+				canvas#gameDraw(width='1900', height='1000')
 
-script(src='http://code.jquery.com/jquery-1.11.1.js')
-script(src='/javascripts/chat_test.js')
+				script(src='/game/test.js')
+
+				//
+					script.
+						window.onload = function() {
+							var c = document.getElementById("gameDraw");
+							var ctx = c.getContext("2d");
+							var img = document.getElementById("background");
+							ctx.drawImage(img, 10, 10);
+						}
