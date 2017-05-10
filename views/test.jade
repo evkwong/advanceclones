@@ -2,10 +2,12 @@ extends layout
 
 block content
 
-  img(src="/images/littleisle.png", width="500", height="300")
-
-  #join
-    button.btn.btn-default(type='button') Join
+  #create-game
+    button(onclick="move()") Create Game
+  script.
+    function move() {
+      window.location.href = '/game'
+    }
 
   script(src='http://code.jquery.com/jquery-1.11.1.js')
   script(src='/javascripts/test.js')

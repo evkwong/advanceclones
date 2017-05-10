@@ -18,6 +18,15 @@ var init = (app, server) => {
     socket.on('disconnect', data => {
       console.log('client disconnected')
     })
+
+    socket.on('createGame', function(data){
+      console.log(data);
+      var name = data.players;
+      var numPlayers = data.name;
+      var mapNum = data.map;
+      console.log(mapNum);
+     // socket.broadcast.emit('addGameToLobby', {name, numPlayers, mapNum});
+    });
     
     socket.on('connectGame', function(){
       socket.join("game");

@@ -20,4 +20,8 @@ router.get('/test', function(req, res, next) {
   res.render('test.jade', {title: 'Test'});
 });
 
+router.get('/game', function(req, res, next) {
+  res.render('game.jade', {title: 'GameRoom'});
+});
+
 module.exports = router;

@@ -1,7 +1,11 @@
 var socket = io();
 
+var a = '2';
+var b = 'TestRoom';
+var c = 1;
+
 $(document).ready(function () {
-  $('#join button').click(function(event) {
-     socket.emit('connectGame');
+  $('#create-game button').click(function(event) {
+     socket.emit('createGame', { 'players' : a, 'name' : b, 'map' : c});
   })
 })
