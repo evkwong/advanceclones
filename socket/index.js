@@ -25,15 +25,15 @@ var init = (app, server) => {
       var numPlayers = data.name;
       var mapNum = data.map;
       console.log(mapNum);
-     // socket.broadcast.emit('addGameToLobby', {name, numPlayers, mapNum});
-    });
+      socket.broadcast.emit('addGameToLobby', {name, numPlayers, mapNum});
+    })
     
-    socket.on('connectGame', function(){
+   /* socket.on('connectGame', function(){
       socket.join("game");
       console.log("player joins a game");
       players.push(socket);
       console.log(players.length);
-   })
+   })*/
        
 
    // socket.on(USER_JOINED, data => io.emit(USER_JOINED, data))

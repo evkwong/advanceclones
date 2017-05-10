@@ -9,3 +9,7 @@ $(document).ready(function () {
      socket.emit('createGame', { 'players' : a, 'name' : b, 'map' : c});
   })
 })
+
+/*function move() {
+  window.location.href = '/game'
+}*/
