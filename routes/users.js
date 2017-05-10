@@ -37,7 +37,7 @@ router.post('/register', function(req, res){
 		User.storeUser(user, function(err, user){
 			if(err) throw err;
 			console.log(user);
-		});R
+		});
 
 		console.log(user, 'successfully registered!');
 		req.flash('success', 'You have registerd successfully.');

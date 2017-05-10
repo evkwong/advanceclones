@@ -22,12 +22,13 @@ router.post('/new_game', function(req, res) {
 		var totalPlayers = 1;
 		var currentPlayerTurn = 1;
 
-		db.query('INSERT INTO games(title, map, totalTurns, totalPlayers, currentPlayerTurn) VALUES($1, $2, $3, $4, $5);',
+		db.one('INSERT INTO games(title, map, totalTurns, totalPlayers, currentPlayerTurn) VALUES($1, $2, $3, $4, $5) RETURNING id',
 			[title, map, totalTurns, totalPlayers, currentPlayerTurn])
 			.then(data => {
-				console.log("Success! Game added to DB. Attempting to add player to DB.");
-				
+				console.log('Success! Game added to DB.');
+
 				//Add user into DB as player 1.
+				console.log('Attempting to add player to DB.');
 				var username = req.user.username;
 				var gameID = data.id;
 				var userID = req.user.id;
@@ -36,12 +37,11 @@ router.post('/new_game', function(req, res) {
 				var co = 0;
 				var specialMeter = 0;
 
-				console.log("User to be added to player DB:", username, "Game ID:", gameID);
-
-				db.query('INSERT INTO players(username, gameID, userID, income, wallet, co, specialMeter) VALUES($1, $2, $3, $4, $5, $6, $7);',
+				console.log("User to be added to player DB:", username, ", GameID:", gameID);
+				db.one('INSERT INTO players(username, gameID, userID, income, wallet, co, specialMeter) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING username',
 					[username, gameID, userID, income, wallet, co, specialMeter])
 					.then(data => {
-						console.log('Success', data.id, 'stored in DB.');
+						console.log('Success', data.username, 'stored in player DB!');
 					})
 					.catch(error => {
 						throw error;
@@ -51,6 +51,7 @@ router.post('/new_game', function(req, res) {
 				throw err;
 			});
 
+		
 		res.render('testGame', {title: title});
 
 	}
