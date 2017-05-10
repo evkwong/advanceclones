@@ -3,12 +3,13 @@ extends layout
 doctype html
 html
 		block content
-				img#background(src='/images/map_01.png')
+				img#background(src='/images/map_1.png')
 				canvas#gameDraw(width='1900', height='1000')
 
-				//script(src='/game/test.js')
+				script(src='/game/test.js')
 
-				script.
+				//
+					script.
 						window.onload = function() {
 							var c = document.getElementById("gameDraw");
 							var ctx = c.getContext("2d");
