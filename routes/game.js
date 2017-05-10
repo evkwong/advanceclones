@@ -10,7 +10,8 @@ router.post('/new_game', function(req, res) {
 	var errors = req.validationErrors();
 
 	if(errors) {
-		res.render('/', {
+		console.log(errors);
+		res.render('lobby', {
 			errors:errors
 		});
 	}
