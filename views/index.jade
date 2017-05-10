@@ -27,3 +27,37 @@ html(lang='en')
 					a(href='./game') Test Link to Game
 					br
 					a(href='./registration') Sign Up
+			//-
+					div.index-page
+						div.container.center-div
+							form(class='form-signin', name='login-user', method='post', action='/users/login')
+								h2.form-signin-heading Login
+								div.input.input-block-level
+									//span.label Username:
+									input(type="text", name="username", placeholder="Username")
+								div.input.input-block-level
+									//span.label Password:
+									input(type="text", name="password", placeholder="Password")
+								label.checkbox
+									input(type='checkbox', value='remember-me')
+									| Remember Me
+								div.actions
+									input(type="submit", value="Login")
+									form(class='form-signin', name='signup-user', method='post', action='./registration')
+										input(type='submit' value='Sign Up' name='signup')
+			div.container
+				row
+					col-md-6.col-md-offset-3
+						h1.display-4.m-b-2 Log In
+						form(method='post', action='/users/login', class='form-signin', name='login-user')
+							div.form-group
+								label(for='username') Username
+								input.form-control(type='text', id='username', placeholder='Enter Username', name='username')
+							div.form-group
+								label(for='password') Password
+								input.form-control(type='password', id='password', placeholder='Enter Password', name='password')
+							button.btn.btn-primary(type='submit') Log in
+			br
+			a(href='./lobby') Test Link to Lobby
+			br
+			a(href='./registration') Sign Up

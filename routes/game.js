@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var db = require('../routes/database');
-var User = require('../models/user')
+var path = require('path');
 
 
 router.post('/new_game', function(req, res) {
@@ -10,7 +10,8 @@ router.post('/new_game', function(req, res) {
 	var errors = req.validationErrors();
 
 	if(errors) {
-		res.render('/', {
+		console.log(errors);
+		res.render('lobby', {
 			errors:errors
 		});
 	}
@@ -23,56 +24,60 @@ router.post('/new_game', function(req, res) {
 		var totalPlayers = 1;
 		var currentPlayerTurn = 1;
 
-		db.query('INSERT INTO games(title, map, totalTurns, totalPlayers, currentPlayerTurn) VALUES($1, $2, $3, $4, $5);',
+		//Insert into DB.
+		db.one('INSERT INTO games(title, map, totalTurns, totalPlayers, currentPlayerTurn) VALUES($1, $2, $3, $4, $5) RETURNING id',
 			[title, map, totalTurns, totalPlayers, currentPlayerTurn])
 			.then(data => {
-				req.flash('success', 'You have successfully registered! Please log in.');
+				console.log('Success! Game added to DB.');
+
+				//Add user into DB as player 1.
+				console.log('Attempting to add player to DB.');
+				var username = req.user.username;
+				var gameID = data.id;
+				var userID = req.user.id;
+				var income = 1000;
+				var wallet = 0;
+				var co = 0;
+				var specialMeter = 0;
+
+				console.log("User to be added to player DB:", username, ", GameID:", gameID);
+				db.one('INSERT INTO players(username, gameID, userID, income, wallet, co, specialMeter) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING username',
+					[username, gameID, userID, income, wallet, co, specialMeter])
+					.then(data => {
+						console.log('Success', data.username, 'stored in player DB!');
+					})
+					.catch(error => {
+						throw error;
+					});
 			})
-			.catch(error => {
-				throw error;
-			})
+			.catch(error =>{
+				throw err;
+			});
 
-
-		//Add user into DB as player 1.
-		var username = User.username;
-		var gameID = 0; //Get game ID from table above.
-		var userID = User.id;
-		var income = 1000;
-		var wallet = 0;
-		var co = 0;
-		var specialMeter = 0;
-
-		/*
-		db.query('INSERT INTO players(username, gameID, userID, income, wallet, co, specialMeter) VALUES($1, $2, $3, $4);',
-				[username, gameID, userID, income, wallet, co, specialMeter])
-				.then(data => {
-					console.log('Success, player stored in DB.');
-				})
-				.catch(error => {
-					callback(error, false);
-				})*/
-
-
-		res.render('/views/game.jade');
+		//Send variables to game js.
+		//res.send(path.basename('/images/map_' + map + '.png'));
+		var mapPath = path.basename('/images/map_' + map + '.png');
+		res.render('testGame', {title: title, mapPath: mapPath});
 
 	}
 });
 
 router.post('/join_game', function(req, res) {
-	//Add user into DB as player 1.
-	var username = User.username;
-	var gameID = req.body.gameID; //Get game ID from table above.
-	var userID = User.id;
+	//Add user into DB.
+	var username = req.user.username;
+	var gameID = req.body.gameID;
+	var userID = req.user.id;
 	var income = 1000;
 	var wallet = 0;
 	var co = 0;
 	var specialMeter = 0;
 
-	console.log(User.username, 'has joined the game');
+	console.log(username, 'has joined the game.');
 
-	res.render('game'); //Display game page.
+	res.render('testGame'); //Display game page.
 });
 
+/*
 router.post('build_unit', function(req, res) {
 	var gameID = req.body.gameID;
 	var owner = req.body.player;
@@ -81,12 +86,10 @@ router.post('build_unit', function(req, res) {
 	var health = 0 //Set below.
 	var type = req.body.type;
 
-	unitType = db.oneOrNone('SELECT * FROM unitTypes WHERE id = $1;', [type]);
-		/*.then(data => {
-		})
+	unitType = db.oneOrNone('SELECT * FROM unitTypes WHERE id = $1;', [type])
 		.catch(error => {
 			throw error;
-		});*/
+		});
 
 	health = unitType.health;
 
@@ -105,20 +108,37 @@ router.post('move_unit', function(req, res) {
 	var xPos = req.body.xPos;
 	var yPos = req.body.yPos;
 
-	db.oneOrNone('UPDATE units SET xPos = $1, yPos = $2, WHERE id = $3;', [xPos, yPos, unitID]);
+	db.oneOrNone('UPDATE units SET xPos = $1, yPos = $2, WHERE id = $3;', [xPos, yPos, unitID])
+		.catch(error => {
+			throw error;
+		});
 });
 
 router.post('update_health', function(req, res) {
 	var unitID = req.body.unitID;
 	var health = req.body.health;
 
-	db.oneOrNone('UPDATE units SET health = $1 WHERE id = $2;', [health, unitID]);
+	db.oneOrNone('UPDATE units SET health = $1 WHERE id = $2;', [health, unitID])
+		.catch(error => {
+			throw error;
+		});
 })
 
 router.post('kill_unit', function(req, res) {
 	var unitID = req.body.unitID;
 
-	unitType = db.oneOrNone('DELETE FROM units WHERE id = $1;', [unitID]);
+	unitType = db.oneOrNone('DELETE FROM units WHERE id = $1;', [unitID])
+		.catch(error => {
+			throw error;
+		});
 });
+*/
+
+module.exports.getGameList = function() {
+	list = db.many('SELECT * FROM games');
+	console.log("List of games:", list);
+
+	return list;
+};
 
 module.exports = router;
