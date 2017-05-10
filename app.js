@@ -71,13 +71,6 @@ app.use(function(req, res, next) {
   next(err);
 });
 
-//flash error messages
-app.use(function(req,res,next){
-	res.locals.success_messages = req.flash('success_messages');
-	res.local.error_messages = req.flash('error_messages');
-	next();
-});
-
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
