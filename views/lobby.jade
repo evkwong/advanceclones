@@ -1,30 +1,33 @@
 extends layout
 
 block content
-		.container
-			h1(id='title') Welcome to the Game Lobby
-		div.body_content
-			a(href='/createGame')
-				input(type='button', value='Create Game')
-			a(href='/testGame')
-				input(type='button', value='Test Game')
-			div.table_content
-				table#lobby-table
-					thead
-						tr
-							th Players
-							th Title
-							th Map
-					tbody
-						tr
-							td
-								a(href='#')
-									input(type='button', value='Join Game')
-					div.chat_content
-						h3 Chat box goes here
-							ul(id='messages')
-								form(action='', method ='post')
-									input(id='m', autocomplete='off', type='button', value='Send')
+	.container
+		h1(id='title') Welcome to the Game Lobby
+	div.body_content
+		a(href='/createGame')
+			input(type='button', value='Create Game')
+		a(href='/testGame')
+			input(type='button', value='Test Game')
+		div.table_content
+			table#lobby-table
+				thead
+					tr
+						th Players
+						th Title
+						th Map
+				tbody
+					tr
+						td
+							a(href='#')
+								input(type='button', value='Join Game')
+						td
+								
+				div.chat_content
+					h3 Chat box goes here
+						ul(id='chat-messages')
+								form(action='', method='post')
+								input(class='chat-text-area', type='text', placeholder='Type here!')
+								input(id='chat-msg', autocomplete='off', type='button', value='Send')
   
-script(src='http://code.jquery.com/jquery-1.11.1.js')
-script(src='/javascripts/chat_test.js')					
+	script(src='http://code.jquery.com/jquery-1.11.1.js')
+	script(src='/javascripts/chat_test.js')					
