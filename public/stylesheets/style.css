@@ -134,8 +134,19 @@ th, td{
 	box-shadow:0 1px 2px rgba(0,0,0,0.05);
 }
 
-input[name='username'], input[name='password']{
-	
+ul[name='chat-messages']{
+	height:50px;
+}
+
+input[name='chat-text-area']{
+	margin-right:10px;
+	margin-top:20px;
+	margin-left:5px;
+}
+
+input[name='chat-msg']{
+	margin-left:5px;
+	margin-right:5px;
 }
 
 input[name='signup']{
@@ -150,7 +161,7 @@ canvas[name='game-screen']{
 }
 
 input[type='checkbox']{
-	margin-left: 5px;
+	margin-left:5px;
 }
 
 form[name='create-game']{
