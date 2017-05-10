@@ -1,5 +1,4 @@
 var express = require('express');
-//var bcrypt = require('bcryptjs');
 var db = require('./database');
 var User = require('../models/user');
 var passport = require('passport');
@@ -23,6 +22,7 @@ router.post('/register', function(req, res){
 	var errors = req.validationErrors();
 
 	if(errors) {
+		console.log('Errors:', errors);
 		res.render('registration', {
 			errors:errors
 		});
@@ -136,7 +136,6 @@ passport.deserializeUser(function(id, done) {
 router.post('/login',
 	passport.authenticate('local', {successRedirect:'/lobby', failureRedirect:'/', failureFlash: true}), 
 	function(req, res){
-		
 });
 
 module.exports = router;
