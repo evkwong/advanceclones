@@ -3,7 +3,8 @@ var router = express.Router();
 var db = require('../routes/database');
 var User = require('../models/user')
 
-router.post('/new_game', function(req, res){
+
+router.post('/new_game', function(req, res) {
 	req.checkBody('title', 'A title for your game is required.').notEmpty();
 
 	var errors = req.validationErrors();
@@ -41,8 +42,6 @@ router.post('/new_game', function(req, res){
 		var co = 0;
 		var specialMeter = 0;
 
-		console.log(User.username, 'has joined the game as player 1.');
-
 		/*
 		db.query('INSERT INTO players(username, gameID, userID, income, wallet, co, specialMeter) VALUES($1, $2, $3, $4);',
 				[username, gameID, userID, income, wallet, co, specialMeter])
@@ -52,6 +51,9 @@ router.post('/new_game', function(req, res){
 				.catch(error => {
 					callback(error, false);
 				})*/
+
+
+		res.render('/views/game.jade');
 
 	}
 });
@@ -67,6 +69,8 @@ router.post('/join_game', function(req, res) {
 	var specialMeter = 0;
 
 	console.log(User.username, 'has joined the game');
+
+	res.render('game'); //Display game page.
 });
 
 router.post('build_unit', function(req, res) {
@@ -92,9 +96,8 @@ router.post('build_unit', function(req, res) {
 			console.log('Unit', unitType.name, 'added to list of in game units!');
 		})
 		.catch(error => {
-			throw error;
+			//throw error;
 		})
-	}
 });
 
 router.post('move_unit', function(req, res) {
@@ -117,3 +120,5 @@ router.post('kill_unit', function(req, res) {
 
 	unitType = db.oneOrNone('DELETE FROM units WHERE id = $1;', [unitID]);
 });
+
+module.exports = router;
