@@ -5,9 +5,9 @@ block content
 			h1(id='title') Welcome to the Game Lobby
 		div.body_content
 			a(href='/createGame')
-				input(type='submit', value='Create Game')
-			//a(href='/createGame') Create Game
-			//a(href='/testGame') Test Game Page
+				input(type='button', value='Create Game')
+			a(href='/testGame')
+				input(type='button', value='Test Game')
 			div.table_content
 				table#lobby-table
 					thead
@@ -18,8 +18,6 @@ block content
 					tbody
 						tr
 							td
-								//form(action='', method='post')
-								//	input(type='submit', value='Join Game')
 								a(href='#')
 									input(type='button', value='Join Game')
 					div.chat_content
