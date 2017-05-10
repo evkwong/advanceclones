@@ -1,21 +1,13 @@
 extends layout
 
-doctype html
-html(lang='en')
-	head
-		title Advance Wars Clone - Game Lobby
-	block content
+block content
 		.container
 			h1(id='title') Welcome to the Game Lobby
 		div.body_content
-			//
-				img(src='', alt='create game')
-				input(type='submit', value='Create Game')
-
-
-
-			a(href='/createGame') Create Game
-			a(href='/testGame') Test Game Page
+			a(href='/createGame')
+				input(type='button', value='Create Game')
+			a(href='/testGame')
+				input(type='button', value='Test Game')
 			div.table_content
 				table#lobby-table
 					thead
@@ -26,22 +18,13 @@ html(lang='en')
 					tbody
 						tr
 							td
-								form(name="create-game", method="post", action="/game/new_game")
-									div.input
-										span.label Game Title: 
-										input(type="text", name="title")
-									div.input
-										span.label Select a map: 
-										select(name="map")
-											option(value="0") Map A
-									div.actions
-									input(type="submit", value="Create Game")
-
+								a(href='#')
+									input(type='button', value='Join Game')
 					div.chat_content
 						h3 Chat box goes here
 							ul(id='messages')
 								form(action='', method ='post')
 									input(id='m', autocomplete='off', type='button', value='Send')
   
-		//script(src='http://code.jquery.com/jquery-1.11.1.js')
-		//script(src='/javascripts/chat_test.js')
+script(src='http://code.jquery.com/jquery-1.11.1.js')
+script(src='/javascripts/chat_test.js')
