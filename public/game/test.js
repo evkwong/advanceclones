@@ -1,21 +1,21 @@
-var canvas = document.getElementById("gameDraw");
-var context = canvas.getContext("2d");;
+var canvas = document.getElementById('gameDraw');
+var context = canvas.getContext('2d');;
 var units = [];
 
 window.onload = function() {
 		var background = new Image();
-		background.src = "/images/map_0.png";
+		background.src = '/images/map_0.png';
 		background.onload = function() {
 				context.drawImage(background, 10, 10);
 		};
 
-		drawInfantry(context, 1, 0, 20, 20, infantry);
+		drawInfantry(context, 1, 0, 20, 20, 'infantry');
 };
 
 var drawUnit = function(context, gameId, owner, xPos, yPos, type) {
 		var unitImage = new Image();
 		
-		if(type == "infantry") {
+		if(type == 'infantry') {
 				if(owner == 0) {
 						unitImage.src = "/images/infantry_red.png";
 				}

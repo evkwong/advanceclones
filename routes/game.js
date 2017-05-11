@@ -50,12 +50,6 @@ router.post('/new_game', function(req, res) {
 				throw err;
 			});
 
-		//Send variables to game js.
-		//res.send(path.basename('/images/map_' + map + '.png'));
-		var mapPath = path.basename('/images/map_' + mapID + '.png');
-		res.render('testGame', {title: title, mapPath: mapPath, gameID: gameID});
-		
-
 	}
 });
 
