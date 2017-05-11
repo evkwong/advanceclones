@@ -36,7 +36,7 @@ router.get('/test', function(req, res, next) {
 });
 
 router.get('/game', function(req, res, next) {
-  res.render('game.jade', {title: 'GameRoom'});
+  res.render('testGame.jade', {title: 'GameRoom'});
 });
 
 module.exports = router;
