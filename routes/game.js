@@ -50,8 +50,6 @@ router.post('/new_game', function(req, res) {
 				throw err;
 			});
 
-		
-
 	}
 });
 
