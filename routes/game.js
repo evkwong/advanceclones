@@ -147,3 +147,17 @@ module.exports.getGameList = function() {
 };
 
 module.exports = router;
+
+//Exports
+module.exports = router;
+
+module.exports.getGameList = function(callback) {
+	db.many('SELECT * FROM games')
+		.then((data) => {
+			console.log('Fetching games list.');
+			callback(null, data);
+		})
+		.catch((error) => {
+			callback(error, false);
+		});
+};
