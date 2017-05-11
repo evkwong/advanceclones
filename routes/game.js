@@ -19,14 +19,14 @@ router.post('/new_game', function(req, res) {
 		console.log('No errors. Attempting to store new game.');
 
 		var title = req.body.title;
-		var map = req.body.map;
+		var mapID = req.body.map;
 		var totalTurns = 0;
 		var totalPlayers = 1;
 		var currentPlayerTurn = 1;
 
 		//Insert into DB.
 		db.one('INSERT INTO games(title, map, totalTurns, totalPlayers, currentPlayerTurn) VALUES($1, $2, $3, $4, $5) RETURNING id',
-			[title, map, totalTurns, totalPlayers, currentPlayerTurn])
+			[title, mapID, totalTurns, totalPlayers, currentPlayerTurn])
 			.then(data => {
 				console.log('Success! Game added to DB.');
 
@@ -56,8 +56,8 @@ router.post('/new_game', function(req, res) {
 
 		//Send variables to game js.
 		//res.send(path.basename('/images/map_' + map + '.png'));
-		var mapPath = path.basename('/images/map_' + map + '.png');
-		res.render('testGame', {title: title, mapPath: mapPath});
+		var mapPath = path.basename('/images/map_' + mapID + '.png');
+		res.render('testGame', {title: title, mapPath: mapPath, mapID: map});
 
 	}
 });
@@ -139,14 +139,11 @@ router.get('/images/map_0.png', function(req,res) {
 		res.sendFile(path.resolve(__dirname, '/images/map_0.png'));
 });
 
-module.exports.getGameList = function() {
-	list = db.many('SELECT * FROM games');
-	console.log("List of games:", list);
-
-	return list;
-};
-
 module.exports = router;
+
+router.post('end_turn', function(req, res) {
+	db.one('SELECT * FROM games WHERE')
+});
 
 //Exports
 module.exports = router;
@@ -161,3 +158,6 @@ module.exports.getGameList = function(callback) {
 			callback(error, false);
 		});
 };
+
+router.get('refresh_game', function(req, res) {
+})
