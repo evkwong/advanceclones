@@ -1,36 +1,42 @@
 extends layout
 
-doctype html
-html(lang='en')
-	head
-		title Advance Wars Clone - Game Lobby
-	block content
-		.container
-			h1(id='title') Welcome to the Game Lobby
-		div.body_content
-			img(src='', alt='create game')
-			form(action='', method='get')
-				input(type='submit', value='Create Game')
-			div.table_content
-				table#lobby-table
-					thead
-						tr
-							th Players
-							th Title
-							th Map
-					tbody
-						tr
-							td
-								form(action='', method='get')
-									input(type='submit', value='Join Game')
-				body
-					script(src='http://code.jquery.com/jquery-1.11.1.js')
-					script(src='/javascripts/chat_test.js')
-					div.chat_content
-						h3 Chat box goes here
-							<ul id="messages"></ul>
-							<form action="">
-							<input id = "m" autocomplete="off" /><button>Send</button>
-							</form>
-							
-							
+block content
+	.container
+		h1(id='title') Welcome to the Game Lobby
+	div.body_content
+		a(href='/createGame')
+			input(type='button', value='Create Game')
+		a(href='/testGame')
+			input(type='button', value='Test Game')
+		
+		div.table_content
+			table#lobby-table
+				thead
+					tr
+						th Players
+						th Title
+						th Map
+						th Join
+				tbody
+					if games
+						each game in games
+							tr
+								td
+									strong Player List
+								td
+									strong= game.title
+								td
+									strong= game.map
+								td
+									a(href='#')
+									input(type='button', value='Join Game')
+								
+			div.chat_content
+				h3 Chat
+					ul(name='chat-messages')
+						form(action='', method='post')
+							input(name='chat-text-area', type='text', placeholder='Type here!')
+							input(name='chat-msg', autocomplete='off', type='button', value='Send')
+  
+	//script(src='http://code.jquery.com/jquery-1.11.1.js')
+	//script(src='/javascripts/chat_test.js')					

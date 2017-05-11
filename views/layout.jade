@@ -1,6 +1,5 @@
 doctype html
 html
-
 	head
 		meta(charset='utf-8')
 		meta(name='viewport', content='width=device-width, initial-scale=1.0')
@@ -10,16 +9,17 @@ html
 		link(href='/stylesheets/style.css', rel='stylesheet', type='text/css')
 		link(href='/stylesheets/bootstrap-responsive.css', rel='stylesheet', type='text/css')
 	body
-	script(src='/socket.io/socket.io.js')
-		//- 
-			#err
-				if errors
-					for each errors
-						div(class='alert alert-danger')
-							var msg = {errMsg:'Shit be broke!'}
-
+		script(src='/socket.io/socket.io.js')
 		.container
 			div.header_content
+			
+				#Errors
+					if errors
+						h3 Form Errors!
+						h4 Please check to make sure you've entered the correct information.
+						each error in errors
+							div(class='alert alert-danger')
+								strong=error.msg
 				div.login
 					h3(name='header_title') Advance Wars Clone - Csc 667 - Fighting Mongooses
 					div.user-logo
@@ -30,7 +30,7 @@ html
 						div(class='container-fluid')
 							ul(class='nav navbar-nav')
 								li
-									a(href='/index') Home
+									a(href='/') Home
 								li
 									a(href='/account') Account
 								li

@@ -12,7 +12,6 @@ function User (id, username, email, password, avatar) {
 
 module.exports = User;
 
-
 module.exports.storeUser = function(user, callback){
 	bcrypt.genSalt(saltRounds, function(err, salt) {
 		bcrypt.hash(user.password, salt, function(err, hash) {
