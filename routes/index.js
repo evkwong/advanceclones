@@ -26,17 +26,4 @@ router.get('/lobby', function(req,res, next) {
 	});
 });
 
-//Create Game Page
-router.get('/createGame', function(req,res,next){
-	res.render('createGame.jade', {title: 'Create Game'});
-});
-
-router.get('/test', function(req, res, next) {
-  res.render('test.jade', {title: 'Test'});
-});
-
-router.get('/game', function(req, res, next) {
-  res.render('testGame.jade', {title: 'GameRoom'});
-});
-
 module.exports = router;
