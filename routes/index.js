@@ -23,6 +23,7 @@ router.get('/lobby', function(req,res, next) {
 			console.log('Game List:', gameList);
 			res.render('lobby.jade', { title: 'Lobby', games: gameList});
 		}
+
 	});
 });
 
