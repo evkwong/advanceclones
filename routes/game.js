@@ -36,8 +36,8 @@ router.post('/new_game', function(req, res) {
 				//Add user into DB as player 1.
 				console.log('Attempting to add player to DB.');
 				insertPlayer(username, gameID, userID, function(err, data) {
-					if (err) throw error;
-					if (!data) console.log('Error');
+					if (err) throw err;
+					if (!data) console.log('No data found.');
 					else {
 						//Send variables to game js.
 						//res.send(path.basename('/images/map_' + map + '.png'));
@@ -46,7 +46,7 @@ router.post('/new_game', function(req, res) {
 					}
 				});
 			})
-			.catch(error =>{
+			.catch(error => {
 				throw err;
 			});
 
@@ -58,16 +58,27 @@ router.post('/join_game', function(req, res) {
 	var username = req.user.username;
 	var gameID = req.body.gameID;
 	var userID = req.user.id;
-	var income = 1000;
-	var wallet = 0;
-	var co = 0;
-	var specialMeter = 0;
 
-	db.none('INSERT INTO players(username, gameID, userID, income, wallet, co, specialMeter) VALUES($1, $2, $3, $4, $5, $6, $7)')
+	console.log('Attempting to add a player to existing game.');
+	db.none('UPDATE games SET totalPlayers = totalPlayers + 1 WHERE id = $1', [gameID])
+		.then(data => {
+			console.log(username, 'added to players of game', gameID);
+		})
+		.catch(error => {
+			throw err;
+		})
 
-	console.log(username, 'has joined the game.');
+	insertPlayer(username, gameID, userID, function(err, data) {
+		if (err) throw err;
+		if (!data) console.log('No data found.');
+		else {
+			console.log(username, 'has joined the game.');
 
-	res.render('testGame'); //Display game page.
+
+
+			res.render('testGame'); //Display game page.
+		}
+	});
 });
 
 var insertPlayer = function(username, gameID, userID, callback){
@@ -80,15 +91,15 @@ var insertPlayer = function(username, gameID, userID, callback){
 	var specialMeter = 0;
 
 	console.log("User to be added to player DB:", username, ", GameID:", gameID);
-		db.one('INSERT INTO players(username, gameID, userID, income, wallet, co, specialMeter) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING username',
-			[username, gameID, userID, income, wallet, co, specialMeter])
-			.then(data => {
-				console.log('Success', data.username, 'stored in player DB!');
-				callback(null, data);
-			})
-			.catch(error => {
-				callback(error, false);
-			});
+	db.one('INSERT INTO players(username, gameID, userID, income, wallet, co, specialMeter) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING username',
+		[username, gameID, userID, income, wallet, co, specialMeter])
+		.then(data => {
+			console.log('Success', data.username, 'stored in player DB!');
+			callback(null, data);
+		})
+		.catch(error => {
+			callback(error, false);
+		});
 }
 
 /*
