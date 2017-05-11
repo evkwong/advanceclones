@@ -135,6 +135,7 @@ router.post('kill_unit', function(req, res) {
 */
 
 router.get('/images/map_0.png', function(req,res) {
+		console.log(path.resolve(__dirname, '/images/map_0.png'));
 		res.sendFile(path.resolve(__dirname, '/images/map_0.png'));
 });
 
