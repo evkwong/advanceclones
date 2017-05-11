@@ -57,7 +57,7 @@ router.post('/new_game', function(req, res) {
 		//Send variables to game js.
 		//res.send(path.basename('/images/map_' + map + '.png'));
 		var mapPath = path.basename('/images/map_' + mapID + '.png');
-		res.render('testGame', {title: title, mapPath: mapPath, mapID: map});
+		res.render('testGame', {title: title, mapPath: mapPath, gameID: gameID});
 
 	}
 });
@@ -139,22 +139,28 @@ router.get('/images/map_0.png', function(req,res) {
 		res.sendFile(path.resolve(__dirname, '/images/map_0.png'));
 });
 
-module.exports = router;
-
+/*
 router.post('end_turn', function(req, res) {
-	db.one('SELECT * FROM games WHERE')
-});
+	db.one('SELECT * FROM games WHERE id = $1', [req.gameID])
+		.then(data => {
+			console.log('Ending player ' + data.currentPlayerTurn + '\'s turn.');
+
+		})
+		.catch(error => {
+			throw error;
+		})
+});*/
 
 //Exports
 module.exports = router;
 
 module.exports.getGameList = function(callback) {
 	db.many('SELECT * FROM games')
-		.then((data) => {
+		.then(data => {
 			console.log('Fetching games list.');
 			callback(null, data);
 		})
-		.catch((error) => {
+		.catch(error => {
 			callback(error, false);
 		});
 };
