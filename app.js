@@ -58,7 +58,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 //Do not move these below following error functions.
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '/public')));
 app.use('/', index);
 app.use('/users', users);
 app.use('/game', game);

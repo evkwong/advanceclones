@@ -150,6 +150,11 @@ router.post('kill_unit', function(req, res) {
 });
 */
 
+router.get('/images/map_0.png', function(req,res) {
+		console.log(path.resolve(__dirname, '/images/map_0.png'));
+		res.sendFile(path.resolve(__dirname, '/images/map_0.png'));
+});
+
 /*
 router.post('end_turn', function(req, res) {
 	db.one('SELECT * FROM games WHERE id = $1', [req.gameID])
