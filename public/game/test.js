@@ -1,5 +1,5 @@
 var canvas = document.getElementById('gameDraw');
-var context = canvas.getContext('2d');;
+var context = canvas.getContext('2d');
 var units = [];
 
 window.onload = function() {
