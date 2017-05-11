@@ -1,18 +1,8 @@
 extends layout
 
 doctype html
-html(lang='en')
-	body
+html
 		block content
-			div.gamePage
-				h2 test display
-				div.container.center-div
-					canvas(id='gameCanvas', name='game-screen')
-			div.chat_content
-				h3 Chat box goes here
-					#content(style='width: 500px; height: 300px; margin: 0 0 20px 0; border: solid 1px #999; overflow-y: scroll;')
-					input#field(style='width: 350px;')
-					input#send(type='button', value='send')
+				canvas#gameDraw(width='1900', height='1000')
 
-			script(src='http://code.jquery.com/jquery-1.11.1.js')
-			script(src='/javascripts/chat.js')
+				script(src='/game/test.js')
