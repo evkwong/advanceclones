@@ -134,11 +134,16 @@ router.post('kill_unit', function(req, res) {
 });
 */
 
-module.exports.getGameList = function() {
-	list = db.many('SELECT * FROM games');
-	console.log("List of games:", list);
-
-	return list;
-};
-
+//Exports
 module.exports = router;
+
+module.exports.getGameList = function(callback) {
+	db.many('SELECT * FROM games')
+		.then((data) => {
+			console.log('Fetching games list.');
+			callback(null, data);
+		})
+		.catch((error) => {
+			callback(error, false);
+		});
+};
