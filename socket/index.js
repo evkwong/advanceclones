@@ -6,19 +6,19 @@ var init = (app, server) => {
   
   app.set('io', io)
   
+  let players = [];
+  
   io.on('connection', socket => {
     console.log('client connected')
-      
-      socket.on('chat message', function(msg){
-        io.emit('chat message', msg);
-      });
+    
+    //used for chat serverside       
+    socket.on('send', function(data) {
+      socket.emit('message', data);
+    })
 
     socket.on('disconnect', data => {
       console.log('client disconnected')
     })
-
-   // socket.on(USER_JOINED, data => io.emit(USER_JOINED, data))
-   // socket.on(MESSAGE_SEND, data => io.emit(MESSAGE_SEND, data))
   })
 }
 
