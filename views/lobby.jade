@@ -34,7 +34,8 @@ block content
                   strong= game.map
                 td
                   form(method='post', action='/game/join_game', name='join-game')
-                    input(type='submit', value='Join Game')
+                    input(type= 'hidden', name= 'gameID' value= game.id)
+                    input(type='submit', value= 'Join Game')
                 
       div.chat_content
         h3 Chat
