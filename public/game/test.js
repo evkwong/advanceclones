@@ -5,6 +5,8 @@ background.src = '/images/map_0.png';
 var units = [];
 
 window.onload = function() {
+		var background = new Image();
+		background.src = '/images/map_0.png';
 		background.onload = function() {
 				context.drawImage(background, 0, 0);
 		};
@@ -30,7 +32,7 @@ var drawUnit = function(unitObject) {
 		}
 };
 
-$('#gameDraw').click(selectUnit);
+$('#gameDraw').one('click', selectUnit);
 
 function selectUnit(e) {
 		var clickedX = e.pageX - this.offsetLeft;
@@ -48,7 +50,7 @@ function selectUnit(e) {
 }
 
 function orderUnit(selectedUnit) {
-		$('#gameDraw').click(function(e) {
+		$('#gameDraw').one('click', function(e) {
 				selectedUnit.xPos = e.pageX - this.offsetLeft;
 				selectedUnit.yPos = e.pageY - this.offsetTop;
 
