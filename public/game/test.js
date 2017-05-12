@@ -11,7 +11,7 @@ window.onload = function() {
 				context.drawImage(background, 0, 0);
 		};
 
-		drawInfantry(context, 1, 1, 0, 1, 1, 'infantry');
+		createInfantry(context, 1, 1, 0, 1, 1, 'infantry');
 };
 
 var drawUnit = function(unitObject) {
@@ -82,7 +82,7 @@ var Infantry = function(id, gameId, owner, xPos, yPos, type) {
 		this.type = type;
 };
 
-var drawInfantry = function(context, id, gameId, owner, xPos, yPos, type) {
+var createInfantry = function(context, id, gameId, owner, xPos, yPos, type) {
 		var infantry = new Infantry(id, gameId, owner, xPos, yPos, type);
 		drawUnit(infantry);
 		units.push(infantry);
