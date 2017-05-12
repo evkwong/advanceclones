@@ -32,7 +32,7 @@ var drawUnit = function(unitObject) {
 		}
 };
 
-$('#gameDraw').one('click', selectUnit);
+$('#gameDraw').on('click', selectUnit);
 
 function selectUnit(e) {
 		var clickedX = e.pageX - this.offsetLeft;
@@ -63,6 +63,7 @@ function orderUnit(selectedUnit) {
 				}
 
 				updateAll();
+				return;
 		});
 }
 
