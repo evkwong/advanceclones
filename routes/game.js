@@ -60,12 +60,12 @@ router.post('/join_game', function(req, res) {
 	var userID = req.user.id;
 
 	console.log('Attempting to add a player to existing game.');
-	db.none('UPDATE games SET totalPlayers = totalPlayers + 1 WHERE id = $1', [gameID])
+	db.one('UPDATE games SET totalPlayers = totalPlayers + 1 WHERE id = $1', [gameID])
 		.then(data => {
 			console.log(username, 'added to players of game', gameID);
 		})
 		.catch(error => {
-			throw err;
+			throw error;
 		})
 
 	insertPlayer(username, gameID, userID, function(err, data) {
@@ -73,8 +73,6 @@ router.post('/join_game', function(req, res) {
 		if (!data) console.log('No data found.');
 		else {
 			console.log(username, 'has joined the game.');
-
-
 
 			res.render('testGame'); //Display game page.
 		}
