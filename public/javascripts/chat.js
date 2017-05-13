@@ -1,51 +1,40 @@
-import { LOBBY, USER_JOINED, MESSAGE_SEND } from '../../chat/constants_chat'
+window.onload = function() {
+  
+  var socket = io();
+  var messages = [];
+  var field = document.getElementById('field');
+  var sendButton = document.getElementById('send');
+  var content = document.getElementById('content');
+  
+  socket.on('message', function (data) {
+    if(data.message) {
+      messages.push(data);
+      var html = '';
+      for(var i = 0; i < messages.length; i++) {
+        html += messages[i].message + '<br />';
+      }
+     
+      content.innerHTML = html;
+    } else {
+      console.log('not working', data);
+    }
+  });
 
-var socket = io()
+  sendButton.onclick = sendMessage = function() {
+    var text = field.value;
+    socket.emit('send', {message: text});
+    field.value = '';
+  };
 
-var appendMessage = message => {
-  $('.messages').append(message)
 }
 
-var messageElement = ({user, message}) =>
-  $( '<div>', {class: 'message'})
-  .text(message)
-  .prepend(userElement(user))
+$(document).ready(function() {
+  $('#field').keyup(function(e) {
+     if(e.keyCode == 13) {
+       sendMessage();
+     }
+  });
+});
 
-var userElement = userName =>
-  $('<span>', {class: 'user'}).text(userName)[0]
 
-var userJoined = data =>
-  appendMessage(messageElement(Object.assign(data, {message: ' joined'})))
 
-var messageReceived = data =>
-  appendMessage(messageElement(
-    Object.assign(data, {user: '${data.user} said'})
-  )) //end messageReceived
-
-var initializeSocket = () => {
-  socket.on(USER_JOINED, userJoined)
-  socket.on(MESSAGE_SEND, messageReceived)
-} //end initializeSoscket
-
-$(document).ready( () => {
-  let user = 'anonymous'
-  
-  $('#initial-form button').click(event => {
-    user = $('#who-are-you').val()
-  
-    $('#initial-fomr').hide()
-    $('#chat-area').show()
- 
-    initializeSocket()
-    socket.emit(USER_JOINED, {user})
-
-    return false
-  }) //end initial-form
-
-  $('#chat-area button').click(event => {
-    var message = $('#chat-area input').val()
-    $('#chat-area input').val('')
- 
-    socket.emit(MESSAGE_SEND, {user, message})
-  })//end chat-area
-})//end frontend functionality 

@@ -18,12 +18,16 @@ router.get('/lobby', function(req,res, next) {
 		if (err) throw err;
 		if (!data) console.log('Error: No data returned.');
 		else {
-			console.log('Thisis the data:', data);
 			var gameList = data;
 			console.log('Game List:', gameList);
 			res.render('lobby.jade', { title: 'Lobby', games: gameList});
 		}
+
 	});
+});
+
+router.get('/game', function(req, res, next) {
+	res.render('game.jade', { title: 'Game'});
 });
 
 //Create Game Page
