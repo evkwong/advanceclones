@@ -28,8 +28,10 @@ window.onload = function() {
 				context.drawImage(background, 0, 0);
 		};
 
-		createHQ(context, 1, 1, 0, 1, 256, "hq");
-		createInfantry(context, 1, 1, 0, 1, 1, "infantry");
+		createHQ(context, 0, 1, currentPlayerTurn, 1, 256, "hq");
+		createHQ(context, 1, 1, 1, 1, 280, "hq");
+		createInfantry(context, 2, 1, currentPlayerTurn, 1, 1, "infantry");
+		createInfantry(context, 1, 1, 1, 550, 1, "infantry");
 };
 
 $('#gameDraw').on('click', selectUnit);
@@ -96,11 +98,12 @@ function selectBuilding(e) {
 
 } function drawBuyUnits(currentTurn) {
 		var unitSide;
+
 		context.fillStyle = "#ffffff";
 		context.fillRect(160, 256, 40, 40);
-		//context.fillRect(225, 256, 40, 40);
-		//context.fillRect(287, 256, 40, 40);
-		//context.fillRect(353, 256, 40, 40);
+		context.fillRect(225, 256, 40, 40);
+		context.fillRect(287, 256, 40, 40);
+		context.fillRect(353, 256, 40, 40);
 		context.strokeRect(160, 256, 40, 40);
 		context.strokeRect(225, 256, 40, 40);
 		context.strokeRect(287, 256, 40, 40);
