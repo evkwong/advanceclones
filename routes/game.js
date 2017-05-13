@@ -120,7 +120,7 @@ var getGameByID = function(gameID, callback) {
 			
 		})
 		.catch(error => {
-			callback(error, false);
+			callback(error, false, false);
 		})
 }
 
@@ -210,10 +210,19 @@ module.exports.getGameList = function(callback) {
 	db.manyOrNone('SELECT * FROM games')
 		.then(data => {
 			console.log('Fetching games list.');
-			callback(null, data);
+
+			db.manyOrNone('SELECT * FROM players')
+				.then(data => {
+					//Implement this.
+					callback(null, data, playerList);
+				})
+				
+			}
+
+			
 		})
 		.catch(error => {
-			callback(error, false);
+			callback(error, false, false);
 		});
 };
 
