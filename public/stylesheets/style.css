@@ -31,7 +31,10 @@ li a:hover {
     background-color: #d9d9d9;
 }
 
-
+img.profile{
+	width:50%;
+	height:50%;
+}
 
 .active {
     background-color: #4CAF50;
