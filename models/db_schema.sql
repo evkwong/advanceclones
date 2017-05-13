@@ -30,7 +30,8 @@ CREATE TABLE IF NOT EXISTS games
   map INTEGER NOT NULL,
   totalTurns INTEGER,
   totalPlayers INTEGER,
-  currentPlayerTurn INTEGER
+  currentPlayerTurn INTEGER,
+  playerList VARCHAR(125)
 );
 
 -- Players Table

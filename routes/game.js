@@ -22,7 +22,7 @@ router.post('/new_game', function(req, res) {
 		var mapID = req.body.map;
 		var totalTurns = 0;
 		var totalPlayers = 1;
-		var currentPlayerTurn = 1;
+		var currentPlayerTurn = 0;
 
 		//Insert into DB.
 		db.one('INSERT INTO games(title, map, totalTurns, totalPlayers, currentPlayerTurn) VALUES($1, $2, $3, $4, $5) RETURNING id',
@@ -211,14 +211,24 @@ module.exports.getGameList = function(callback) {
 		.then(data => {
 			console.log('Fetching games list.');
 
-			db.manyOrNone('SELECT * FROM players')
-				.then(data => {
-					//Implement this.
-					callback(null, data, playerList);
-				})
-				
+			var playerList = new Array(data.length);
+			for (i = 0; i < data.length; i++) {
+				playerList[i] = 'Players: ';
+				console.log('PlayerList', i, ':', playerList[i]);
 			}
 
+			db.manyOrNone('SELECT * FROM players')
+				.then(data => {
+					for (i = 0; i < data.length; i++) {
+						console.log('PlayerList New', i, ':', playerList[data[i].gameID])
+						playerList[data[i].gameID] = playerList[data[i].gameID] + " " + data[i].username + ",";
+					}
+
+					callback(null, data, playerList);
+				})
+				.catch(error => {
+					callback(error, false, false);
+				})
 			
 		})
 		.catch(error => {
