@@ -22,7 +22,7 @@ router.post('/new_game', function(req, res) {
 		var mapID = req.body.map;
 		var totalTurns = 0;
 		var totalPlayers = 1;
-		var currentPlayerTurn = 1;
+		var currentPlayerTurn = 0;
 
 		//Insert into DB.
 		db.one('INSERT INTO games(title, map, totalTurns, totalPlayers, currentPlayerTurn) VALUES($1, $2, $3, $4, $5) RETURNING id',
