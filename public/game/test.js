@@ -1,3 +1,7 @@
+/* TODO
+ * get gameId, currentPlayerTurn, and unitId from database
+ * 	these values are hard coded into the game right now
+ */
 var currentPlayerTurn = 0;
 var canvas = document.getElementById('gameDraw');
 var context = canvas.getContext('2d');
@@ -46,7 +50,6 @@ function selectUnit(e) {
 		$('#gameDraw').one('click', function(e) {
 				selectedUnit.xPos = e.pageX - this.offsetLeft;
 				selectedUnit.yPos = e.pageY - this.offsetTop;
-				console.log(units);
 
 				for(var i in units) {
 						if(units[i].id == selectedUnit.id) {
@@ -72,21 +75,29 @@ function selectBuilding(e) {
 				if(clickedX > buildings[i].xPos && clickedX < buildings[i].xPos + 32 &&
 					 clickedY > buildings[i].yPos && clickedY < buildings[i].yPos + 64) {
 							console.log("Clicked on building", buildings[i].xPos, buildings[i].yPos);
-							buyUnits();
+							buyUnits(buildings[i]);
 				}
 		}
-} function buyUnits(e) {
+} function buyUnits(selectedBuild) {
 		drawBuyUnits(currentPlayerTurn);
 
 		$('#gameDraw').one('click', function(e) {
+				var clickedX = e.pageX - this.offsetLeft;
+				var clickedY = e.pageY - this.offsetTop;
+
+				if(clickedX > 160 && clickedX < 200 && clickedY > 256 && clickedY < 296) {
+						createInfantry(context, 1, 1, currentPlayerTurn, 
+								selectedBuild.xPos + 32, selectedBuild.yPos, "infantry");
+				}
+
 				updateAll();
 				return;
-		})
+		});
 
 } function drawBuyUnits(currentTurn) {
 		var unitSide;
-		//context.fillStyle = "#ffffff";
-		//context.fillRect(160, 256, 40, 40);
+		context.fillStyle = "#ffffff";
+		context.fillRect(160, 256, 40, 40);
 		//context.fillRect(225, 256, 40, 40);
 		//context.fillRect(287, 256, 40, 40);
 		//context.fillRect(353, 256, 40, 40);
@@ -110,6 +121,7 @@ function selectBuilding(e) {
 						menuImage.src = "/images/infantry_" + unitSide + ".png";
 						menuX = 160;
 						menuY = 256;
+						context.drawImage(menuImage, menuX, menuY);
 				}
 
 				/*
@@ -131,11 +143,6 @@ function selectBuilding(e) {
 						menuY = 256;
 				}
 				*/
-
-				menuImage.onload = function() {
-						context.drawImage(menuImage, menuX, menuY);
-				}
-
 		}
 
 }
