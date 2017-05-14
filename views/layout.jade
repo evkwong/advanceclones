@@ -31,18 +31,19 @@ html
 				div.login
 					h3(name='header_title') Advance Wars Clone - Csc 667 - Fighting Mongooses
 					div.user-logo
-						img(src='', alt='user photo')
+						img.profile(src='/images/Avatar_default.png', alt='user photo')
 						a(id='login-out', href='#') Logout
-					a(href='/'): img.logo(src='#', alt='game logo')
+					a(href='/'): img.logo(src='/images/Csc667_logo.png', alt='game logo')
 					nav(class='navbar navbar-default')
 						div(class='container-fluid')
 							ul(class='nav navbar-nav')
-								li
+								li.active
 									a(href='/') Home
 								li
 									a(href='/account') Account
 								li
-									a(href='/registration') Register
+									a(href='/registration') 
+										span(class='glyphicon glyphicon-user') Register
 								li
 									a(href='/lobby') Lobby
 	block content
