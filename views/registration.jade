@@ -4,30 +4,26 @@ doctype html
 html(lang='en')
 
 block content
-  head
-    title= title
-
-  h1= title
-  form(name="register-user", method="post", action="/users/register")
-    div.input
-      span.label Enter a username: 
-      input(type="text", name="username")
-    div.input
-      span.label Enter a password: 
-      input(type="text", name="password")
-    div.input
-      span.label Re-enter the password: 
-      input(type="text", name="password2")
-    div.input
-      span.label Enter an email:
-      input(type="text", name="email")
-    div.input
-      span.label Select an avatar: 
-      select(name="avatar")
-        option(value="1") 1
-        option(value="2") 2
-        option(value="3") 3
-    div.actions
-      input(type="submit", value="Register")
-
-
+	div.container
+		h1= title
+		form(name="register-user", method="post", action="/users/register")
+			div.input
+				span.label Enter a username: 
+				input(type="text", name="username")
+			div.input
+				span.label Enter a password: 
+				input(type="text", name="password")
+			div.input
+				span.label Re-enter the password: 
+				input(type="text", name="password2")
+			div.input
+				span.label Enter an email:
+				input(type="text", name="email")
+			div.input
+				span.label Select an avatar: 
+				select(name="avatar")
+					option(value="1") 1
+					option(value="2") 2
+					option(value="3") 3
+			div.actions
+				input(type="submit", value="Register")
