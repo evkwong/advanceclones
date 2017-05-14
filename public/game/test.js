@@ -29,9 +29,10 @@ window.onload = function() {
 		};
 
 		createHQ(context, 0, 1, currentPlayerTurn, 1, 256, "hq");
-		createHQ(context, 1, 1, 1, 1, 280, "hq");
+		createHQ(context, 1, 1, 1, 580, 1, "hq");
 		createInfantry(context, 2, 1, currentPlayerTurn, 1, 1, "infantry");
 		createInfantry(context, 1, 1, 1, 550, 1, "infantry");
+		createMech(context, 3, 1, currentPlayerTurn, 32, 1, "mech");
 };
 
 $('#gameDraw').on('click', selectUnit);
@@ -127,13 +128,14 @@ function selectBuilding(e) {
 						context.drawImage(menuImage, menuX, menuY);
 				}
 
-				/*
+				
 				if(i == 1) {
 						menuImage.src = "/images/mech_" + unitSide + ".png";
 						menuX = 225;
 						menuY = 256;
 				}
 
+				/*
 				if(i == 2) {
 						menuImage.src = "/images/recon_" + unitSide + ".png";
 						menuX = 287;
@@ -170,6 +172,16 @@ var drawUnit = function(context, unitObject) {
 
 				if(unitObject.owner == 1) {
 						unitImage.src = "/images/infantry_blue.png";
+				}
+		}
+
+		if(unitObject.type == "mech") {
+				if(unitObject.owner == 0) {
+						unitImage.src = "/images/mech_red.png";
+				}
+
+				if(unitObject.owner == 1) {
+						unitImage.src = "/images/mech_blue.png";
 				}
 		}
 
@@ -225,6 +237,12 @@ var createInfantry = function(context, id, gameId, owner, xPos, yPos, type) {
 		var infantry = new Unit(id, gameId, owner, xPos, yPos, type);
 		drawUnit(context, infantry);
 		units.push(infantry);
+};
+
+var createMech = function(context, id, gameId, owner, xPos, yPos, type) {
+		var mech = new Unit(id, gameId, owner, xPos, yPos, type);
+		drawUnit(context, mech);
+		units.push(mech);
 };
 
 
