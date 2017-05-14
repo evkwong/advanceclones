@@ -23,10 +23,11 @@ router.post('/new_game', function(req, res) {
 		var totalTurns = 0;
 		var totalPlayers = 1;
 		var currentPlayerTurn = 0;
+		var playerList = "";
 
 		//Insert into DB.
-		db.one('INSERT INTO games(title, map, totalTurns, totalPlayers, currentPlayerTurn) VALUES($1, $2, $3, $4, $5) RETURNING id',
-			[title, mapID, totalTurns, totalPlayers, currentPlayerTurn])
+		db.one('INSERT INTO games(title, map, totalTurns, totalPlayers, currentPlayerTurn, playerList) VALUES($1, $2, $3, $4, $5, $6) RETURNING id',
+			[title, mapID, totalTurns, totalPlayers, currentPlayerTurn, playerList])
 			.then(data => {
 				console.log('Success! Game added to DB.');
 				var username = req.user.username;
@@ -98,9 +99,20 @@ var insertPlayer = function(username, gameID, userID, callback) {
 	console.log("User to be added to player DB:", username, ", GameID:", gameID);
 	db.one('INSERT INTO players(username, gameID, userID, income, wallet, co, specialMeter) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING username',
 		[username, gameID, userID, income, wallet, co, specialMeter])
-		.then(data => {
-			console.log('Success', data.username, 'stored in player DB!');
-			callback(null, data);
+		.then(user => {
+			console.log('Success', user.username, 'stored in player DB!');
+			var userString = user.username + ', ';
+
+			//Update player list in game state.
+			db.one('UPDATE games SET playerList = playerList || $1 WHERE id = $2', [userString, gameID])
+				.then(game => {
+					console.log('Updated playerlist in game state:', game.playerList)
+					callback(null, user);
+				})
+				.catch(error => {
+					callback(error, false);
+				})
+			
 		})
 		.catch(error => {
 			callback(error, false);

@@ -18,7 +18,7 @@ router.get('/lobby', function(req,res, next) {
 		if (err) throw err;
 		if (!gameList) console.log('Error: No data returned.');
 		else {
-			res.render('lobby.jade', {title: 'Lobby', games: gameList, playerList: playerList});
+			res.render('lobby.jade', {title: 'Lobby', games: gameList});
 		}
 
 	});
