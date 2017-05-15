@@ -65,16 +65,28 @@ router.post('/join_game', function(req, res) {
 	console.log('Attempting to add a player to existing game if there is room');
 	db.one('SELECT * FROM games WHERE id = $1 RETURNING *', [gameID])
 		.then(game => {
-			if(game.started || game.totalplayers >= game.maxplayers) {
+			db.oneOrNone('SELECT * FROM players WHERE id = $1 AND gameID = $2', [userID, gameID])
+				.then(user => {
+					if (user) {
+						
+						
+					}
+					else {
+						if (game.started || game.totalplayers >= game.maxplayers) {
 
-			}
-			else {
+						}
+						else {
 
-			}
+						}
+					}
+				})
+
+
+			
 		})
 		.catch(error =>) {
-			error throw;
-		} */
+			throw error;
+		}*/
 
 	db.one('UPDATE games SET totalplayers = totalplayers+1 WHERE id = $1 RETURNING *', [gameID])
 		.then(data => {
