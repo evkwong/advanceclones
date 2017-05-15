@@ -14,20 +14,19 @@ router.get('/registration', function(req, res, next) {
 
 //Lobby Page
 router.get('/lobby', function(req,res, next) {
-	game.getGameList(function(err, data) {
+	game.getGameList(function(err, gameList) {
 		if (err) throw err;
-		if (!data) console.log('Error: No data returned.');
+		if (!gameList) console.log('Error: No data returned.');
 		else {
-			var gameList = data;
-			console.log('Game List:', gameList);
-			res.render('lobby.jade', { title: 'Lobby', games: gameList});
+			//console.log('Gamelist:', gameList);
+			res.render('lobby.jade', {title: 'Lobby', games: gameList});
 		}
 
 	});
 });
 
 router.get('/game', function(req, res, next) {
-	res.render('game.jade', { title: 'Game'});
+	res.render('testGame.jade', { title: 'Game'});
 });
 
 //Create Game Page
