@@ -1,5 +1,5 @@
 body {
-  padding: 50px;
+  padding:0 0 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
@@ -31,29 +31,61 @@ li a:hover {
     background-color: #d9d9d9;
 }
 
+img.profile{
+	width:50%;
+	height:50%;
+}
+
 .active {
     background-color: #4CAF50;
 }
 
 .index-page{
 	font:14px "Lucida Grande", Helvetica, Arial, sans-serif;
-	padding-top:40px;
-	padding-bottom:40px;
-	background-image:url('https://www.tokkoro.com/picsup/2000933-advance-wars__32.jpg');
-	background-position:center;
+	background-image:url('../images/csc667_background.jpg');
+	background-position:center center;
 	background-size:cover;
 	background-repeat:no-repeat;
+	-webkit-background-size:cover;
+	-moz-background-size:cover;
+	-o-background-size:cover;
+	min-height:100%;
+	min-width:50%;
+	width:100%;
+	height:1100px;
+	//background-attachment:fixed;
+	//position:absolute;
+	//top:0;
+	//left:0;
 }
 
 .container.center-div{
 	margin:0 auto;
-	width:100%;
+	margin-left:500px;
+	width:75%;
+}
+
+form[name='register-user']{
+	width:25%;
+	min-width:20%;
+	padding:15px 15px 15px 15px;
+	background-color:#fff;
+	border:1px solid #000;
+	border-radius:5px;
+	box-shadow:0 1px 2px rgba(0,0,0,0.05);
+}
+
+.container.registration{
+	margin-left:700px;
 }
 
 .form-signin{
+	display:inline-block;
 	max-width:400px;
-	padding:20px, 30px, 30px;
-	margin:210px, auto, 20px;
+	padding:0px 10px 10px;
+	//margin:0 auto;
+	margin-top: 120px;
+	margin-left:280px;
 	background-color:#fff;
 	border:1px solid #000;
 	border-radius:5px;
@@ -86,7 +118,8 @@ li a:hover {
 
 .user-logo{
 	float:right;
-	padding-left:250px;
+	//padding-left:250px;
+	//margin-right:200px;
 	width:15%;
 	display:inline;
 }
@@ -102,11 +135,22 @@ h3[name='header_title']{
 	float:center;
 }
 
-.body_content{
+.login{
+	float:left;
+	//position:fixed;
+}
 
+.content[name='chat-content']{
+	width:500px;
+	height:300px;
+	margin:0 0 20px 0;
+	border:solid 1px #999;
+	overflow-y:scroll;
 }
 
 .table_content{
+	display:inline-table;
+	width:60%;
 	padding:14px;
 	text-align:center;
 }
@@ -158,6 +202,14 @@ canvas[name='game-screen']{
 	height:500px;
 	border-radius:5px;
 	box-shadow:0 1px 2px rgba(0,0,0,0,0.05);
+}
+
+input[name='field']{
+	width:350px;
+}
+
+input[name='send']{
+	
 }
 
 input[type='checkbox']{
