@@ -22,13 +22,15 @@ router.post('/new_game', function(req, res) {
 		var mapID = req.body.map;
 		var totalTurns = 0;
 		var totalPlayers = 1;
+		var maxPlayers = 2; //Update to switch statement with more map diversity.
 		var currentPlayerTurn = 0;
 
 		//Insert into DB.
-		db.one('INSERT INTO games(title, map, totalTurns, totalPlayers, currentPlayerTurn) VALUES($1, $2, $3, $4, $5) RETURNING id',
-			[title, mapID, totalTurns, totalPlayers, currentPlayerTurn])
+		db.one('INSERT INTO games(title, map, totalTurns, totalPlayers, maxPlayers, currentPlayerTurn, started) VALUES($1, $2, $3, $4, $5, $6, FALSE) RETURNING *',
+			[title, mapID, totalTurns, totalPlayers, maxPlayers, currentPlayerTurn])
 			.then(data => {
-				console.log('Success! Game added to DB.');
+				console.log('Success! Game added to DB:');
+				console.log(data);
 				var username = req.user.username;
 				var gameID = data.id;
 				var userID = req.user.id;
@@ -47,7 +49,7 @@ router.post('/new_game', function(req, res) {
 				});
 			})
 			.catch(error => {
-				throw err;
+				throw error;
 			});
 
 	}
@@ -59,10 +61,28 @@ router.post('/join_game', function(req, res) {
 	var gameID = req.body.gameID;
 	var userID = req.user.id;
 
-	console.log('Attempting to add a player to existing game: GameID =', gameID);
-	db.one('UPDATE games SET totalPlayers = totalPlayers + 1 WHERE id = $1', [gameID])
+	/*
+	console.log('Attempting to add a player to existing game if there is room');
+	db.one('SELECT * FROM games WHERE id = $1 RETURNING *', [gameID])
+		.then(game => {
+			if(game.started || game.totalplayers >= game.maxplayers) {
+
+			}
+			else {
+
+			}
+		})
+		.catch(error =>) {
+			error throw;
+		} */
+
+	db.one('UPDATE games SET totalplayers = totalplayers+1 WHERE id = $1 RETURNING *', [gameID])
 		.then(data => {
-			console.log(username, 'added to players of game', gameID);
+			console.log(username, 'added to players of game:', gameID, 'Current number of players:', data.totalplayers);
+
+			if (data.totalplayers == data.maxplayers) {
+				db.none('UPDATE games SET started = true WHERE id = $1', [gameID]);
+			}
 		})
 		.catch(error => {
 			throw error;
@@ -98,9 +118,9 @@ var insertPlayer = function(username, gameID, userID, callback) {
 	console.log("User to be added to player DB:", username, ", GameID:", gameID);
 	db.one('INSERT INTO players(username, gameID, userID, income, wallet, co, specialMeter) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING username',
 		[username, gameID, userID, income, wallet, co, specialMeter])
-		.then(data => {
-			console.log('Success', data.username, 'stored in player DB!');
-			callback(null, data);
+		.then(user => {
+			console.log('Success', user.username, 'stored in player DB!');
+			callback(null, user);
 		})
 		.catch(error => {
 			callback(error, false);
@@ -120,7 +140,7 @@ var getGameByID = function(gameID, callback) {
 			
 		})
 		.catch(error => {
-			callback(error, false);
+			callback(error, false, false);
 		})
 }
 
@@ -208,9 +228,32 @@ module.exports = router;
 
 module.exports.getGameList = function(callback) {
 	db.manyOrNone('SELECT * FROM games')
-		.then(data => {
+		.then(games => {
 			console.log('Fetching games list.');
-			callback(null, data);
+			callback(null, games);
+
+			/*
+			var playerList = new Array(games.length);
+
+			for (i = 0; i < games.length; i++) {
+
+				playerList[i] = '';
+
+				db.manyOrNone('SELECT * FROM players WHERE gameID = $1', [games[i].id])
+					.then(players => {
+						for (player in players) {
+							console.log('PlayerList New', i, ':', playerList[i]);
+							playerList[i] = playerList[[i]] + " " + player.username + ",";
+						}
+
+						callback(null, games, playerList);
+					})
+					.catch(error => {
+						callback(error, false, false);
+					})
+			}*/
+			
+			
 		})
 		.catch(error => {
 			callback(error, false);
