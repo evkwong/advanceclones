@@ -2,9 +2,9 @@ extends layout
 
 doctype html
 html(lang='en')
-  head
-    title Advance Wars Clone - Game Lobby
-              
+	head
+		title Advance Wars Clone - Game Lobby
+							
 block content
   .container
     h1(id='title') Welcome to the Game Lobby
@@ -41,12 +41,12 @@ block content
                     strong Game Started
                 
       div.chat_content
-        h3 Chat
-          #content(style='width: 500px; height: 300px; margin: 0 0 20px 0; border: solid 1px #999; overflow-y: scroll;')
-          br
-          input#field(style='width:350px;')
-          input#send(type='button', value='send')
-  
-      script(src='http://code.jquery.com/jquery-1.11.1.js')
-      script(src='/javascripts/chat.js')         
+				h3 Chat
+					#content(style='width: 500px; height: 300px; margin: 0 0 20px 0; border: solid 1px #999; overflow-y: scroll;')
+					br
+					input#field(style='width:350px;')
+					input#send(type='button', value='send')
+	
+			script(src='http://code.jquery.com/jquery-1.11.1.js')
+			script(src='/javascripts/chat.js')
 
