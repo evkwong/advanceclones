@@ -14,10 +14,11 @@ router.get('/registration', function(req, res, next) {
 
 //Lobby Page
 router.get('/lobby', function(req,res, next) {
-	game.getGameList(function(err, gameList, playerList) {
+	game.getGameList(function(err, gameList) {
 		if (err) throw err;
 		if (!gameList) console.log('Error: No data returned.');
 		else {
+			//console.log('Gamelist:', gameList);
 			res.render('lobby.jade', {title: 'Lobby', games: gameList});
 		}
 

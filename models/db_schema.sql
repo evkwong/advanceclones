@@ -30,8 +30,9 @@ CREATE TABLE IF NOT EXISTS games
   map INTEGER NOT NULL,
   totalTurns INTEGER,
   totalPlayers INTEGER,
+  maxPlayers INTEGER,
   currentPlayerTurn INTEGER,
-  playerList VARCHAR(125)
+  started BOOLEAN
 );
 
 -- Players Table

@@ -27,15 +27,18 @@ block content
             each game in games
               tr
                 td
-                  strong= game.playerList
+                  strong= game.totalplayers + "/" + game.maxplayers
                 td
                   strong= game.title
                 td
                   strong= game.map
                 td
-                  form(method='post', action='/game/join_game', name='join-game')
-                    input(type= 'hidden', name= 'gameID' value= game.id)
-                    input(type='submit', value= 'Join Game')
+                  if game.totalplayers < game.maxplayers
+                    form(method='post', action='/game/join_game', name='join-game')
+                      input(type= 'hidden', name= 'gameID' value= game.id)
+                      input(type='submit', value= 'Join Game')
+                  else
+                    strong Game Started
                 
       div.chat_content
         h3 Chat
