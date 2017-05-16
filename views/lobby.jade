@@ -1,7 +1,7 @@
 extends layout
 
 block content
-	.index-page
+	.bg
 		.container
 			h1= title
 		div.body_content
@@ -9,10 +9,8 @@ block content
 				input(type='button', value='Create Game')
 			a(href='/testGame')
 				input(type='button', value='Test Game')
-    
-<<<<<<< HEAD
 			div.table_content
-				table#lobby-table
+				table.table_content
 					thead
 						tr
 							th Players
@@ -30,50 +28,21 @@ block content
 									td
 										strong= game.map
 									td
-										if game.totalplayers < game.maxplayers
+										if game.playerInGame == true
+											form(method='post', action='/game/rejoin_game', name='rejoin-game')
+												input(type= 'hidden', name= 'gameID' value= game.id)
+												input(type='submit', value= 'Rejoin Game')
+										else if game.totalplayers < game.maxplayers
 											form(method='post', action='/game/join_game', name='join-game')
 												input(type= 'hidden', name= 'gameID' value= game.id)
 												input(type='submit', value= 'Join Game')
 										else
 											strong Game Started
-=======
-    div.table_content
-      table#lobby-table
-        thead
-          tr
-            th Players
-            th Title
-            th Map
-            th Join
-        tbody
-          if games
-            each game in games
-              tr
-                td
-                  strong= game.totalplayers + "/" + game.maxplayers
-                td
-                  strong= game.title
-                td
-                  strong= game.map
-                td
-                  if game.playerInGame == true
-                    form(method='post', action='/game/rejoin_game', name='rejoin-game')
-                      input(type= 'hidden', name= 'gameID' value= game.id)
-                      input(type='submit', value= 'Rejoin Game')
-                  else if game.totalplayers < game.maxplayers
-                    form(method='post', action='/game/join_game', name='join-game')
-                      input(type= 'hidden', name= 'gameID' value= game.id)
-                      input(type='submit', value= 'Join Game')
-                  else
-                    strong Game Started
->>>>>>> 3f3edbd859496602e1f8927f78cc6f4df5e04cfb
-                
 			div.chat_content
 				h3 Chat
 					.content(name='chat-content')
 					br
 					input(name='chat-text-area')
 					input(type='button', value='send')
-
 			script(src='http://code.jquery.com/jquery-1.11.1.js')
 			script(src='/javascripts/chat.js')
