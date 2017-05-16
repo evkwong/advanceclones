@@ -15,25 +15,10 @@ router.get('/registration', function(req, res, next) {
 
 //Lobby Page
 router.get('/lobby', function(req,res, next) {
-	game.getGameList(function(err, gameList) {
+	game.getGameList(req.user, function(err, gameList) {
 		if (err) throw err;
 		if (!gameList) console.log('Error: No data returned.');
 		else {
-			
-			console.log(gameList);
-			//Check if a logged in user has any concurrent games.
-			if (req.user) {
-				var game = 0;
-				for (j = 0; j < gameList.players.length; j++) {
-					if (gameList.players[j].username === req.user.username) {
-						gameList[game].playerInGame = true;
-						game++;
-					}
-				}
-			}
-			
-
-			console.log('Gamelist:', gameList);
 			res.render('lobby.jade', {title: 'Lobby', games: gameList});
 		}
 
@@ -52,11 +37,12 @@ router.get('/createGame', function(req, res, next) {
 
 router.get('/profile', function(req, res, next) {
 	if (req.user) {
-		var userID = req.user.id;
-		game.getGamesByUserID(userID, function(err, games) {
+		var user = req.user;
+
+		game.getGamesByUserID(user.id, function(err, games) {
 			if (err) throw err;
-			if (!games) res.render('profile.jade', {user: req.user});
-			else res.render('profile.jade', {user: req.user, games: games});
+			if (!games) res.render('profile.jade', {user: user});
+			else res.render('profile.jade', {user: user, games: games});
 		});
 	}
 	else {
