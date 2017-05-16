@@ -3,26 +3,29 @@ extends layout
 body
 
 	block content
-		div.container
-			h1 user.username
-			h3 Current Games:
-			
-			div.table_content
-				thead
-					tr
-						th Title
-						th Map
-						th Rejoin
-				tbody
-					if games
-						for each game in games
-							tr
-								td
-									strong= game.title
-								td
-									strong= game.map
-								td
-									form(method='post', action='/game/rejoin_game')
-										input(type= 'gameID' value= game.id)
-										input(type='submit', value='rejoin-game')
-
+		.container
+			div.block_content
+				h1= user.username
+				h3 Current Games:
+				
+				div.table_content
+					if games.length > 0
+						table
+							thead
+								tr
+									th Title
+									th Map
+									th Rejoin
+							tbody
+								each game in games
+									tr
+										td
+											strong= game.title
+										td
+											strong= game.map
+										td
+											form(method='post', action='/game/rejoin_game')
+												input(type='hidden', name='gameID' value= game.id)
+												input(type='submit', value='rejoin-game')
+					else
+						strong You do not have any concurrent games.

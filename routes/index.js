@@ -18,20 +18,50 @@ router.get('/lobby', function(req,res, next) {
 		if (err) throw err;
 		if (!gameList) console.log('Error: No data returned.');
 		else {
-			//console.log('Gamelist:', gameList);
+			
+
+			//Check if a logged in user has any concurrent games.
+			if (req.user) {
+				for (j = 0; j < gameList.players.length; j++) {
+					if (gameList.players[j].username === req.user.username) {
+						gameList[j].playerInGame = true;
+					}
+				}
+			}
+			
+
+			console.log('Gamelist:', gameList);
 			res.render('lobby.jade', {title: 'Lobby', games: gameList});
 		}
 
 	});
 });
 
+//Comment this out?
 router.get('/game', function(req, res, next) {
 	res.render('testGame.jade', { title: 'Game'});
 });
 
 //Create Game Page
-router.get('/createGame', function(req,res,next){
+router.get('/createGame', function(req, res, next) {
 	res.render('createGame.jade', {title: 'Create Game'});
 });
+
+router.get('/profile', function(req, res, next) {
+	if (req.user) {
+		var userID = req.user.id;
+		game.getGamesByUserID(userID, function(err, games) {
+			if (err) throw err;
+			if (!games) res.render('profile.jade', {user: req.user});
+			else res.render('profile.jade', {user: req.user, games: games});
+		});
+	}
+	else {
+		var error = {msg: 'You are not logged in!'};
+		var errors = [error];
+		res.render('index', {errors: errors});
+	}
+	
+})
 
 module.exports = router;

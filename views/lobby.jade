@@ -33,7 +33,11 @@ block content
                 td
                   strong= game.map
                 td
-                  if game.totalplayers < game.maxplayers
+                  if game.playerInGame == true
+                    form(method='post', action='/game/rejoin_game', name='rejoin-game')
+                      input(type= 'hidden', name= 'gameID' value= game.id)
+                      input(type='submit', value= 'Rejoin Game')
+                  else if game.totalplayers < game.maxplayers
                     form(method='post', action='/game/join_game', name='join-game')
                       input(type= 'hidden', name= 'gameID' value= game.id)
                       input(type='submit', value= 'Join Game')
