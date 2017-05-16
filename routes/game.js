@@ -209,7 +209,7 @@ module.exports.getPlayerList = function(gameID, callback) {
 };
 
 module.exports.getGamesByUserID = function(userID, callback) {
-	db.manyOrNone('SELECT * FROM players p INNER JOIN games g WHERE p.id = $1 AND p.gameid = g.id', [userID])
+	db.manyOrNone('SELECT * FROM players p, games g WHERE p.userid = $1 AND g.id = p.gameID', [userID])
 		.then(games => {
 			console.log('These games were found:', games);
 			callback(null, games);

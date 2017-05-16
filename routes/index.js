@@ -37,11 +37,12 @@ router.get('/createGame', function(req, res, next) {
 
 router.get('/profile', function(req, res, next) {
 	if (req.user) {
-		var userID = req.user.id;
-		game.getGamesByUserID(userID, function(err, games) {
+		var user = req.user;
+
+		game.getGamesByUserID(user.id, function(err, games) {
 			if (err) throw err;
-			if (!games) res.render('profile.jade', {user: req.user});
-			else res.render('profile.jade', {user: req.user, games: games});
+			if (!games) res.render('profile.jade', {user: user});
+			else res.render('profile.jade', {user: user, games: games});
 		});
 	}
 	else {
