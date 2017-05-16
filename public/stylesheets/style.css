@@ -7,6 +7,10 @@ a {
   color: #00B7FF;
 }
 
+a[name='create-game-href'], a[name='test-game-href']{
+	float:left;
+}
+
 ul {
     list-style-type: none;
     margin: 0;
@@ -40,7 +44,7 @@ img.profile{
     background-color: #4CAF50;
 }
 
-.index-page{
+.bg{
 	font:14px "Lucida Grande", Helvetica, Arial, sans-serif;
 	background-image:url('../images/csc667_background.jpg');
 	background-position:center center;
@@ -53,15 +57,10 @@ img.profile{
 	min-width:50%;
 	width:100%;
 	height:1100px;
-	//background-attachment:fixed;
-	//position:absolute;
-	//top:0;
-	//left:0;
 }
 
 .container.center-div{
-	margin:0 auto;
-	margin-left:500px;
+	margin-left:25%;
 	width:75%;
 }
 
@@ -76,15 +75,23 @@ form[name='register-user']{
 	box-shadow:0 1px 2px rgba(0,0,0,0.05);
 }
 
+a[name='signup']{
+	float:right;
+}
+
 .container.registration{
-	margin-left:700px;
+	margin-left:40%;
+}
+
+.body_content[name='createGame-content']{
+	float:left;
+	margin-left:15px;
 }
 
 .form-signin{
 	display:inline-block;
 	max-width:400px;
 	padding:0px 10px 10px;
-	//margin:0 auto;
 	margin-top: 120px;
 	margin-left:280px;
 	background-color:#fff;
@@ -106,30 +113,32 @@ form[name='register-user']{
 	margin-left:15px;
 }
 
-.lobby-page{
-	padding-top:60px;
-}
-
 .logo{
 	float:left;
-	//padding-right:50px;
 	width:15%;
 	display:inline;
 }
 
 .user-logo{
 	float:right;
-	//padding-left:250px;
-	//margin-right:200px;
 	width:15%;
 	display:inline;
 }
 
-.header_content h1{
-	margin:0px;
-	display:inline;
+h1[name='username-h1']{
 	color:black;
-	vertical-align:top;
+}
+
+h3[name='profile-h3']{
+	color:black;
+}
+
+input[name='rejoin-game']{
+	margin-top:15px;
+}
+
+h1{
+	color:black;
 }
 
 h3[name='header_title']{
@@ -138,11 +147,9 @@ h3[name='header_title']{
 
 .login{
 	float:left;
-	//position:fixed;
 }
 
 .content[name='chat-content']{
-	//width:500px;
 	min-width:25%;
 	min-height:10%;
 	height:100px;
@@ -151,16 +158,28 @@ h3[name='header_title']{
 	overflow-y:scroll;
 }
 
+.block_content[name='lobby']{
+	float:left;
+	width:70%;
+	min-width:65%;
+}
+
+.table_normal{
+	float:left;
+	width:65%;
+	min-width:35%;
+	margin-right:120px;
+}
+
 .table_content{
 	display:inline-table;
-	width:60%;
-	padding:14px;
-	text-align:center;
+	width:100%;
+	min-width:65%;
 }
 
 table{
 	background-color:#fff;
-	width:75%;
+	width:100%;
 	margin:20px auto;
 	table-layout:fixed;
 }
@@ -172,9 +191,21 @@ table, td, th{
 
 th, td{
 	background-color:#fff;
-	padding:10px;
+	padding:5px;
 	border:solid 1px;
 	text-align:center;
+}
+
+.chat_content[name='create-game-chat']{
+	float:right;
+	background-color:#fff;
+	min-width:5%;
+	width:25%;
+	padding:10px;
+	margin:25px 62% 0px 0px;
+	border:1px solid #000;
+	border-radius:5px;
+	box-shadow:0 1px 2px rgba(0,0,0,0.05);
 }
 
 .chat_content{
@@ -189,8 +220,16 @@ th, td{
 	box-shadow:0 1px 2px rgba(0,0,0,0.05);
 }
 
-.container.createGame{
-	
+form[name='create-game']{
+	width:100%;
+	min-width:15%;
+	margin-top:25px;
+	margin-left:20%;
+	padding:5px 5px 5px 5px;
+	background-color:#fff;
+	border:1px solid #000;
+	border-radius:5px;
+	box-shadow:0 1px 2px rgba(0,0,0,0.05);	
 }
 
 ul[name='chat-messages']{
@@ -208,8 +247,12 @@ input[name='chat-msg']{
 	margin-right:5px;
 }
 
-input[name='signup']{
-	float:right;
+input[name='title']{
+	margin:8px;
+}
+
+select[name='map']{
+	margin:5px;
 }
 
 canvas[name='game-screen']{
@@ -221,8 +264,4 @@ canvas[name='game-screen']{
 
 input[type='checkbox']{
 	margin-left:5px;
-}
-
-form[name='create-game']{
-	margin-top:15px;
 }
