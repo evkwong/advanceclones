@@ -4,12 +4,11 @@ block content
 	.bg
 		.container
 			div.block_content
-				h1= user.username
-				h3 Current Games:
-			
-				div.table_content
+				h1(name='username-h1')= user.username
+				div.table_normal
+					h3(name='profile-h3') Current Games:
 					if games.length > 0
-						table
+						table.table_content
 							thead
 								tr
 									th Title
@@ -25,6 +24,6 @@ block content
 										td
 											form(method='post', action='/game/rejoin_game')
 												input(type='hidden', name='gameID' value= game.id)
-												input(type='submit', value='rejoin-game')
+												input(name='rejoin-game', type='submit', value='rejoin-game')
 					else
 						strong You do not have any concurrent games.
