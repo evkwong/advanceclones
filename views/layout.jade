@@ -11,12 +11,6 @@ html
 	body
 		script(src='/socket.io/socket.io.js')
 		script(src='http://code.jquery.com/jquery-1.7.1.min.js')
-		//- 
-			#err
-				if errors
-					for each errors
-						div(class='alert alert-danger')
-							var msg = {errMsg:'Shit be broke!'}
 
 		.container
 			div.header_content
@@ -40,7 +34,7 @@ html
 								li.active
 									a(href='/') Home
 								li
-									a(href='/account') Account
+									a(href='/profile') Account
 								li
 									a(href='/registration') Register
 								li
