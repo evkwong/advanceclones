@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var game = require('./game');
+var site = require('./site.js');
 
 //Landing Page
 router.get('/', function(req, res, next) {
@@ -19,12 +20,14 @@ router.get('/lobby', function(req,res, next) {
 		if (!gameList) console.log('Error: No data returned.');
 		else {
 			
-
+			console.log(gameList);
 			//Check if a logged in user has any concurrent games.
 			if (req.user) {
+				var game = 0;
 				for (j = 0; j < gameList.players.length; j++) {
 					if (gameList.players[j].username === req.user.username) {
-						gameList[j].playerInGame = true;
+						gameList[game].playerInGame = true;
+						game++;
 					}
 				}
 			}
@@ -57,11 +60,9 @@ router.get('/profile', function(req, res, next) {
 		});
 	}
 	else {
-		var error = {msg: 'You are not logged in!'};
-		var errors = [error];
-		res.render('index', {errors: errors});
+		site.notLoggedIn(res);
 	}
 	
-})
+});
 
 module.exports = router;
