@@ -2,7 +2,7 @@ extends layout
 block content
 	.bg
 		.container
-		div.body_content
+		div.body_content(name='createGame-content')
 			form(name='create-game', method='post', action='/game/new_game')
 				h1= title
 				div.input
@@ -20,11 +20,11 @@ block content
 						input(type='checkbox', value='add_opt2')
 				div.actions
 					input(type='submit', value='Create Game')
-			div.chat_content
-				h3 Chat
-					div.content(name='chat-content')
-					br
-					input(name='chat-text-area')
-					input(type='button', value='Send')
-			script(src='http://code.jquery.com/jquery-1.11.1.js')
-			script(src='/javascripts/chat_test.js')
+		div.chat_content(name='create-game-chat')
+			h3 Chat
+				div.content(name='chat-content')
+				br
+				input(name='chat-text-area')
+				input(type='button', value='Send')
+		script(src='http://code.jquery.com/jquery-1.11.1.js')
+		script(src='/javascripts/chat_test.js')
