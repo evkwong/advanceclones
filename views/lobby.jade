@@ -1,19 +1,42 @@
 extends layout
 
-doctype html
-html(lang='en')
-  head
-    title Advance Wars Clone - Game Lobby
-
 block content
-  .container
-    h1(id='title') Welcome to the Game Lobby
-  div.body_content
-    a(href='/createGame')
-      input(type='button', value='Create Game')
-    a(href='/testGame')
-      input(type='button', value='Test Game')
+	.index-page
+		.container
+			h1= title
+		div.body_content
+			a(href='/createGame')
+				input(type='button', value='Create Game')
+			a(href='/testGame')
+				input(type='button', value='Test Game')
     
+<<<<<<< HEAD
+			div.table_content
+				table#lobby-table
+					thead
+						tr
+							th Players
+							th Title
+							th Map
+							th Join
+					tbody
+						if games
+							each game in games
+								tr
+									td
+										strong= game.totalplayers + "/" + game.maxplayers
+									td
+										strong= game.title
+									td
+										strong= game.map
+									td
+										if game.totalplayers < game.maxplayers
+											form(method='post', action='/game/join_game', name='join-game')
+												input(type= 'hidden', name= 'gameID' value= game.id)
+												input(type='submit', value= 'Join Game')
+										else
+											strong Game Started
+=======
     div.table_content
       table#lobby-table
         thead
@@ -43,13 +66,14 @@ block content
                       input(type='submit', value= 'Join Game')
                   else
                     strong Game Started
+>>>>>>> 3f3edbd859496602e1f8927f78cc6f4df5e04cfb
                 
-      div.chat_content
-        h3 Chat
-          #content(style='width: 500px; height: 300px; margin: 0 0 20px 0; border: solid 1px #999; overflow-y: scroll;')
-          br
-          input#field(style='width:350px;')
-          input#send(type='button', value='send')
+			div.chat_content
+				h3 Chat
+					.content(name='chat-content')
+					br
+					input(name='chat-text-area')
+					input(type='button', value='send')
 
-      script(src='http://code.jquery.com/jquery-1.11.1.js')
-      script(src='/javascripts/chat.js')
+			script(src='http://code.jquery.com/jquery-1.11.1.js')
+			script(src='/javascripts/chat.js')
