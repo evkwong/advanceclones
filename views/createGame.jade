@@ -1,18 +1,19 @@
 extends layout
 block content
-	.index-page
-		div.container.createGame
+	.bg
+		.container
+		div.body_content
 			form(name='create-game', method='post', action='/game/new_game')
 				h1= title
 				div.input
-					span.label Game Title
+					span.label(name='span-game-title') Game Title:
 					input(type='text', name='title', placeholder='Enter name of game here:')
-				div.input
-					span.label Select a Map:
+					//div.input
+					span.label(name='span-map') Select a Map:
 					select(name='map')
 						option(value='0') Map A
 				div.input
-					span.label Additional Game Options
+					span.label(name='add-game-opt') Additional Game Options:
 					label(name='checkbox-label') More Mountains
 						input(type='checkbox', value='add_opt1')
 					label(name='checkbox-label') Higher Production Costs
