@@ -1,13 +1,12 @@
 extends layout
 
-body
-
-	block content
+block content
+	.bg
 		.container
 			div.block_content
 				h1= user.username
 				h3 Current Games:
-				
+			
 				div.table_content
 					if games.length > 0
 						table
