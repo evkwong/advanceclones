@@ -6,8 +6,9 @@ html(lang='en')
 block content
 	div.index-page
 		div.container.registration
-			h1= title
+			//h1= title
 			form(name="register-user", method="post", action="/users/register")
+				h1= title
 				div.input
 					span.label Enter a username: 
 					input(type="text", name="username")
