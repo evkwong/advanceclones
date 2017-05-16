@@ -125,6 +125,11 @@ a[name='signup']{
 	display:inline;
 }
 
+img[name='user-profile-avatar']{
+	float:right;
+	width:15%;
+}
+
 h1[name='username-h1']{
 	color:black;
 }
