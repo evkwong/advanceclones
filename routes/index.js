@@ -15,25 +15,10 @@ router.get('/registration', function(req, res, next) {
 
 //Lobby Page
 router.get('/lobby', function(req,res, next) {
-	game.getGameList(function(err, gameList) {
+	game.getGameList(req.user, function(err, gameList) {
 		if (err) throw err;
 		if (!gameList) console.log('Error: No data returned.');
 		else {
-			
-			console.log(gameList);
-			//Check if a logged in user has any concurrent games.
-			if (req.user) {
-				var game = 0;
-				for (j = 0; j < gameList.players.length; j++) {
-					if (gameList.players[j].username === req.user.username) {
-						gameList[game].playerInGame = true;
-						game++;
-					}
-				}
-			}
-			
-
-			console.log('Gamelist:', gameList);
 			res.render('lobby.jade', {title: 'Lobby', games: gameList});
 		}
 

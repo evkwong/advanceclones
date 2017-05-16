@@ -162,12 +162,29 @@ var getUnitsByGameID = function(gameID, callback) {
 //Exports
 module.exports = router;
 
-module.exports.getGameList = function(callback) {
+module.exports.getGameList = function(user, callback) {
 	db.manyOrNone('SELECT * FROM games')
 		.then(games => {
 			db.manyOrNone('SELECT * FROM players')
 				.then(players => {
-					games.players = players;
+					//Check if a logged in user has any concurrent games.
+					for (i = 0; i < games.length; i++) {
+						games[i].playerInGame = false;
+					}
+
+					//Check if a logged in user has any concurrent games.
+					if (user != null) {
+						for (i = 0; i < players.length; i++) {
+							for (j = 0; j < games.length; j++) {
+								if (players[i].username == user.username && players[i].gameid == games[j].id) {
+									games[j].playerInGame = true;
+								}
+							}
+							
+						}
+					}
+
+					console.log('Game list:', games);
 					callback(null, games);
 				})
 				.catch(error => {
@@ -192,7 +209,7 @@ module.exports.getPlayerList = function(gameID, callback) {
 };
 
 module.exports.getGamesByUserID = function(userID, callback) {
-	db.manyOrNone('SELECT * FROM players p INNER JOIN games g ON p.gameID = g.id WHERE p.id = $1', [userID])
+	db.manyOrNone('SELECT * FROM players p INNER JOIN games g WHERE p.id = $1 AND p.gameid = g.id', [userID])
 		.then(games => {
 			console.log('These games were found:', games);
 			callback(null, games);
