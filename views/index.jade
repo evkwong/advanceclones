@@ -2,7 +2,7 @@ extends layout
 
 body
 	block content
-		div.index-page
+		div.bg
 			div.container.center-div
 				form(method='post', action='/users/login', class='form-signin', name='login-user')
 					h1 Log In
@@ -13,9 +13,4 @@ body
 						label(for='password') Password
 						input.form-control(type='password', id='password', placeholder='Enter Password', name='password')
 					button.btn.btn-primary(type='submit') Log in
-			br
-			a(href='./lobby') Test Link to Lobby
-			br
-			a(href='./game') Test Link to Game
-			br
-			a(href='./registration') Sign Up
+					a(href='./registration', class='btn btn-primary', name='signup') Sign up
