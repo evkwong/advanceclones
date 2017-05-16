@@ -68,7 +68,8 @@ img.profile{
 form[name='register-user']{
 	width:25%;
 	min-width:20%;
-	padding:15px 15px 15px 15px;
+	margin: 0px -5px -393px 0px;
+	padding:0px 0px 15px 15px;
 	background-color:#fff;
 	border:1px solid #000;
 	border-radius:5px;
@@ -141,8 +142,10 @@ h3[name='header_title']{
 }
 
 .content[name='chat-content']{
-	width:500px;
-	height:300px;
+	//width:500px;
+	min-width:25%;
+	min-height:10%;
+	height:100px;
 	margin:0 0 20px 0;
 	border:solid 1px #999;
 	overflow-y:scroll;
@@ -156,16 +159,19 @@ h3[name='header_title']{
 }
 
 table{
+	background-color:#fff;
 	width:75%;
 	margin:20px auto;
 	table-layout:fixed;
 }
 
 table, td, th{
+	background-color:#fff;
 	border-collapse:collapse;
 }
 
 th, td{
+	background-color:#fff;
 	padding:10px;
 	border:solid 1px;
 	text-align:center;
@@ -173,9 +179,18 @@ th, td{
 
 .chat_content{
 	float:right;
+	background-color:#fff;
+	min-width:5%;
+	width:25%;
+	padding:10px;
+	margin:25px 10px 0px 0px;
 	border:1px solid #000;
 	border-radius:5px;
 	box-shadow:0 1px 2px rgba(0,0,0,0.05);
+}
+
+.container.createGame{
+	
 }
 
 ul[name='chat-messages']{
@@ -183,8 +198,8 @@ ul[name='chat-messages']{
 }
 
 input[name='chat-text-area']{
+	width:75%;
 	margin-right:10px;
-	margin-top:20px;
 	margin-left:5px;
 }
 
@@ -202,14 +217,6 @@ canvas[name='game-screen']{
 	height:500px;
 	border-radius:5px;
 	box-shadow:0 1px 2px rgba(0,0,0,0,0.05);
-}
-
-input[name='field']{
-	width:350px;
-}
-
-input[name='send']{
-	
 }
 
 input[type='checkbox']{
