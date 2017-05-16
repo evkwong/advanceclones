@@ -7,6 +7,10 @@ a {
   color: #00B7FF;
 }
 
+a[name='create-game-href'], a[name='test-game-href']{
+	float:left;
+}
+
 ul {
     list-style-type: none;
     margin: 0;
@@ -71,6 +75,10 @@ form[name='register-user']{
 	box-shadow:0 1px 2px rgba(0,0,0,0.05);
 }
 
+a[name='signup']{
+	float:right;
+}
+
 .container.registration{
 	margin-left:40%;
 }
@@ -79,7 +87,6 @@ form[name='register-user']{
 	display:inline-block;
 	max-width:400px;
 	padding:0px 10px 10px;
-	//margin:0 auto;
 	margin-top: 120px;
 	margin-left:280px;
 	background-color:#fff;
@@ -113,11 +120,20 @@ form[name='register-user']{
 	display:inline;
 }
 
-.header_content h1{
-	margin:0px;
-	display:inline;
+h1[name='username-h1']{
 	color:black;
-	vertical-align:top;
+}
+
+h3[name='profile-h3']{
+	color:black;
+}
+
+input[name='rejoin-game']{
+	margin-top:15px;
+}
+
+h1{
+	color:black;
 }
 
 h3[name='header_title']{
@@ -137,18 +153,28 @@ h3[name='header_title']{
 	overflow-y:scroll;
 }
 
+.block_content[name='lobby']{
+	float:left;
+	width:70%;
+	min-width:65%;
+}
+
+.table_normal{
+	float:left;
+	width:65%;
+	min-width:35%;
+	margin-right:120px;
+}
+
 .table_content{
 	display:inline-table;
-	float:center;
-	width:55%;
-	min-width:50%;
-	padding:14px;
-	text-align:center;
+	width:100%;
+	min-width:65%;
 }
 
 table{
 	background-color:#fff;
-	width:75%;
+	width:100%;
 	margin:20px auto;
 	table-layout:fixed;
 }
@@ -160,7 +186,7 @@ table, td, th{
 
 th, td{
 	background-color:#fff;
-	padding:10px;
+	padding:5px;
 	border:solid 1px;
 	text-align:center;
 }
