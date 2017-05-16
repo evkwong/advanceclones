@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var db = require('../routes/database');
 var path = require('path');
+var site = require('./site.js');
 
 //Routes.
 router.post('/new_game', function(req, res) {
@@ -56,38 +57,43 @@ router.post('/new_game', function(req, res) {
 });
 
 router.post('/join_game', function(req, res) {
-	var username = req.user.username;
-	var gameID = req.body.gameID;
-	var userID = req.user.id;
+	if (req.user) {
+		var username = req.user.username;
+		var gameID = req.body.gameID;
+		var userID = req.user.id;
 
-	db.one('UPDATE games SET totalplayers = totalplayers+1 WHERE id = $1 RETURNING *', [gameID])
-		.then(data => {
-			console.log(username, 'added to players of game:', gameID, 'Current number of players:', data.totalplayers);
+		db.one('UPDATE games SET totalplayers = totalplayers+1 WHERE id = $1 RETURNING *', [gameID])
+			.then(data => {
+				console.log(username, 'added to players of game:', gameID, 'Current number of players:', data.totalplayers);
 
-			if (data.totalplayers == data.maxplayers) {
-				db.none('UPDATE games SET started = true WHERE id = $1', [gameID]);
-			}
-		})
-		.catch(error => {
-			throw error;
-		})
-
-	insertPlayer(username, gameID, userID, function(err, data) {
-		if (err) throw err;
-		if (!data) console.log('No data found.');
-		else {
-			console.log(username, 'has joined the game.');
-
-			getGameByID(gameID, function(err, game, unitList) {
-				if (err) throw err;
-				if (!game) console.log('Error: No game found!');
-				else {
-					res.render('testGame', {game, unitList});
+				if (data.totalplayers == data.maxplayers) {
+					db.none('UPDATE games SET started = true WHERE id = $1', [gameID]);
 				}
 			})
-			
-		}
-	});
+			.catch(error => {
+				throw error;
+			})
+
+		insertPlayer(username, gameID, userID, function(err, data) {
+			if (err) throw err;
+			if (!data) console.log('No data found.');
+			else {
+				console.log(username, 'has joined the game.');
+
+				getGameByID(gameID, function(err, game, unitList) {
+					if (err) throw err;
+					if (!game) console.log('Error: No game found!');
+					else {
+						res.render('testGame', {game, unitList});
+					}
+				})
+				
+			}
+		});
+	}
+	else {
+		site.notLoggedIn(res);
+	}
 });
 
 router.post('/rejoin_game', function(req, res) {
@@ -183,7 +189,7 @@ module.exports.getPlayerList = function(gameID, callback) {
 		.catch(error => {
 			callback(error, false);
 		})
-}
+};
 
 module.exports.getGamesByUserID = function(userID, callback) {
 	db.manyOrNone('SELECT * FROM players p INNER JOIN games g ON p.gameID = g.id WHERE p.id = $1', [userID])
@@ -204,7 +210,7 @@ module.exports.getGamesByUserID = function(userID, callback) {
 		.catch(error => {
 			callback(error, false);
 		})
-}
+};
 
 router.get('refresh_game', function(req, res) {
-})
+});
