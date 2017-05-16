@@ -83,6 +83,11 @@ a[name='signup']{
 	margin-left:40%;
 }
 
+.body_content[name='createGame-content']{
+	float:left;
+	margin-left:15px;
+}
+
 .form-signin{
 	display:inline-block;
 	max-width:400px;
@@ -191,6 +196,18 @@ th, td{
 	text-align:center;
 }
 
+.chat_content[name='create-game-chat']{
+	float:right;
+	background-color:#fff;
+	min-width:5%;
+	width:25%;
+	padding:10px;
+	margin:25px 62% 0px 0px;
+	border:1px solid #000;
+	border-radius:5px;
+	box-shadow:0 1px 2px rgba(0,0,0,0.05);
+}
+
 .chat_content{
 	float:right;
 	background-color:#fff;
@@ -204,8 +221,7 @@ th, td{
 }
 
 form[name='create-game']{
-	display:inline-block;
-	width:35%;
+	width:100%;
 	min-width:15%;
 	margin-top:25px;
 	margin-left:20%;
