@@ -50,7 +50,6 @@ router.get('/createGame', function(req, res, next) {
 	res.render('createGame.jade', {title: 'Create Game'});
 });
 
-//Profile Page
 router.get('/profile', function(req, res, next) {
 	if (req.user) {
 		var userID = req.user.id;
