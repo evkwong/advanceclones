@@ -1,6 +1,6 @@
 /* TODO
  * get gameId, currentPlayerTurn, and unitId from database
- * 	these values are hard coded into the game right now
+ *	these values are hard coded into the game right now
  */
 var currentPlayerTurn = 0;
 var canvas = document.getElementById('gameDraw');
@@ -45,11 +45,11 @@ function selectUnit(e) {
 		for(var i = 0; i < units.length; i++) {
 				if (clickedX > units[i].xPos && clickedX < units[i].xPos + 32 && 
 						clickedY > units[i].yPos && clickedY < units[i].yPos + 32) {
-						    console.log("Clicked on unit", units[i].xPos, units[i].yPos);
+								console.log("Clicked on unit", units[i].xPos, units[i].yPos);
 								orderUnit(units[i]);
 				}
 		}
-}	function orderUnit(selectedUnit) {
+} function orderUnit(selectedUnit) {
 		$('#gameDraw').one('click', function(e) {
 				selectedUnit.xPos = e.pageX - this.offsetLeft;
 				selectedUnit.yPos = e.pageY - this.offsetTop;
@@ -89,8 +89,23 @@ function selectBuilding(e) {
 				var clickedY = e.pageY - this.offsetTop;
 
 				if(clickedX > 160 && clickedX < 200 && clickedY > 256 && clickedY < 296) {
-						createUnit(context, 1, 1, currentPlayerTurn, 
-								selectedBuild.xPos + 32, selectedBuild.yPos, "infantry");
+					createUnit(context, 1, 1, currentPlayerTurn, 
+						selectedBuild.xPos + 32, selectedBuild.yPos, "infantry");
+				}
+
+				if(clickedX > 225 && clickedX < 265 && clickedY > 256 && clickedY < 296) {
+					createUnit(context, 1, 1, currentPlayerTurn, 
+						selectedBuild.xPos + 32, selectedBuild.yPos, "mech");
+				}
+
+				if(clickedX > 287 && clickedX < 327 && clickedY > 256 && clickedY < 296) {
+					createUnit(context, 1, 1, currentPlayerTurn, 
+						selectedBuild.xPos + 32, selectedBuild.yPos, "recon");
+				}
+
+				if(clickedX > 353 && clickedX < 393 && clickedY > 256 && clickedY < 296) {
+					createUnit(context, 1, 1, currentPlayerTurn, 
+						selectedBuild.xPos + 32, selectedBuild.yPos, "tank");
 				}
 
 				updateAll();
@@ -135,7 +150,7 @@ function selectBuilding(e) {
 						menuY = 256;
 				}
 
-				/*
+				
 				if(i == 2) {
 						menuImage.src = "/images/recon_" + unitSide + ".png";
 						menuX = 287;
@@ -147,7 +162,7 @@ function selectBuilding(e) {
 						menuX = 353;
 						menuY = 256;
 				}
-				*/
+				
 		}
 
 }
@@ -183,6 +198,26 @@ var drawUnit = function(context, unitObject) {
 				if(unitObject.owner == 1) {
 						unitImage.src = "/images/mech_blue.png";
 				}
+		}
+
+		if(unitObject.type == "recon") {
+			if(unitObject.owner == 0) {
+					unitImage.src = "/images/recon_red.png";
+			}
+
+			if(unitObject.owner == 1) {
+					unitImage.src = "/images/recon_blue.png";
+			}
+		}
+
+		if(unitObject.type == "tank") {
+			if(unitObject.owner == 0) {
+					unitImage.src = "/images/tank_red.png";
+			}
+
+			if(unitObject.owner == 1) {
+					unitImage.src = "/images/tank_blue.png";
+			}
 		}
 
 		unitImage.onload = function() {
