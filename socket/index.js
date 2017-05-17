@@ -9,15 +9,21 @@ var init = (app, server) => {
   let players = [];
   
   io.on('connection', socket => {
-    console.log('client connected')
+    console.log('A client connected.')
     
     //used for chat serverside       
     socket.on('send', function(data) {
       socket.emit('message', data);
     })
 
+    //Game state.
+    socket.on('test', function(data) {
+      console.log('Data received:', data);
+    })
+    
+    //Disconnect.
     socket.on('disconnect', data => {
-      console.log('client disconnected')
+      console.log('A client disconnected.')
     })
   })
 }

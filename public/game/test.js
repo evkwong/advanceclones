@@ -2,6 +2,9 @@
  * get gameId, currentPlayerTurn, and unitId from database
  * 	these values are hard coded into the game right now
  */
+
+var socket = io();
+var testButton = document.getElementById('testButton');
 var currentPlayerTurn = 0;
 var canvas = document.getElementById('gameDraw');
 var context = canvas.getContext('2d');
@@ -53,6 +56,11 @@ function selectUnit(e) {
 		$('#gameDraw').one('click', function(e) {
 				selectedUnit.xPos = e.pageX - this.offsetLeft;
 				selectedUnit.yPos = e.pageY - this.offsetTop;
+
+
+				console.log('Attempting to get new xPos and yPos!');
+				socket.emit('test', {unit: selectedUnit});
+
 
 				for(var i in units) {
 						if(units[i].id == selectedUnit.id) {
@@ -239,3 +247,8 @@ var createUnit = function(context, id, gameId, owner, xPos, yPos, type) {
 		units.push(unit);
 };
 
+//Socket.io for updating game states.
+testButton.onclick = function() {
+  console.log('Attempting to send data!');
+  socket.emit('test', {message: 'WOW IT WORKED!'});
+};
