@@ -31,11 +31,11 @@ window.onload = function() {
 				context.drawImage(background, 0, 0);
 		};
 
-		createHQ(context, 0, 1, currentPlayerTurn, 1, 256, "hq");
-		createHQ(context, 1, 1, 1, 580, 1, "hq");
-		createInfantry(context, 2, 1, currentPlayerTurn, 1, 1, "infantry");
-		createInfantry(context, 1, 1, 1, 550, 1, "infantry");
-		createMech(context, 3, 1, currentPlayerTurn, 32, 1, "mech");
+		createBuilding(context, 0, 1, currentPlayerTurn, 1, 256, "hq");
+		createBuilding(context, 1, 1, 1, 580, 1, "hq");
+		createUnit(context, 2, 1, currentPlayerTurn, 1, 1, "infantry");
+		createUnit(context, 1, 1, 1, 550, 1, "infantry");
+		createUnit(context, 3, 1, currentPlayerTurn, 32, 1, "mech");
 };
 
 $('#gameDraw').on('click', selectUnit);
@@ -97,7 +97,7 @@ function selectBuilding(e) {
 				var clickedY = e.pageY - this.offsetTop;
 
 				if(clickedX > 160 && clickedX < 200 && clickedY > 256 && clickedY < 296) {
-						createInfantry(context, 1, 1, currentPlayerTurn, 
+						createUnit(context, 1, 1, currentPlayerTurn, 
 								selectedBuild.xPos + 32, selectedBuild.yPos, "infantry");
 				}
 
@@ -235,22 +235,16 @@ var Unit = function(id, gameId, owner, xPos, yPos, type) {
 		this.type = type;
 };
 
-var createHQ = function(context, buildId, gameId, owner, xPos, yPos, type) {
-		var hq = new Building(buildId, gameId, owner, xPos, yPos, type);
-		drawBuilding(context, hq);
-		buildings.push(hq);
+var createBuilding = function(context, buildId, gameId, owner, xPos, yPos, type) {
+		var building = new Building(buildId, gameId, owner, xPos, yPos, type);
+		drawBuilding(context, building);
+		buildings.push(building);
 };
 
-var createInfantry = function(context, id, gameId, owner, xPos, yPos, type) {
-		var infantry = new Unit(id, gameId, owner, xPos, yPos, type);
-		drawUnit(context, infantry);
-		units.push(infantry);
-};
-
-var createMech = function(context, id, gameId, owner, xPos, yPos, type) {
-		var mech = new Unit(id, gameId, owner, xPos, yPos, type);
-		drawUnit(context, mech);
-		units.push(mech);
+var createUnit = function(context, id, gameId, owner, xPos, yPos, type) {
+		var unit = new Unit(id, gameId, owner, xPos, yPos, type);
+		drawUnit(context, unit);
+		units.push(unit);
 };
 
 //Socket.io for updating game states.
