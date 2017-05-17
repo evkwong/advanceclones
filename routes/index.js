@@ -5,7 +5,7 @@ var site = require('./site.js');
 
 //Landing Page
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('index.jade', { title: 'Advance Clones' });
 });
 
 //Registration Page
@@ -49,6 +49,13 @@ router.get('/profile', function(req, res, next) {
 		site.notLoggedIn(res);
 	}
 	
+});
+
+router.get('/logout', function (req, res, next) {
+	console.log('HELLO!!');
+	req.session.destroy(function (err) {
+		site.loggedOut(res);
+	});
 });
 
 module.exports = router;

@@ -16,6 +16,12 @@ var init = (app, server) => {
       socket.emit('message', data);
     })
 
+    //Game state.
+    socket.on('test', function(data) {
+      console.log('Data received:', data);
+    })
+    
+    //Disconnect.
     socket.on('disconnect', data => {
       console.log('client disconnected')
     })
