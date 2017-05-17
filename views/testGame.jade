@@ -3,11 +3,11 @@ extends layout
 doctype html
 html
 		block content
-				//canvas#gameDraw
+				canvas#gameDraw
 
-				input(type='button', value='test')
+				input(type='button', value='test', id='testButton')
 
-				cript(src='/game/test.js')
 				script(src='http://code.jquery.com/jquery-1.11.1.js')
-				script(src='/javascripts/game_socket_client.js')
-
+				script(src='/javascripts/game_client_socket.js')
+				//script(src='/game/test.js')
+				

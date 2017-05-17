@@ -4,6 +4,7 @@ window.onload = function() {
   var messages = [];
   var field = document.getElementById('field');
   var sendButton = document.getElementById('send');
+  var testButton = document.getElementById('testButton');
   var content = document.getElementById('content');
   
   socket.on('message', function (data) {
