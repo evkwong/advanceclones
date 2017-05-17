@@ -36,6 +36,9 @@ window.onload = function() {
 		createUnit(context, 2, 1, currentPlayerTurn, 1, 1, "infantry");
 		createUnit(context, 1, 1, 1, 550, 1, "infantry");
 		createUnit(context, 3, 1, currentPlayerTurn, 32, 1, "mech");
+
+		//Socket.io test.
+		console.log(game);
 };
 
 $('#gameDraw').on('click', selectUnit);
@@ -252,3 +255,8 @@ testButton.onclick = function() {
   console.log('Attempting to send data!');
   socket.emit('test', {message: 'WOW IT WORKED!'});
 };
+
+//Game state.
+socket.on('test', function(data) {
+  console.log('Data received:', data);
+})

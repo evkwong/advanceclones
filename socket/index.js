@@ -1,10 +1,12 @@
 var socketIo = require('socket.io')
 //var { USER_JOINED, MESSAGE_SEND } = require('../chat/constants_chat')
+var game = require('../routes/game');
 
+console.log('SocketIO index loaded.');
 var init = (app, server) => {
-  var io = socketIo(server)
+  var io = socketIo(server);
   
-  app.set('io', io)
+  app.set('io', io);
   
   let players = [];
   
@@ -18,13 +20,21 @@ var init = (app, server) => {
 
     //Game state.
     socket.on('test', function(data) {
-      console.log('Data received:', data);
+      game.getGameList(null, function(err, gameList) {
+        if (err) throw err
+        else {
+          console.log('Data received:', gameList);
+        }
+        
+      });
+      
     })
     
     //Disconnect.
     socket.on('disconnect', data => {
       console.log('A client disconnected.')
     })
+
   })
 }
 

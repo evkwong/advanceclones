@@ -3,6 +3,7 @@ var router = express.Router();
 var db = require('../routes/database');
 var path = require('path');
 var site = require('./site.js');
+var socketIO = require('../socket/index.js');
 
 //Routes.
 router.post('/new_game', function(req, res) {
@@ -103,7 +104,7 @@ router.post('/rejoin_game', function(req, res) {
 		if (err) throw err;
 		if (!game) console.log('Error: No game found!');
 		else {
-			res.render('testGame', {game, unitList});
+			res.render('testGame', {game: game, unitList: unitList});
 		}
 	})
 	

@@ -2,7 +2,7 @@ window.onload = function() {
   console.log('Chat loaded!');
   
   var socket = io();
-  var messages = [];
+  //var messages = [];
   //var field = document.getElementById('field');
   //var sendButton = document.getElementById('send');
   var testButton = document.getElementById('testButton');
