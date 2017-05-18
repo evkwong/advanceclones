@@ -356,4 +356,3 @@ function setDefaultState() {
 		createUnit(context, 2, currentGameId, currentPlayerTurn, 1, 1, "infantry");
 		createUnit(context, 1, currentGameId, 1, 550, 1, "infantry");
 }
->>>>>>> 087ae9b33bd78e31e2dcce82370a7daf8aa99c0b
