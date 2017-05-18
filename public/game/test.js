@@ -45,7 +45,8 @@ function selectUnit(e) {
 
 		for(var i = 0; i < units.length; i++) { 
 				if (clickedX > units[i].xPos && clickedX < units[i].xPos + 32 && 
-						clickedY > units[i].yPos && clickedY < units[i].yPos + 32) {
+						clickedY > units[i].yPos && clickedY < units[i].yPos + 32 &&
+						units[i].owner == currentPlayerTurn) {
 								console.log("Clicked on unit", units[i].xPos, units[i].yPos);
 								orderUnit(units[i], i);
 				}
@@ -66,8 +67,7 @@ function selectUnit(e) {
 								clickedX < units[i].xPos + 32 && 
 								clickedY > units[i].yPos && 
 								clickedY < units[i].yPos + 32 && 
-								selectedUnit.owner != units[i].owner &&
-								selectedUnit.owner != selectedUnit.owner) {
+								selectedUnit.owner != units[i].owner ) {
 								
 								attackUnit(selectedUnit, unitPosInArray, i);
 								break;
@@ -110,11 +110,11 @@ $('#gameDraw').on('click', selectBuilding);
 function selectBuilding(e) {
 		var clickedX = e.pageX - this.offsetLeft;
 		var clickedY = e.pageY - this.offsetTop;
-		console.log("x: ", clickedX, 'y:', clickedY);
 
 		for(var i in buildings) {
 				if(clickedX > buildings[i].xPos && clickedX < buildings[i].xPos + 32 &&
-					 clickedY > buildings[i].yPos && clickedY < buildings[i].yPos + 64) {
+					 clickedY > buildings[i].yPos && clickedY < buildings[i].yPos + 64 &&
+						buildings[i].type == "hq") {
 							console.log("Clicked on building", buildings[i].xPos, buildings[i].yPos);
 							buyUnits(buildings[i]);
 				}
@@ -212,7 +212,6 @@ function updateAll() {
 		context.drawImage(background, 0, 0);
 		for(var i in units) {
 				drawUnit(context, units[i]);
-				console.log("Updated Unit:", units[i].xPos, units[i].yPos);
 		}
 		for(var i in buildings) {
 				drawBuilding(context, buildings[i]);
@@ -328,7 +327,7 @@ testButton.onclick = function() {
 };
 function setDefaultState() {
 		createBuilding(context, 0, currentGameId, 0, 1, 256, "hq");
-		createBuilding(context, 1, currentGameId, 1, 580, 1, "hq");
+		createBuilding(context, 1, currentGameId, 1, 577, 1, "hq");
 
 		//Build Red Factory
 		createBuilding(context, 2, currentGameId, 0, 1, 230, "factory");
@@ -356,4 +355,3 @@ function setDefaultState() {
 		createUnit(context, 2, currentGameId, currentPlayerTurn, 1, 1, "infantry");
 		createUnit(context, 1, currentGameId, 1, 550, 1, "infantry");
 }
->>>>>>> 087ae9b33bd78e31e2dcce82370a7daf8aa99c0b
