@@ -248,14 +248,30 @@ var createUnit = function(context, id, gameId, owner, xPos, yPos, type) {
 		socket.emit('createUnit', unit);
 };
 
-//Socket.io for updating game states.
+//Socket.io for updating game state.
 testButton.onclick = function() {
   console.log('Attempting to send data!');
   socket.emit('test', {message: 'WOW IT WORKED!'});
 };
 
-//Game state.
 socket.on('test', function(data) {
   console.log('Data received:', data);
   socket.emit('test', {message: 'Yup it fuckin worked.'});
-})
+});
+
+socket.on('returnUnit', function(unit) {
+	console.log('Received a unit back:', unit);
+	//Implement unit creation / update here.
+});
+
+socket.on('removeUnit', function(unitID) {
+	//Implement unit deletion here.
+});
+
+socket.on('returnPlayer', function(player) {
+	//Implement player update here.
+});
+
+socket.on('updatePlayerTurn', function(currentPlayerTurn) {
+	//Implement update current player turn here.
+});

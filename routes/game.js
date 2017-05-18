@@ -229,7 +229,9 @@ module.exports.getGamesByUserID = function(userID, callback) {
 		})
 };
 
-module.exports.addUnit = function(data) {
+//Update game state.
+//Return data to be sent to other clients.
+module.exports.addUnit = function(data, callback) {
 	var gameID = data.gameID;
 	var owner = data.owner;
 	var posX = data.posX;
@@ -237,16 +239,58 @@ module.exports.addUnit = function(data) {
 	var health = 10;
 	var type = 0;
 
-	db.none('INSERT INTO units(gameID, owner, posX, posY, health, type) VALUES ($1, $2, $3, $4, $5, $6)',
+	db.one('INSERT INTO units(gameid, owner, posx, posy, health, type) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
 		[gameID, owner, posX, posY, health, type])
-		.then(data => {
+		.then(unit => {
 			console.log('Unit inserted into DB.');
+			callback(null, unit);
 		})
 		.catch(error => {
-			throw error;
+			callback(error, false);
+		})
+};
+
+module.exports.removeUnit = function(data, callback) {
+	var id = data.id;
+
+	db.none('DELETE FROM units WHERE id = $1', [id])
+		.then(unit => {
+			console.log('Unit deleted from DB.');
+			callback(null, id);
+		})
+		.catch(error => {
+			callback(error, id);
+		});
+};
+
+module.exports.updateWallet = function(data, callback) {
+	var value = data.value;
+	var playerID = data.playerID;
+
+	db.one('UPDATE games SET wallet = wallet+$1 WHERE id = $2 RETURNING *', [value, playerID])
+		.then(player => {
+			console.log('Player wallet updated:', data.wallet);
+			callback(null, player);
+		})
+		.catch(error => {
+			callback(error, false);
+		});
+};
+
+module.exports.updatePlayerTurn = function(data, callback) {
+	if (data.currentplayerturn == 0) var nextPlayerTurn = 1;
+	else var nextPlayerTurn = 0;
+	var gameid = data.id;
+
+	db.one('UPDATE games SET currentplayerturn = $1 WHERE id = $2', [nextplayerturn, gameid])
+		.then(data => {
+			callback(null, nextPlayerTurn);
+		})
+		.catch(error => {
+			callback(error, nextPlayerTurn);
 		})
 }
 
 module.exports.testFunction = function(data) {
 	console.log('Got it:', data);
-}
+};
