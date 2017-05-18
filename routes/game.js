@@ -84,7 +84,7 @@ router.post('/join_game', function(req, res) {
 					if (err) throw err;
 					if (!game) console.log('Error: No game found!');
 					else {
-						res.render('testGame', {gameID: gameID});
+						res.render('testGame', {title: game.title, gameID: gameID});
 					}
 				})
 				
@@ -103,7 +103,7 @@ router.post('/rejoin_game', function(req, res) {
 		if (err) throw err;
 		if (!game) console.log('Error: No game found!');
 		else {
-			res.render('testGame', {gameID: gameID});
+			res.render('testGame', {title: game.title, gameID: gameID});
 		}
 	})
 	
@@ -280,9 +280,9 @@ module.exports.updateWallet = function(data, callback) {
 module.exports.updatePlayerTurn = function(data, callback) {
 	if (data.currentplayerturn == 0) var nextPlayerTurn = 1;
 	else var nextPlayerTurn = 0;
-	var gameid = data.id;
+	var gameID = data.gameid;
 
-	db.one('UPDATE games SET currentplayerturn = $1 WHERE id = $2', [nextplayerturn, gameid])
+	db.none('UPDATE games SET currentplayerturn = $1 WHERE id = $2', [nextPlayerTurn, gameID])
 		.then(data => {
 			callback(null, nextPlayerTurn);
 		})

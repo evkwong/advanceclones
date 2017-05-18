@@ -3,9 +3,12 @@ extends layout
 doctype html
 html
 		block content
+				h1= title
+				h3#currentPlayerTurnDisplay Red player's turn!
+
 				canvas#gameDraw
 
-				input(type='button', value='test', id='testButton')
+				input(type='button', value='endTurn', id='endTurnButton')
 
 				script(type= 'text/javascript').
 					var gameID =!{JSON.stringify(gameID)}

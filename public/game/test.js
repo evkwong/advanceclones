@@ -14,7 +14,8 @@ socket.on('socketInfo', function(data) {
 })
 
 //Game setup.
-var testButton = document.getElementById('testButton');
+var currentPlayerTurnDisplay = document.getElementById('currentPlayerTurnDisplay');
+var endTurnButton = document.getElementById('endTurnButton');
 var currentPlayerTurn = 0;
 
 var canvas = document.getElementById('gameDraw');
@@ -365,21 +366,29 @@ function setDefaultState() {
 }
 
 //Socket.io for updating game state.
-testButton.onclick = function() {
-  console.log('Attempting to send data!');
-  socket.emit('test', {message: 'WOW IT WORKED!'});
+endTurnButton.onclick = function() {
+  console.log('Attempting to update player turn.');
+  socket.emit('updatePlayerTurn', {currentplayerturn: currentPlayerTurn, gameid: gameID});
 };
+
+socket.on('updatePlayerTurn', function(nextPlayerTurn) {
+	console.log('Received new player turn from DB:', nextPlayerTurn);
+	currentPlayerTurn = nextPlayerTurn;
+	if (currentPlayerTurn == 0) var player = 'Red';
+	else var player = 'Blue';
+	currentPlayerTurnDisplay.innerHTML = player + ' player\'s turn!';
+})
 
 socket.on('clientConsoleMessage', function(data) {
 	console.log('Message received:', data.message);
 })
 
 socket.on('returnUnit', function(unit) {
-		console.log('Unit sent back:', unit);
-		var tempUnit = new Unit(unit.id, unit.gameid, unit.owner, unit.xpos, unit.ypos, unit.type);
-		console.log('tempUnit:', tempUnit);
-		drawUnit(context, tempUnit);
-		units.push(tempUnit);
+	console.log('Unit sent back:', unit);
+	var tempUnit = new Unit(unit.id, unit.gameid, unit.owner, unit.xpos, unit.ypos, unit.type);
+	console.log('tempUnit:', tempUnit);
+	drawUnit(context, tempUnit);
+	units.push(tempUnit);
 });
 
 socket.on('removeUnit', function(unitID) {

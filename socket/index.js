@@ -36,7 +36,7 @@ var init = (app, server) => {
 		});
 
 		socket.on('createUnit', function(data, room) {
-			console.log('Adding new unit to DB:', data);
+			console.log('Received unit from client:', data);
       console.log('Room:', room);
 			game.addUnit(data, room, function(err, unit) {
 				if (err) throw err;
@@ -48,10 +48,15 @@ var init = (app, server) => {
 			});
 		});
 
+    socket.on('createBuilding', function(data, room) {
+      console.log('Received unit from client:', data);
+
+    })
+
 		socket.on('removeUnit', function(data) {
 			console.log('Removing unit from DB:', data);
 			game.removeUnit(data, function(err, unitID) {
-				if (err) throw error;
+				if (err) throw err;
 				else {
 					socket.emit('removeUnit', unitID);
 				}
@@ -61,16 +66,16 @@ var init = (app, server) => {
 		socket.on('updateWallet', function(data) {
 			console.log('Updating wallet:', data);
 			game.updateWallet(data, function(err, player) {
-				if (err) throw error;
+				if (err) throw err;
 				else {
 					socket.emit('updateWallet', player);
 				}
 			});
 		});
 
-		socket.on('updatePlayerTurn', function(currentPlayerTurn) {
-			console.log('Updating player turn.');
-			game.updatePlayerTurn(currentPlayerTurn, function(err, nextPlayerTurn) {
+		socket.on('updatePlayerTurn', function(data) {
+			console.log('Updating player turn.', data);
+			game.updatePlayerTurn(data, function(err, nextPlayerTurn) {
 				if (err) throw err;
 				else {
 					socket.emit('updatePlayerTurn', nextPlayerTurn);
