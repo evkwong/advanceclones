@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var db = require('../routes/database');
 var path = require('path');
-var site = require('./site.js');
+var site = require('./site');
 
 //Routes.
 router.post('/new_game', function(req, res) {
@@ -84,7 +84,7 @@ router.post('/join_game', function(req, res) {
 					if (err) throw err;
 					if (!game) console.log('Error: No game found!');
 					else {
-						res.render('testGame', {game, unitList});
+						res.render('testGame', {gameID: gameID});
 					}
 				})
 				
@@ -103,7 +103,7 @@ router.post('/rejoin_game', function(req, res) {
 		if (err) throw err;
 		if (!game) console.log('Error: No game found!');
 		else {
-			res.render('testGame', {game, unitList});
+			res.render('testGame', {gameID: gameID});
 		}
 	})
 	
@@ -229,5 +229,68 @@ module.exports.getGamesByUserID = function(userID, callback) {
 		})
 };
 
-router.get('refresh_game', function(req, res) {
-});
+//Update game state.
+//Return data to be sent to other clients.
+module.exports.addUnit = function(data, callback) {
+	var gameID = data.gameID;
+	var owner = data.owner;
+	var posX = data.posX;
+	var posY = data.posY;
+	var health = 10;
+	var type = 0;
+
+	db.one('INSERT INTO units(gameid, owner, posx, posy, health, type) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+		[gameID, owner, posX, posY, health, type])
+		.then(unit => {
+			console.log('Unit inserted into DB.');
+			callback(null, unit);
+		})
+		.catch(error => {
+			callback(error, false);
+		})
+};
+
+module.exports.removeUnit = function(data, callback) {
+	var id = data.id;
+
+	db.none('DELETE FROM units WHERE id = $1', [id])
+		.then(unit => {
+			console.log('Unit deleted from DB.');
+			callback(null, id);
+		})
+		.catch(error => {
+			callback(error, id);
+		});
+};
+
+module.exports.updateWallet = function(data, callback) {
+	var value = data.value;
+	var playerID = data.playerID;
+
+	db.one('UPDATE games SET wallet = wallet+$1 WHERE id = $2 RETURNING *', [value, playerID])
+		.then(player => {
+			console.log('Player wallet updated:', data.wallet);
+			callback(null, player);
+		})
+		.catch(error => {
+			callback(error, false);
+		});
+};
+
+module.exports.updatePlayerTurn = function(data, callback) {
+	if (data.currentplayerturn == 0) var nextPlayerTurn = 1;
+	else var nextPlayerTurn = 0;
+	var gameid = data.id;
+
+	db.one('UPDATE games SET currentplayerturn = $1 WHERE id = $2', [nextplayerturn, gameid])
+		.then(data => {
+			callback(null, nextPlayerTurn);
+		})
+		.catch(error => {
+			callback(error, nextPlayerTurn);
+		})
+}
+
+module.exports.testFunction = function(data) {
+	console.log('Got it:', data);
+};

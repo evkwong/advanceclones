@@ -3,7 +3,17 @@
  *	these values are hard coded into the game right now
  */
 
+console.log('GameID:', gameID);
+
+//SocketIO setup.
 var socket = io();
+var socketID = null;
+socket.emit('getSocketInfo', gameID);
+socket.on('socketInfo', function(data) {
+	socketID = data.socketID;
+})
+
+//Game setup.
 var testButton = document.getElementById('testButton');
 var currentPlayerTurn = 0;
 var currentGameId = 0;
@@ -318,13 +328,12 @@ var createUnit = function(context, id, gameId, owner, xPos, yPos, type) {
 		var unit = new Unit(id, gameId, owner, xPos, yPos, type);
 		drawUnit(context, unit);
 		units.push(unit);
+		socket.emit('createUnit', unit, gameID);
 };
 
-//Socket.io for updating game states.
-testButton.onclick = function() {
-  console.log('Attempting to send data!');
-  socket.emit('test', {message: 'WOW IT WORKED!'});
-};
+socket.on('updatePlayerTurn', function(currentPlayerTurn) {
+	//Implement update current player turn here.
+});
 function setDefaultState() {
 		createBuilding(context, 0, currentGameId, 0, 1, 256, "hq");
 		createBuilding(context, 1, currentGameId, 1, 577, 1, "hq");
@@ -355,3 +364,22 @@ function setDefaultState() {
 		createUnit(context, 2, currentGameId, currentPlayerTurn, 1, 1, "infantry");
 		createUnit(context, 1, currentGameId, 1, 550, 1, "infantry");
 }
+
+//Socket.io for updating game state.
+testButton.onclick = function() {
+  console.log('Attempting to send data!');
+  socket.emit('test', {message: 'WOW IT WORKED!'});
+};
+
+socket.on('returnUnit', function(unit) {
+	console.log('Received a unit back:', unit);
+	//Implement unit creation / update here.
+});
+
+socket.on('removeUnit', function(unitID) {
+	//Implement unit deletion here.
+});
+
+socket.on('returnPlayer', function(player) {
+	//Implement player update here.
+});
