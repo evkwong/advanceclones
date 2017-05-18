@@ -135,24 +135,33 @@ function selectBuilding(e) {
 				var clickedX = e.pageX - this.offsetLeft;
 				var clickedY = e.pageY - this.offsetTop;
 
+				var spawnX = 0;
+				var spawnY = 0;
+
+				if(currentPlayerTurn == 0) {
+						spawnX = selectedBuild.xPos + 32;
+						spawnY = selectedBuild.yPos;
+				} 
+				
+				else if (currentPlayerTurn == 1) {
+						spawnX = selectedBuild.xPos - 32;
+						spawnY = selectedBuild.yPos;
+				}
+
 				if(clickedX > 160 && clickedX < 200 && clickedY > 256 && clickedY < 296) {
-					//createUnit(context, 1, 1, currentPlayerTurn, 
-					//	selectedBuild.xPos + 32, selectedBuild.yPos, "infantry");
+						createUnit(context, gameID, currentPlayerTurn, spawnX, spawnY, "infantry");
 				}
 
 				if(clickedX > 225 && clickedX < 265 && clickedY > 256 && clickedY < 296) {
-					//createUnit(context, 1, 1, currentPlayerTurn, 
-						//selectedBuild.xPos + 32, selectedBuild.yPos, "mech");
+						createUnit(context, gameID, currentPlayerTurn, spawnX, spawnY, "mech");
 				}
 
 				if(clickedX > 287 && clickedX < 327 && clickedY > 256 && clickedY < 296) {
-					//createUnit(context, 1, 1, currentPlayerTurn, 
-					//	selectedBuild.xPos + 32, selectedBuild.yPos, "recon");
+						createUnit(context, gameID, currentPlayerTurn, spawnX, spawnY, "recon");
 				}
 
 				if(clickedX > 353 && clickedX < 393 && clickedY > 256 && clickedY < 296) {
-					//createUnit(context, 1, 1, currentPlayerTurn, 
-						//selectedBuild.xPos + 32, selectedBuild.yPos, "tank");
+						createUnit(context, gameID, currentPlayerTurn, spawnX, spawnY, "tank");
 				}
 
 				updateAll();
@@ -178,44 +187,31 @@ function selectBuilding(e) {
 				unitSide = "blue";
 		}
 
-		for(var i = 0; i < 4; i++) {
-				var menuImage = new Image();
-				var menuX;
-				var menuY;
-
-				if(i == 0) {
-						menuImage.src = "/images/infantry_" + unitSide + ".png";
-						menuX = 160;
-						menuY = 256;
-						context.drawImage(menuImage, menuX, menuY);
-				}
-
-				
-				if(i == 1) {
-						menuImage.src = "/images/mech_" + unitSide + ".png";
-						menuX = 225;
-						menuY = 256;
-						context.drawImage(menuImage, menuX, menuY);
-				}
-
-				
-				if(i == 2) {
-						menuImage.src = "/images/recon_" + unitSide + ".png";
-						menuX = 287;
-						menuY = 256;
-						context.drawImage(menuImage, menuX, menuY);
-				}
-
-				if(i == 3) {
-						menuImage.src = "/images/tank_" + unitSide + ".png";
-						menuX = 353;
-						menuY = 256;
-						context.drawImage(menuImage,menuX, menuY);
-				}
-				
+		var menuInfantry = new Image();
+		menuInfantry.src = "/images/infantry_" + unitSide + ".png";
+		menuInfantry.onload = function() {
+				context.drawImage(menuInfantry, 160, 256);
 		}
 
-}
+		var menuMech = new Image();
+		menuMech.src = "/images/mech_" + unitSide + ".png";
+		menuMech.onload = function() { 
+				context.drawImage(menuMech, 225, 256);
+		}
+
+		var menuRecon = new Image();
+		menuRecon.src = "/images/recon_" + unitSide + ".png";
+		menuRecon.onload = function() {
+				context.drawImage(menuRecon, 287, 256);
+		}
+
+		var menuTank = new Image();
+		menuTank.src = "/images/tank_" + unitSide + ".png";
+		menuTank.onload = function() {
+				context.drawImage(menuTank, 353, 256);
+		}				
+
+};
 
 function updateAll() {
 		context.drawImage(background, 0, 0);
