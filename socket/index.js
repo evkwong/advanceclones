@@ -8,7 +8,6 @@ game.testFunction('hi');
 console.log('SocketIO index loaded.');
 var init = (app, server) => {
 	var io = socketIo(server);
-	var room = null;
 	
 	app.set('io', io);
 	
@@ -23,7 +22,7 @@ var init = (app, server) => {
 			socket.join(room);
 			console.log(socket.id, 'has joined room:', room);
 			socket.send('socketInfo', {socketID: socket.id});
-			io.to(room).emit('Socket:', socketID, 'connected to this room.');
+			io.to(room).emit('clientConsoleMessage', {message: 'A socket connected to this room.'});
 		})
 
 		//Chat. 
