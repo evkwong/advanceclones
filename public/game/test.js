@@ -371,6 +371,10 @@ testButton.onclick = function() {
   socket.emit('test', {message: 'WOW IT WORKED!'});
 };
 
+socket.on('clientConsoleMessage', function(data) {
+	console.log('Message received:', data.message);
+})
+
 socket.on('returnUnit', function(unit) {
 		console.log('Received a unit back:', unit);
 		var tempUnit = new Unit(unit.gameId, unit.owner, unit.xPos, unit.yPos, unit.type);
