@@ -84,7 +84,7 @@ router.post('/join_game', function(req, res) {
 					if (err) throw err;
 					if (!game) console.log('Error: No game found!');
 					else {
-						res.render('testGame', {game, unitList});
+						res.render('testGame', {gameID: gameID});
 					}
 				})
 				
@@ -103,7 +103,7 @@ router.post('/rejoin_game', function(req, res) {
 		if (err) throw err;
 		if (!game) console.log('Error: No game found!');
 		else {
-			res.render('testGame', {game: game, unitList: unitList});
+			res.render('testGame', {gameID: gameID});
 		}
 	})
 	

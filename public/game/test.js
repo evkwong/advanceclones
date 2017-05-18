@@ -3,7 +3,17 @@
  * 	these values are hard coded into the game right now
  */
 
+console.log('GameID:', gameID);
+
+//SocketIO setup.
 var socket = io();
+var socketID = null;
+socket.emit('getSocketInfo', gameID);
+socket.on('socketInfo', function(data) {
+	socketID = data.socketID;
+})
+
+//Game setup.
 var testButton = document.getElementById('testButton');
 var currentPlayerTurn = 0;
 var canvas = document.getElementById('gameDraw');
@@ -245,7 +255,7 @@ var createUnit = function(context, id, gameId, owner, xPos, yPos, type) {
 		var unit = new Unit(id, gameId, owner, xPos, yPos, type);
 		drawUnit(context, unit);
 		units.push(unit);
-		socket.emit('createUnit', unit);
+		socket.emit('createUnit', unit, gameID);
 };
 
 //Socket.io for updating game state.
@@ -253,11 +263,6 @@ testButton.onclick = function() {
   console.log('Attempting to send data!');
   socket.emit('test', {message: 'WOW IT WORKED!'});
 };
-
-socket.on('test', function(data) {
-  console.log('Data received:', data);
-  socket.emit('test', {message: 'Yup it fuckin worked.'});
-});
 
 socket.on('returnUnit', function(unit) {
 	console.log('Received a unit back:', unit);
