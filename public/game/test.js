@@ -1,5 +1,5 @@
 /* TODO
- * get gameId, currentPlayerTurn, and unitId from database
+ * get gameID, currentPlayerTurn, and unitId from database
  *	these values are hard coded into the game right now
  */
 
@@ -294,20 +294,20 @@ var drawBuilding = function(context, buildObject) {
 }
 
 
-var Building = function(buildId, gameId, owner, xPos, yPos, type) {
+var Building = function(buildId, gameID, owner, xPos, yPos, type) {
 		this.buildId = buildId;
-		this.gameId = gameId;
+		this.gameID = gameID;
 		this.owner = owner;
 		this.xPos = xPos;
 		this.yPos = yPos;
 		this.type = type;
 }
 
-var Unit = function(id, gameId, owner, xPos, yPos, type) {
+var Unit = function(id, gameID, owner, xPos, yPos, type) {
 		this.id = id;
 		this.xPos = xPos;
 		this.yPos = yPos;
-		this.gameId = gameId;
+		this.gameID = gameID;
 		this.owner = owner;
 		this.type = type;
 
@@ -317,16 +317,14 @@ var Unit = function(id, gameId, owner, xPos, yPos, type) {
 		}
 };
 
-var createBuilding = function(context, gameId, owner, xPos, yPos, type) {
-		var building = new Building(gameId, owner, xPos, yPos, type);
+var createBuilding = function(context, gameID, owner, xPos, yPos, type) {
+		var building = new Building(gameID, owner, xPos, yPos, type);
 		drawBuilding(context, building);
 		buildings.push(building);
 };
 
-var createUnit = function(context, gameId, owner, xPos, yPos, type) {
-		var unit = new Unit(gameId, owner, xPos, yPos, type);
-		drawUnit(context, unit);
-		units.push(unit);
+var createUnit = function(context, gameID, owner, xPos, yPos, type) {
+		var unit = new Unit(gameID, owner, xPos, yPos, type);
 		socket.emit('createUnit', unit, gameID);
 };
 
@@ -376,7 +374,6 @@ socket.on('clientConsoleMessage', function(data) {
 
 socket.on('returnUnit', function(unit) {
 		console.log('Received a unit back:', unit);
-		var tempUnit = new Unit(unit.gameId, unit.owner, unit.xPos, unit.yPos, unit.type);
 		drawUnit(context, tempUnit);
 		units.push(tempUnit);
 
