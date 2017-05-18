@@ -58,7 +58,8 @@ function selectUnit(e) {
 								clickedX < units[i].xPos + 32 && 
 								clickedY > units[i].yPos && 
 								clickedY < units[i].yPos + 32 && 
-								selectedUnit.owner != units[i].owner) {
+								selectedUnit.owner != units[i].owner &&
+								selectedUnit.owner != selectedUnit.owner) {
 								
 								attackUnit(selectedUnit, unitPosInArray, i);
 								break;
