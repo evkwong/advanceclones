@@ -8,7 +8,6 @@ game.testFunction('hi');
 console.log('SocketIO index loaded.');
 var init = (app, server) => {
 	var io = socketIo(server);
-	var room = null;
 	
 	app.set('io', io);
 	
@@ -19,7 +18,7 @@ var init = (app, server) => {
 
 		//Store and return socketID.
 		socket.on('getSocketInfo', function(gameID) {
-			room = gameID;
+			var room = gameID;
 			socket.join(room);
 			console.log(socket.id, 'has joined room:', room);
 			socket.send('socketInfo', {socketID: socket.id});
