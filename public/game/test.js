@@ -1,5 +1,5 @@
 /* TODO
- * get gameId, currentPlayerTurn, and unitId from database
+ * get gameID, currentPlayerTurn, and unitId from database
  *	these values are hard coded into the game right now
  */
 
@@ -16,7 +16,6 @@ socket.on('socketInfo', function(data) {
 //Game setup.
 var testButton = document.getElementById('testButton');
 var currentPlayerTurn = 0;
-var currentGameId = 0;
 
 var canvas = document.getElementById('gameDraw');
 var context = canvas.getContext('2d');
@@ -137,23 +136,23 @@ function selectBuilding(e) {
 				var clickedY = e.pageY - this.offsetTop;
 
 				if(clickedX > 160 && clickedX < 200 && clickedY > 256 && clickedY < 296) {
-					createUnit(context, 1, 1, currentPlayerTurn, 
-						selectedBuild.xPos + 32, selectedBuild.yPos, "infantry");
+					//createUnit(context, 1, 1, currentPlayerTurn, 
+					//	selectedBuild.xPos + 32, selectedBuild.yPos, "infantry");
 				}
 
 				if(clickedX > 225 && clickedX < 265 && clickedY > 256 && clickedY < 296) {
-					createUnit(context, 1, 1, currentPlayerTurn, 
-						selectedBuild.xPos + 32, selectedBuild.yPos, "mech");
+					//createUnit(context, 1, 1, currentPlayerTurn, 
+						//selectedBuild.xPos + 32, selectedBuild.yPos, "mech");
 				}
 
 				if(clickedX > 287 && clickedX < 327 && clickedY > 256 && clickedY < 296) {
-					createUnit(context, 1, 1, currentPlayerTurn, 
-						selectedBuild.xPos + 32, selectedBuild.yPos, "recon");
+					//createUnit(context, 1, 1, currentPlayerTurn, 
+					//	selectedBuild.xPos + 32, selectedBuild.yPos, "recon");
 				}
 
 				if(clickedX > 353 && clickedX < 393 && clickedY > 256 && clickedY < 296) {
-					createUnit(context, 1, 1, currentPlayerTurn, 
-						selectedBuild.xPos + 32, selectedBuild.yPos, "tank");
+					//createUnit(context, 1, 1, currentPlayerTurn, 
+						//selectedBuild.xPos + 32, selectedBuild.yPos, "tank");
 				}
 
 				updateAll();
@@ -295,20 +294,20 @@ var drawBuilding = function(context, buildObject) {
 }
 
 
-var Building = function(buildId, gameId, owner, xPos, yPos, type) {
-		this.buildId = buildId;
-		this.gameId = gameId;
+var Building = function(id, gameID, owner, xPos, yPos, type) {
+		this.id = id;
+		this.gameID = gameID;
 		this.owner = owner;
 		this.xPos = xPos;
 		this.yPos = yPos;
 		this.type = type;
 }
 
-var Unit = function(id, gameId, owner, xPos, yPos, type) {
+var Unit = function(id, gameID, owner, xPos, yPos, type) {
 		this.id = id;
 		this.xPos = xPos;
 		this.yPos = yPos;
-		this.gameId = gameId;
+		this.gameID = gameID;
 		this.owner = owner;
 		this.type = type;
 
@@ -318,16 +317,14 @@ var Unit = function(id, gameId, owner, xPos, yPos, type) {
 		}
 };
 
-var createBuilding = function(context, buildId, gameId, owner, xPos, yPos, type) {
-		var building = new Building(buildId, gameId, owner, xPos, yPos, type);
+var createBuilding = function(context, gameID, owner, xPos, yPos, type) {
+		var building = new Building(-1, gameID, owner, xPos, yPos, type);
 		drawBuilding(context, building);
 		buildings.push(building);
 };
 
-var createUnit = function(context, id, gameId, owner, xPos, yPos, type) {
-		var unit = new Unit(id, gameId, owner, xPos, yPos, type);
-		drawUnit(context, unit);
-		units.push(unit);
+var createUnit = function(context, gameID, owner, xPos, yPos, type) {
+		var unit = new Unit(-1, gameID, owner, xPos, yPos, type);
 		socket.emit('createUnit', unit, gameID);
 };
 
@@ -335,34 +332,36 @@ socket.on('updatePlayerTurn', function(currentPlayerTurn) {
 	//Implement update current player turn here.
 });
 function setDefaultState() {
-		createBuilding(context, 0, currentGameId, 0, 1, 256, "hq");
-		createBuilding(context, 1, currentGameId, 1, 577, 1, "hq");
+		createBuilding(context, gameID, 0, 1, 256, "hq");
+		createBuilding(context, gameID, 1, 577, 1, "hq");
 
 		//Build Red Factory
-		createBuilding(context, 2, currentGameId, 0, 1, 230, "factory");
-		createBuilding(context, 3, currentGameId, 0, 36, 258, "factory");
-		createBuilding(context, 4, currentGameId, 0, 67, 292, "factory");
+		createBuilding(context, gameID, 0, 1, 230, "factory");
+		createBuilding(context, gameID, 0, 36, 258, "factory");
+		createBuilding(context, gameID, 0, 67, 292, "factory");
 
 		//Build Blue Factory
-		createBuilding(context, 5, currentGameId, 1, 514, 38, "factory");
-		createBuilding(context, 6, currentGameId, 1, 512, 100, "factory");
-		createBuilding(context, 7, currentGameId, 1, 579, 101, "factory");
+		createBuilding(context, gameID, 1, 514, 38, "factory");
+		createBuilding(context, gameID, 1, 512, 100, "factory");
+		createBuilding(context, gameID, 1, 579, 101, "factory");
 
 		//Build Neutral Building
-		createBuilding(context, 8, currentGameId, -1, 388, 163, "factory");
-		createBuilding(context, 9, currentGameId, -1, 99, 63, "city");
-		createBuilding(context, 10, currentGameId, -1, 229, 29, "city");
-		createBuilding(context, 11, currentGameId, -1, 228, 123, "city");
-		createBuilding(context, 12, currentGameId, -1, 228, 286, "city");
-		createBuilding(context, 13, currentGameId, -1, 261, 286, "city");
-		createBuilding(context, 14, currentGameId, -1, 324, 2, "city");
-		createBuilding(context, 15, currentGameId, -1, 357, 2, "city");
-		createBuilding(context, 16, currentGameId, -1, 389, 94, "city");
-		createBuilding(context, 17, currentGameId, -1, 547, 285, "city");
+		createBuilding(context, gameID, -1, 388, 163, "factory");
+		createBuilding(context, gameID, -1, 99, 63, "city");
+		createBuilding(context, gameID, -1, 229, 29, "city");
+		createBuilding(context, gameID, -1, 228, 123, "city");
+		createBuilding(context, gameID, -1, 228, 286, "city");
+		createBuilding(context, gameID, -1, 261, 286, "city");
+		createBuilding(context, gameID, -1, 324, 2, "city");
+		createBuilding(context, gameID, -1, 357, 2, "city");
+		createBuilding(context, gameID, -1, 389, 94, "city");
+		createBuilding(context, gameID, -1, 547, 285, "city");
 
 		//Default Units
-		createUnit(context, 2, currentGameId, currentPlayerTurn, 1, 1, "infantry");
-		createUnit(context, 1, currentGameId, 1, 550, 1, "infantry");
+		createUnit(context, gameID, currentPlayerTurn, 1, 1, "infantry");
+		createUnit(context, gameID, 1, 550, 1, "infantry");
+
+		console.log(buildings);
 }
 
 //Socket.io for updating game state.
@@ -371,9 +370,16 @@ testButton.onclick = function() {
   socket.emit('test', {message: 'WOW IT WORKED!'});
 };
 
+socket.on('clientConsoleMessage', function(data) {
+	console.log('Message received:', data.message);
+})
+
 socket.on('returnUnit', function(unit) {
-	console.log('Received a unit back:', unit);
-	//Implement unit creation / update here.
+		console.log('Unit sent back:', unit);
+		var tempUnit = new Unit(unit.id, unit.gameid, unit.owner, unit.xpos, unit.ypos, unit.type);
+		console.log('tempUnit:', tempUnit);
+		drawUnit(context, tempUnit);
+		units.push(tempUnit);
 });
 
 socket.on('removeUnit', function(unitID) {

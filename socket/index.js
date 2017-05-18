@@ -8,7 +8,6 @@ game.testFunction('hi');
 console.log('SocketIO index loaded.');
 var init = (app, server) => {
 	var io = socketIo(server);
-	var room = null;
 	
 	app.set('io', io);
 	
@@ -19,11 +18,11 @@ var init = (app, server) => {
 
 		//Store and return socketID.
 		socket.on('getSocketInfo', function(gameID) {
-			room = gameID;
+			var room = gameID;
 			socket.join(room);
 			console.log(socket.id, 'has joined room:', room);
 			socket.send('socketInfo', {socketID: socket.id});
-			io.to(room).emit('Socket:', socketID, 'connected to this room.');
+			io.to(room).emit('clientConsoleMessage', {message: 'A socket connected to this room.'});
 		})
 
 		//Chat. 
@@ -38,11 +37,12 @@ var init = (app, server) => {
 
 		socket.on('createUnit', function(data, room) {
 			console.log('Adding new unit to DB:', data);
-			game.addUnit(data, function(err, unit) {
-				if (err) throw error;
+      console.log('Room:', room);
+			game.addUnit(data, room, function(err, unit) {
+				if (err) throw err;
 				if (!data) console.log('No data returned.');
 				else {
-					console.log('Returning a', unit.type, 'to', room);
+					console.log('Returning', unit, 'to', room);
 					io.to(room).emit('returnUnit', unit);
 				}
 			});
