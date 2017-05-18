@@ -231,18 +231,18 @@ module.exports.getGamesByUserID = function(userID, callback) {
 
 //Update game state.
 //Return data to be sent to other clients.
-module.exports.addUnit = function(data, callback) {
-	var gameID = data.gameID;
+module.exports.addUnit = function(data, gameID, callback) {
+	var gameID = gameID;
 	var owner = data.owner;
-	var posX = data.posX;
-	var posY = data.posY;
-	var health = 10;
-	var type = 0;
+	var xPos = data.xPos;
+	var yPos = data.yPos;
+	var health = 10; //Get health from DB.
+	var type = data.type;
 
-	db.one('INSERT INTO units(gameid, owner, posx, posy, health, type) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-		[gameID, owner, posX, posY, health, type])
+	db.one('INSERT INTO units(gameid, owner, xpos, ypos, health, type) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+		[gameID, owner, xPos, yPos, health, type])
 		.then(unit => {
-			console.log('Unit inserted into DB.');
+			console.log('Unit inserted into DB:', unit);
 			callback(null, unit);
 		})
 		.catch(error => {

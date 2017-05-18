@@ -294,8 +294,8 @@ var drawBuilding = function(context, buildObject) {
 }
 
 
-var Building = function(buildId, gameID, owner, xPos, yPos, type) {
-		this.buildId = buildId;
+var Building = function(id, gameID, owner, xPos, yPos, type) {
+		this.id = id;
 		this.gameID = gameID;
 		this.owner = owner;
 		this.xPos = xPos;
@@ -318,13 +318,13 @@ var Unit = function(id, gameID, owner, xPos, yPos, type) {
 };
 
 var createBuilding = function(context, gameID, owner, xPos, yPos, type) {
-		var building = new Building(gameID, owner, xPos, yPos, type);
+		var building = new Building(-1, gameID, owner, xPos, yPos, type);
 		drawBuilding(context, building);
 		buildings.push(building);
 };
 
 var createUnit = function(context, gameID, owner, xPos, yPos, type) {
-		var unit = new Unit(gameID, owner, xPos, yPos, type);
+		var unit = new Unit(-1, gameID, owner, xPos, yPos, type);
 		socket.emit('createUnit', unit, gameID);
 };
 
@@ -360,6 +360,8 @@ function setDefaultState() {
 		//Default Units
 		createUnit(context, gameID, currentPlayerTurn, 1, 1, "infantry");
 		createUnit(context, gameID, 1, 550, 1, "infantry");
+
+		console.log(buildings);
 }
 
 //Socket.io for updating game state.
@@ -373,10 +375,11 @@ socket.on('clientConsoleMessage', function(data) {
 })
 
 socket.on('returnUnit', function(unit) {
-		console.log('Received a unit back:', unit);
+		console.log('Unit sent back:', unit);
+		var tempUnit = new Unit(unit.id, unit.gameid, unit.owner, unit.xpos, unit.ypos, unit.type);
+		console.log('tempUnit:', tempUnit);
 		drawUnit(context, tempUnit);
 		units.push(tempUnit);
-
 });
 
 socket.on('removeUnit', function(unitID) {
