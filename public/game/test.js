@@ -99,7 +99,7 @@ function selectUnit(e) {
 				console.log("You ams Dead");
 				units[attacking].xPos = units[receiving].xPos;
 				units[attacking].yPos = units[receiving].yPos;
-				units.splice(receiving);
+				units.splice(receiving, 1);
 		}
 
 		updateAll();
