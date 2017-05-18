@@ -324,8 +324,8 @@ var createBuilding = function(context, buildId, gameId, owner, xPos, yPos, type)
 		buildings.push(building);
 };
 
-var createUnit = function(context, id, gameId, owner, xPos, yPos, type) {
-		var unit = new Unit(id, gameId, owner, xPos, yPos, type);
+var createUnit = function(context, gameId, owner, xPos, yPos, type) {
+		var unit = new Unit(gameId, owner, xPos, yPos, type);
 		drawUnit(context, unit);
 		units.push(unit);
 		socket.emit('createUnit', unit, gameID);
@@ -372,8 +372,11 @@ testButton.onclick = function() {
 };
 
 socket.on('returnUnit', function(unit) {
-	console.log('Received a unit back:', unit);
-	//Implement unit creation / update here.
+		console.log('Received a unit back:', unit);
+		var tempUnit = new Unit(unit.gameId, unit.owner, unit.xPos, unit.yPos, unit.type);
+		drawUnit(context, tempUnit);
+		units.push(tempUnit);
+
 });
 
 socket.on('removeUnit', function(unitID) {
