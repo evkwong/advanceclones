@@ -37,11 +37,12 @@ var init = (app, server) => {
 
 		socket.on('createUnit', function(data, room) {
 			console.log('Adding new unit to DB:', data);
-			game.addUnit(data, function(err, unit) {
-				if (err) throw error;
+      console.log('Room:', room);
+			game.addUnit(data, room, function(err, unit) {
+				if (err) throw err;
 				if (!data) console.log('No data returned.');
 				else {
-					console.log('Returning a', unit.type, 'to', room);
+					console.log('Returning', unit, 'to', room);
 					io.to(room).emit('returnUnit', unit);
 				}
 			});

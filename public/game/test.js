@@ -303,11 +303,11 @@ var Building = function(buildId, gameId, owner, xPos, yPos, type) {
 		this.type = type;
 }
 
-var Unit = function(id, gameId, owner, xPos, yPos, type) {
+var Unit = function(id, gameID, owner, xPos, yPos, type) {
 		this.id = id;
 		this.xPos = xPos;
 		this.yPos = yPos;
-		this.gameId = gameId;
+		this.gameID = gameID;
 		this.owner = owner;
 		this.type = type;
 
@@ -323,10 +323,8 @@ var createBuilding = function(context, gameId, owner, xPos, yPos, type) {
 		buildings.push(building);
 };
 
-var createUnit = function(context, gameId, owner, xPos, yPos, type) {
-		var unit = new Unit(gameId, owner, xPos, yPos, type);
-		drawUnit(context, unit);
-		units.push(unit);
+var createUnit = function(context, gameID, owner, xPos, yPos, type) {
+		var unit = new Unit(-1, gameID, owner, xPos, yPos, type);
 		socket.emit('createUnit', unit, gameID);
 };
 
@@ -375,11 +373,11 @@ socket.on('clientConsoleMessage', function(data) {
 })
 
 socket.on('returnUnit', function(unit) {
-		console.log('Received a unit back:', unit);
-		var tempUnit = new Unit(unit.gameId, unit.owner, unit.xPos, unit.yPos, unit.type);
+		console.log('Unit sent back:', unit);
+		var tempUnit = new Unit(unit.id, unit.gameid, unit.owner, unit.xpos, unit.ypos, unit.type);
+		console.log('tempUnit:', tempUnit);
 		drawUnit(context, tempUnit);
 		units.push(tempUnit);
-
 });
 
 socket.on('removeUnit', function(unitID) {
