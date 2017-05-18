@@ -2,8 +2,7 @@ var express = require('express');
 var router = express.Router();
 var db = require('../routes/database');
 var path = require('path');
-var site = require('./site.js');
-var socketIO = require('../socket/index.js');
+var site = require('./site');
 
 //Routes.
 router.post('/new_game', function(req, res) {
@@ -230,5 +229,24 @@ module.exports.getGamesByUserID = function(userID, callback) {
 		})
 };
 
-router.get('refresh_game', function(req, res) {
-});
+module.exports.addUnit = function(data) {
+	var gameID = data.gameID;
+	var owner = data.owner;
+	var posX = data.posX;
+	var posY = data.posY;
+	var health = 10;
+	var type = 0;
+
+	db.none('INSERT INTO units(gameID, owner, posX, posY, health, type) VALUES ($1, $2, $3, $4, $5, $6)',
+		[gameID, owner, posX, posY, health, type])
+		.then(data => {
+			console.log('Unit inserted into DB.');
+		})
+		.catch(error => {
+			throw error;
+		})
+}
+
+module.exports.testFunction = function(data) {
+	console.log('Got it:', data);
+}

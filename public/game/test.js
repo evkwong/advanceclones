@@ -36,9 +36,6 @@ window.onload = function() {
 		createUnit(context, 2, 1, currentPlayerTurn, 1, 1, "infantry");
 		createUnit(context, 1, 1, 1, 550, 1, "infantry");
 		createUnit(context, 3, 1, currentPlayerTurn, 32, 1, "mech");
-
-		//Socket.io test.
-		console.log(game);
 };
 
 $('#gameDraw').on('click', selectUnit);
@@ -248,6 +245,7 @@ var createUnit = function(context, id, gameId, owner, xPos, yPos, type) {
 		var unit = new Unit(id, gameId, owner, xPos, yPos, type);
 		drawUnit(context, unit);
 		units.push(unit);
+		socket.emit('createUnit', unit);
 };
 
 //Socket.io for updating game states.
@@ -259,4 +257,5 @@ testButton.onclick = function() {
 //Game state.
 socket.on('test', function(data) {
   console.log('Data received:', data);
+  socket.emit('test', {message: 'Yup it fuckin worked.'});
 })

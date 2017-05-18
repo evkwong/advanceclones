@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var game = require('./game');
-var site = require('./site.js');
+var site = require('./site');
 
 //Landing Page
 router.get('/', function(req, res, next) {
