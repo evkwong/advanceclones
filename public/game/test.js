@@ -114,7 +114,7 @@ function selectBuilding(e) {
 		for(var i in buildings) {
 				if(clickedX > buildings[i].xPos && clickedX < buildings[i].xPos + 32 &&
 					 clickedY > buildings[i].yPos && clickedY < buildings[i].yPos + 64 &&
-						buildings[i].type == "hq") {
+						buildings[i].type == "hq" && buildings[i].owner == currentPlayerTurn) {
 							console.log("Clicked on building", buildings[i].xPos, buildings[i].yPos);
 							buyUnits(buildings[i]);
 				}
