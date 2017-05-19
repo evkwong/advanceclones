@@ -87,7 +87,7 @@ CREATE TABLE IF NOT EXISTS buildings
   posX INTEGER,
   posY INTEGER,
   health INTEGER,
-  type INTEGER
+  type VARCHAR(25)
 );
 
 -- BuildingTypes Table
@@ -96,7 +96,7 @@ CREATE TABLE IF NOT EXISTS buildingTypes
   id SERIAL PRIMARY KEY,
   name VARCHAR(25),
   sprite VARCHAR(100),
-  income INTEGER
+  income VARCHAR(25)
 );
 
 -- Maps Table
