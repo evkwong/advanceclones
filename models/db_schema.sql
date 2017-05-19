@@ -42,6 +42,7 @@ CREATE TABLE IF NOT EXISTS players
   username VARCHAR(25),
   gameID INTEGER,
   userID INTEGER,
+  playerNumber INTEGER,
   income INTEGER,
   wallet INTEGER,
   co INTEGER,
