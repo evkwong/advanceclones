@@ -144,9 +144,8 @@ module.exports = router;
 module.exports.getGameByID = getGameByID = function(gameID, callback) {
 	db.one('SELECT * FROM games WHERE id = $1', [gameID])
 		.then(data => {
-			var unitList = getUnitsByGameID(gameID, function(err, unitList) {
+			getUnitsByGameID(gameID, function(err, unitList) {
 				if (err) throw err;
-				if (!unitList) console.log('No unit list found!');
 				else {
 					callback(null, data, unitList);
 				}
