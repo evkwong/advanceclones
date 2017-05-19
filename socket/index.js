@@ -31,9 +31,19 @@ var init = (app, server) => {
 		})
 
 		//Game state.
-		socket.on('test', function(data) {
-			console.log('Got data:', data);
-		});
+    socket.on('getGameInfo', function(gameID) {
+      game.getGameByID(gameID, function(err, game) {
+        if (err) throw err;
+        else {
+          socket.emit('gameInfo', game);
+        }
+      })
+    })
+
+		socket.on('startGame', function(gameID) {
+      console.log('Attempting to start game', gameID);
+      game.startGame(gameID);
+    })
 
 		socket.on('createUnit', function(data, room) {
 			console.log('Received unit from client:', data);

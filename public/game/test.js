@@ -11,9 +11,16 @@ var socketID = null;
 socket.emit('getSocketInfo', gameID);
 socket.on('socketInfo', function(data) {
 	socketID = data.socketID;
-})
+});
 
 //Game setup.
+socket.emit('getGameInfo', gameID);
+socket.on('gameInfo', function(game) {
+	if (!game.started) {
+		setDefaultState();
+		socket.emit('startGame', gameID);
+	}
+};
 var currentPlayerTurnDisplay = document.getElementById('currentPlayerTurnDisplay');
 var endTurnButton = document.getElementById('endTurnButton');
 var currentPlayerTurn = 0;

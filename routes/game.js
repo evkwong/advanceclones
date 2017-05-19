@@ -65,10 +65,6 @@ router.post('/join_game', function(req, res) {
 		db.one('UPDATE games SET totalplayers = totalplayers+1 WHERE id = $1 RETURNING *', [gameID])
 			.then(data => {
 				console.log(username, 'added to players of game:', gameID, 'Current number of players:', data.totalplayers);
-
-				if (data.totalplayers == data.maxplayers) {
-					db.none('UPDATE games SET started = true WHERE id = $1', [gameID]);
-				}
 			})
 			.catch(error => {
 				throw error;
@@ -132,7 +128,20 @@ var insertPlayer = function(username, gameID, userID, callback) {
 
 
 //Helper functions.
-var getGameByID = function(gameID, callback) {
+var getUnitsByGameID = function(gameID, callback) {
+	db.manyOrNone('SELECT * FROM units WHERE gameID = $1', [gameID])
+		.then(data => {
+			callback(null, data);
+		})
+		.catch(error => {
+			callback(error, false);
+		})
+}
+
+//Exports
+module.exports = router;
+
+module.exports.getGameByID = function(gameID, callback) {
 	db.one('SELECT * FROM games WHERE id = $1', [gameID])
 		.then(data => {
 			var unitList = getUnitsByGameID(gameID, function(err, unitList) {
@@ -148,19 +157,6 @@ var getGameByID = function(gameID, callback) {
 			callback(error, false, false);
 		})
 }
-
-var getUnitsByGameID = function(gameID, callback) {
-	db.manyOrNone('SELECT * FROM units WHERE gameID = $1', [gameID])
-		.then(data => {
-			callback(null, data);
-		})
-		.catch(error => {
-			callback(error, false);
-		})
-}
-
-//Exports
-module.exports = router;
 
 module.exports.getGameList = function(user, callback) {
 	db.manyOrNone('SELECT * FROM games')
@@ -231,6 +227,16 @@ module.exports.getGamesByUserID = function(userID, callback) {
 
 //Update game state.
 //Return data to be sent to other clients.
+module.exports.startGame = function(gameID) {
+	db.none('UPDATE games SET started = TRUE WHERE id = $1', [gameID])
+		.then(data => {
+			console.log('Game', gameID, 'started.');
+		})
+		.catch(error => {
+			throw error;
+		})
+}
+
 module.exports.addUnit = function(data, gameID, callback) {
 	var gameID = gameID;
 	var owner = data.owner;
