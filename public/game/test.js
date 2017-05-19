@@ -375,6 +375,7 @@ function setDefaultState() {
 		createBuilding(context, gameID, -1, 547, 285, "city");
 
 		//Default Units
+		console.log('Creating test units!');
 		createUnit(context, gameID, currentPlayerTurn, 1, 1, "infantry");
 		createUnit(context, gameID, 1, 550, 1, "infantry");
 

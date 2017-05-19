@@ -260,8 +260,8 @@ module.exports.startGame = function(gameID) {
 module.exports.addUnit = function(data, gameID, callback) {
 	var gameID = gameID;
 	var owner = data.owner;
-	var xPos = data.xpos;
-	var yPos = data.ypos;
+	var xPos = data.xPos;
+	var yPos = data.yPos;
 	var health = 10; //Get health from DB.
 	var type = data.type;
 
@@ -278,8 +278,8 @@ module.exports.addUnit = function(data, gameID, callback) {
 
 module.exports.updateUnit = function(data, gameID, callback) {
 	var unitID = data.id;
-	var xPos = data.xpos;
-	var yPos = data.ypos;
+	var xPos = data.xPos;
+	var yPos = data.yPos;
 	var health = data.health;
 
 	db.one('UPDATE units SET xpos = $1, ypos = $2, health = $3 WHERE id = $4 RETURNING *', [xPos, yPos, health, unitID])
