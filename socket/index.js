@@ -70,8 +70,16 @@ var init = (app, server) => {
 
     socket.on('createBuilding', function(data, gameID) {
       console.log('Received unit from client:', data);
-
-    })
+			console.log('Room:', gameID);
+			game.addBuilding(data, gameID, function(err, building) {
+					if (err) throw err;
+					if (!data) console.log('No data returned');
+					else {
+							console.log('Returning', building, 'to', gameID);
+							io.to(gameID).emit('returnBuilding', building);
+					}
+			});
+    });
 
 		socket.on('removeUnit', function(data) {
 			console.log('Removing unit from DB:', data);

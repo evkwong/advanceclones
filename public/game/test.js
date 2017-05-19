@@ -83,34 +83,39 @@ window.onload = function() {
 		};
 };
 
-function clickControl() {
+$('#gameDraw').on('click', selectThing);
+function selectThing(e) {
 		if(player.playernumber != currentPlayerTurn) {
 				console.log("WAIT YOUR TURN! FOOL!");
 				return;
 		}
-
-		console.log("This guy is VIP");
-		$('#gameDraw').click(selectUnit);
-		$('#gameDraw').click(selectBuilding);
-};
-
-function selectUnit(e) {
-		console.log("WE IN THE CLUB");
 
 		var clickedX = e.pageX - this.offsetLeft;
 		var clickedY = e.pageY - this.offsetTop;
 
 		console.log("x: ", clickedX , 'y: ', clickedY);
 
-		for(var i = 0; i < units.length; i++) { 
+		for(i in units) { 
 				if (clickedX > units[i].xPos && clickedX < units[i].xPos + 32 && 
 						clickedY > units[i].yPos && clickedY < units[i].yPos + 32 &&
-						units[i].owner == currentPlayerTurn) {
+						units[i].owner == player.playernumber) {
 								console.log("Clicked on unit", units[i].xPos, units[i].yPos);
 								orderUnit(units[i], i);
 				}
 		}
-} function orderUnit(selectedUnit, unitPosInArray) {
+		console.log(buildings);
+		for(i in buildings) {
+				if(clickedX > buildings[i].xPos && clickedX < buildings[i].xPos + 32 &&
+					 clickedY > buildings[i].yPos && clickedY < buildings[i].yPos + 64 &&
+						buildings[i].type == "hq" && buildings[i].owner == player.playernumber) {
+							console.log("Clicked on building", buildings[i].xPos, buildings[i].yPos);
+							buyUnits(buildings[i]);
+				}
+
+		}
+} 
+
+function orderUnit(selectedUnit, unitPosInArray) {
 		$('#gameDraw').one('click', function(e) {
 				clickedX = e.pageX - this.offsetLeft;
 				clickedY = e.pageY - this.offsetTop;
@@ -164,20 +169,7 @@ function selectUnit(e) {
 		return;
 }
 
-$('#gameDraw').on('click', selectBuilding);
-function selectBuilding(e) {
-		var clickedX = e.pageX - this.offsetLeft;
-		var clickedY = e.pageY - this.offsetTop;
-
-		for(var i in buildings) {
-				if(clickedX > buildings[i].xPos && clickedX < buildings[i].xPos + 32 &&
-					 clickedY > buildings[i].yPos && clickedY < buildings[i].yPos + 64 &&
-						buildings[i].type == "hq" && buildings[i].owner == currentPlayerTurn) {
-							console.log("Clicked on building", buildings[i].xPos, buildings[i].yPos);
-							buyUnits(buildings[i]);
-				}
-		}
-} function buyUnits(selectedBuild) {
+function buyUnits(selectedBuild) {
 		drawBuyUnits(currentPlayerTurn);
 
 		$('#gameDraw').one('click', function(e) {
@@ -365,8 +357,7 @@ var Unit = function(id, gameID, owner, xPos, yPos, type) {
 
 var createBuilding = function(context, gameID, owner, xPos, yPos, type) {
 		var building = new Building(-1, gameID, owner, xPos, yPos, type);
-		drawBuilding(context, building);
-		buildings.push(building);
+		socket.emit('createBuilding', building, gameID);
 };
 
 var createUnit = function(context, gameID, owner, xPos, yPos, type) {
