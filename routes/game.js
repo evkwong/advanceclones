@@ -267,7 +267,6 @@ module.exports.startGame = function(gameID) {
 }
 
 module.exports.addUnit = function(data, gameID, callback) {
-	var gameID = gameID;
 	var owner = data.owner;
 	var xPos = data.xPos;
 	var yPos = data.yPos;
@@ -284,6 +283,22 @@ module.exports.addUnit = function(data, gameID, callback) {
 			callback(error, false);
 		})
 };
+
+module.exports.addBuilding = function(data, gameID, callback) {
+	var owner = data.owner;
+	var xPos = data.xPos;
+	var yPos = data.xPos;
+	var type = data.type;
+
+	db.one('INSERT INTO buildings(gameid, owner, xpos, ypos, type) VALUES ($1, $2, $3, $4) RETURNING *', [gameID, owner, xPos, yPos, type])
+		.then(building => {
+			console.log('Stored a building in the DB:', building);
+			callback(null, building);
+		})
+		.catch(error => {
+			callback(error, false);
+		})
+}
 
 module.exports.updateUnit = function(data, gameID, callback) {
 	var unitID = data.id;

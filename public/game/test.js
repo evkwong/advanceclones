@@ -15,6 +15,7 @@ socket.on('socketInfo', function(data) {
 });
 
 //Game setup.
+var currentPlayerTurn = 0;
 socket.emit('getGameInfo', gameID);
 socket.on('gameInfo', function(data) {
 	var game = data.game;
@@ -29,6 +30,10 @@ socket.on('gameInfo', function(data) {
 	else
 	{
 		//Load current game state.
+		currentPlayerTurn = game.currentplayerturn;
+		updatePlayerTurnDisplay();
+
+		//Load units.
 		for (i = 0; i < unitList.length; i++) {
 			unit = unitList[i];
 			var tempUnit = new Unit(unit.id, unit.gameid, unit.owner, unit.xpos, unit.ypos, unit.type);
@@ -55,7 +60,6 @@ var mapTerrain = [
 
 var currentPlayerTurnDisplay = document.getElementById('currentPlayerTurnDisplay');
 var endTurnButton = document.getElementById('endTurnButton');
-var currentPlayerTurn = 0;
 
 var canvas = document.getElementById('gameDraw');
 var context = canvas.getContext('2d');
@@ -419,10 +423,24 @@ endTurnButton.onclick = function() {
 socket.on('updatePlayerTurn', function(nextPlayerTurn) {
 	console.log('Received new player turn from DB:', nextPlayerTurn);
 	currentPlayerTurn = nextPlayerTurn;
-	if (currentPlayerTurn == 0) var player = 'Red';
-	else var player = 'Blue';
-	currentPlayerTurnDisplay.innerHTML = player + ' player\'s turn!';
+	updatePlayerTurnDisplay();
 })
+
+var updatePlayerTurnDisplay = function() {
+	if (currentPlayerTurn == 0) {
+		var player = 'Red';
+	}
+	else {
+		var player = 'Blue';
+	}
+	currentPlayerTurnDisplay.innerHTML = player + ' player\'s turn!';
+	if (player.playerNumber != currentPlayerTurn) {
+		endTurnButton.style.visibility = 'hidden';
+	}
+	else {
+		endTurnButton.style.visibility = 'visible';
+	}
+}
 
 socket.on('clientConsoleMessage', function(data) {
 	console.log('Message received:', data.message);
