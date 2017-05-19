@@ -15,7 +15,9 @@ socket.on('socketInfo', function(data) {
 
 //Game setup.
 socket.emit('getGameInfo', gameID);
-socket.on('gameInfo', function(game, unitList) {
+socket.on('gameInfo', function(data) {
+	var game = data.game;
+	var unitList = data.unitlist;
 	console.log('Game data received:', game);
 	console.log('Unit list:', unitList);
 	if (!game.started) {
@@ -26,11 +28,11 @@ socket.on('gameInfo', function(game, unitList) {
 	else
 	{
 		//Load current game state.
-		if (unitList.length > 0) {
-			for (unit in unitList) {
-				var tempUnit = new Unit(unit.id, unit.gameid, unit.owner, unit.xpos, unit.ypos, unit.type);
-				addUnitToClient(unit);
-			}
+		for (i = 0; i < unitList.length; i++) {
+			unit = unitList[i];
+			console.log('Here is this fkn unit:', unit);
+			var tempUnit = new Unit(unit.id, unit.gameid, unit.owner, unit.xpos, unit.ypos, unit.type);
+			addUnitToClient(tempUnit);
 		}
 		
 	}
@@ -87,11 +89,6 @@ function selectUnit(e) {
 				clickedY = e.pageY - this.offsetTop;
 				var entireArray = 0;
 
-
-				console.log('Attempting to get new xPos and yPos!');
-				socket.emit('test', {unit: selectedUnit});
-
-
 				for(var i in units) {
 						if (clickedX > units[i].xPos && 
 								clickedX < units[i].xPos + 32 && 
@@ -117,6 +114,10 @@ function selectUnit(e) {
 				}
 
 				updateAll();
+
+				//Socket io unit update.
+				socket.emit('updateUnit', selectedUnit, gameID);
+
 				return;
 		});
 } function attackUnit(selectedUnit, attacking, receiving) {
@@ -345,9 +346,6 @@ var createUnit = function(context, gameID, owner, xPos, yPos, type) {
 		socket.emit('createUnit', unit, gameID);
 };
 
-socket.on('updatePlayerTurn', function(currentPlayerTurn) {
-	//Implement update current player turn here.
-});
 function setDefaultState() {
 		console.log('Setting up map.');
 
@@ -377,6 +375,7 @@ function setDefaultState() {
 		createBuilding(context, gameID, -1, 547, 285, "city");
 
 		//Default Units
+		console.log('Creating test units!');
 		createUnit(context, gameID, currentPlayerTurn, 1, 1, "infantry");
 		createUnit(context, gameID, 1, 550, 1, "infantry");
 
@@ -404,13 +403,13 @@ socket.on('clientConsoleMessage', function(data) {
 socket.on('returnUnit', function(unit) {
 	console.log('Unit sent back:', unit);
 	var tempUnit = new Unit(unit.id, unit.gameid, unit.owner, unit.xpos, unit.ypos, unit.type);
-	addUnitToClient(unit);
+	addUnitToClient(tempUnit);
 });
 
 var addUnitToClient = function(unit) {
-	console.log('tempUnit:', tempUnit);
-	drawUnit(context, tempUnit);
-	units.push(tempUnit);
+	console.log('Adding unit to client:', unit);
+	drawUnit(context, unit);
+	units.push(unit);
 }
 
 socket.on('removeUnit', function(unitID) {

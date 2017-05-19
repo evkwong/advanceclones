@@ -45,20 +45,30 @@ var init = (app, server) => {
       game.startGame(gameID);
     })
 
-		socket.on('createUnit', function(data, room) {
+		socket.on('createUnit', function(data, gameID) {
 			console.log('Received unit from client:', data);
-      console.log('Room:', room);
-			game.addUnit(data, room, function(err, unit) {
+      console.log('Room:', gameID);
+			game.addUnit(data, gameID, function(err, unit) {
 				if (err) throw err;
 				if (!data) console.log('No data returned.');
 				else {
-					console.log('Returning', unit, 'to', room);
-					io.to(room).emit('returnUnit', unit);
+					console.log('Returning', unit, 'to', gameID);
+					io.to(gameID).emit('returnUnit', unit);
 				}
 			});
 		});
 
-    socket.on('createBuilding', function(data, room) {
+		socket.on('updateUnit', function(data, gameID) {
+			console.log('Unit to be updated received:', data);
+			game.updateUnit(data, gameID, function(err, unit) {
+				if (err) throw err;
+				else {
+					io.to(gameID).emit('returnUnit', unit);
+				}
+			});
+		});
+
+    socket.on('createBuilding', function(data, gameID) {
       console.log('Received unit from client:', data);
 
     })
