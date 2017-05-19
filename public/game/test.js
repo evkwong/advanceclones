@@ -11,9 +11,31 @@ var socketID = null;
 socket.emit('getSocketInfo', gameID);
 socket.on('socketInfo', function(data) {
 	socketID = data.socketID;
-})
+});
 
 //Game setup.
+socket.emit('getGameInfo', gameID);
+socket.on('gameInfo', function(game, unitList) {
+	console.log('Game data received:', game);
+	console.log('Unit list:', unitList);
+	if (!game.started) {
+		console.log('Attempting to start game.');
+		setDefaultState();
+		socket.emit('startGame', gameID);
+	}
+	else
+	{
+		//Load current game state.
+		if (unitList.length > 0) {
+			for (unit in unitList) {
+				var tempUnit = new Unit(unit.id, unit.gameid, unit.owner, unit.xpos, unit.ypos, unit.type);
+				addUnitToClient(unit);
+			}
+		}
+		
+	}
+});
+
 var currentPlayerTurnDisplay = document.getElementById('currentPlayerTurnDisplay');
 var endTurnButton = document.getElementById('endTurnButton');
 var currentPlayerTurn = 0;
@@ -42,8 +64,6 @@ window.onload = function() {
 				canvas.height = height;
 				context.drawImage(background, 0, 0);
 		};
-
-		setDefaultState();
 };
 
 $('#gameDraw').on('click', selectUnit);
@@ -329,6 +349,8 @@ socket.on('updatePlayerTurn', function(currentPlayerTurn) {
 	//Implement update current player turn here.
 });
 function setDefaultState() {
+		console.log('Setting up map.');
+
 		createBuilding(context, gameID, 0, 1, 256, "hq");
 		createBuilding(context, gameID, 1, 577, 1, "hq");
 
@@ -382,10 +404,14 @@ socket.on('clientConsoleMessage', function(data) {
 socket.on('returnUnit', function(unit) {
 	console.log('Unit sent back:', unit);
 	var tempUnit = new Unit(unit.id, unit.gameid, unit.owner, unit.xpos, unit.ypos, unit.type);
+	addUnitToClient(unit);
+});
+
+var addUnitToClient = function(unit) {
 	console.log('tempUnit:', tempUnit);
 	drawUnit(context, tempUnit);
 	units.push(tempUnit);
-});
+}
 
 socket.on('removeUnit', function(unitID) {
 	//Implement unit deletion here.
