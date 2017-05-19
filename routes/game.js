@@ -35,17 +35,18 @@ router.post('/new_game', function(req, res) {
 				var username = req.user.username;
 				var gameID = data.id;
 				var userID = req.user.id;
+				var playerNumber = 0;
 
 				//Add user into DB as player 1.
 				console.log('Attempting to add player to DB.');
-				insertPlayer(username, gameID, userID, function(err, data) {
+				insertPlayer(username, gameID, userID, playerNumber, function(err, player) {
 					if (err) throw err;
-					if (!data) console.log('No data found.');
+					if (!player) console.log('No player found.');
 					else {
 						//Send variables to game js.
 						//res.send(path.basename('/images/map_' + map + '.png'));
 						var mapPath = path.basename('/images/map_' + mapID + '.png');
-						res.render('testGame', {title: title, mapPath: mapPath, gameID: gameID});
+						res.render('testGame', {title: title, mapPath: mapPath, gameID: gameID, player: player});
 					}
 				});
 			})
@@ -61,6 +62,7 @@ router.post('/join_game', function(req, res) {
 		var username = req.user.username;
 		var gameID = req.body.gameID;
 		var userID = req.user.id;
+		var playerNumber = 1;
 
 		db.one('UPDATE games SET totalplayers = totalplayers+1 WHERE id = $1 RETURNING *', [gameID])
 			.then(data => {
@@ -70,9 +72,9 @@ router.post('/join_game', function(req, res) {
 				throw error;
 			})
 
-		insertPlayer(username, gameID, userID, function(err, data) {
+		insertPlayer(username, gameID, userID, playerNumber, function(err, player) {
 			if (err) throw err;
-			if (!data) console.log('No data found.');
+			if (!player) console.log('No player found.');
 			else {
 				console.log(username, 'has joined the game.');
 
@@ -80,7 +82,7 @@ router.post('/join_game', function(req, res) {
 					if (err) throw err;
 					if (!game) console.log('Error: No game found!');
 					else {
-						res.render('testGame', {title: game.title, gameID: gameID});
+						res.render('testGame', {title: game.title, gameID: gameID, player: player});
 					}
 				})
 				
@@ -94,14 +96,23 @@ router.post('/join_game', function(req, res) {
 
 router.post('/rejoin_game', function(req, res) {
 	var gameID = req.body.gameID;
+	var userID = req.user.id;
 
-	getGameByID(gameID, function(err, game, unitList) {
-		if (err) throw err;
-		if (!game) console.log('Error: No game found!');
-		else {
-			res.render('testGame', {title: game.title, gameID: gameID});
-		}
-	})
+	db.one('SELECT * FROM players WHERE gameID = $1 AND userID = $2', [gameID, userID])
+		.then(data => {
+			getGameByID(gameID, function(err, game, unitList) {
+				if (err) throw err;
+				if (!game) console.log('Error: No game found!');
+				else {
+					db.one()
+					res.render('testGame', {title: game.title, gameID: gameID, player: player});
+				}
+			})
+		})
+		.catch(error => {
+			throw error;
+		})
+	
 	
 })
 
@@ -128,18 +139,19 @@ router.post('/delete_game', function(req, res) {
 
 
 //Helper functions.
-var insertPlayer = function(username, gameID, userID, callback) {
+var insertPlayer = function(username, gameID, userID, playerNumber, callback) {
 	var username = username;
 	var gameID = gameID;
 	var userID = userID;
+	var playerNumber = playerNumber;
 	var income = 1000;
 	var wallet = 0;
 	var co = 0;
 	var specialMeter = 0;
 
 	console.log("User to be added to player DB:", username, ", GameID:", gameID);
-	db.one('INSERT INTO players(username, gameID, userID, income, wallet, co, specialMeter) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING username',
-		[username, gameID, userID, income, wallet, co, specialMeter])
+	db.one('INSERT INTO players(username, gameID, userID, playerNumber, income, wallet, co, specialMeter) VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
+		[username, gameID, userID, playerNumber, income, wallet, co, specialMeter])
 		.then(user => {
 			console.log('Success', user.username, 'stored in player DB!');
 			callback(null, user);
