@@ -42,6 +42,7 @@ CREATE TABLE IF NOT EXISTS players
   username VARCHAR(25),
   gameID INTEGER,
   userID INTEGER,
+  playerNumber INTEGER,
   income INTEGER,
   wallet INTEGER,
   co INTEGER,
@@ -55,17 +56,17 @@ CREATE TABLE IF NOT EXISTS units
   id SERIAL PRIMARY KEY,
   gameID INTEGER,
   owner INTEGER,
-  posX INTEGER,
-  posY INTEGER,
+  xpos INTEGER,
+  ypos INTEGER,
   health INTEGER,
-  type INTEGER
+  type VARCHAR(25)
 );
 
 -- UnitTypes Table
 CREATE TABLE IF NOT EXISTS unitTypes
 (
   id SERIAL PRIMARY KEY,
-  name VARCHAR(25),
+  type VARCHAR(25),
   sprite VARCHAR(100),
   cost INTEGER,
   damage INTEGER,

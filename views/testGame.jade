@@ -3,6 +3,19 @@ extends layout
 doctype html
 html
 		block content
+			.container
+				h2= title
+				h3#currentPlayerTurnDisplay Red player's turn!
+
 				canvas#gameDraw
 
+				input(type='button', value='End Turn', id='endTurnButton')
+
+				form(method='post', action='/game/delete_game', name='delete-game')
+					input(type= 'hidden', name= 'gameID' value= gameID)
+					input(type='submit', value='Concede', id='concedeButton')
+
+				script(type= 'text/javascript').
+					var gameID =!{JSON.stringify(gameID)}
+					var player =!{JSON.stringify(player)}
 				script(src='/game/test.js')

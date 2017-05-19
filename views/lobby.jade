@@ -7,8 +7,6 @@ block content
 				h1= title
 				a(href='/createGame', name='create-game-href', type='button')
 					input(type='button', value='Create Game')
-				a(href='/testGame', name='test-game-href')
-					input(type='button', value='Test Game')
 				br
 				div.table_normal
 					table.table_content
@@ -38,7 +36,7 @@ block content
 													input(type= 'hidden', name= 'gameID' value= game.id)
 													input(type='submit', value= 'Join Game')
 											else
-												strong Game Started
+												strong Game Full
 			div.chat_content
 				h3 Chat
 					.content(name='chat-content')

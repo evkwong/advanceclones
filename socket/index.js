@@ -1,25 +1,114 @@
 var socketIo = require('socket.io')
+var game = require('../routes/game');
+console.log('Game:', game);
 //var { USER_JOINED, MESSAGE_SEND } = require('../chat/constants_chat')
 
+game.testFunction('hi');
+
+console.log('SocketIO index loaded.');
 var init = (app, server) => {
-  var io = socketIo(server)
-  
-  app.set('io', io)
-  
-  let players = [];
-  
-  io.on('connection', socket => {
-    console.log('client connected')
-    
-    //used for chat serverside       
-    socket.on('send', function(data) {
-      socket.emit('message', data);
+	var io = socketIo(server);
+	
+	app.set('io', io);
+	
+	let players = [];
+	
+	io.on('connection', function(socket) {
+		console.log('A client connected.')
+
+		//Store and return socketID.
+		socket.on('getSocketInfo', function(gameID) {
+			var room = gameID;
+			socket.join(room);
+			console.log(socket.id, 'has joined room:', room);
+			socket.send('socketInfo', {socketID: socket.id});
+			io.to(room).emit('clientConsoleMessage', {message: 'A socket connected to this room.'});
+		})
+
+		//Chat. 
+		socket.on('send', function(data) {
+			socket.emit('message', data);
+		})
+
+		//Game state.
+    socket.on('getGameInfo', function(gameID) {
+      game.getGameByID(gameID, function(err, game, unitList) {
+        if (err) throw err;
+        else {
+          socket.emit('gameInfo', {game: game, unitlist: unitList});
+        }
+      })
     })
 
-    socket.on('disconnect', data => {
-      console.log('client disconnected')
+		socket.on('startGame', function(gameID) {
+      console.log('Attempting to start game', gameID);
+      game.startGame(gameID);
     })
-  })
+
+		socket.on('createUnit', function(data, gameID) {
+			console.log('Received unit from client:', data);
+      console.log('Room:', gameID);
+			game.addUnit(data, gameID, function(err, unit) {
+				if (err) throw err;
+				if (!data) console.log('No data returned.');
+				else {
+					console.log('Returning', unit, 'to', gameID);
+					io.to(gameID).emit('returnUnit', unit);
+				}
+			});
+		});
+
+		socket.on('updateUnit', function(data, gameID) {
+			console.log('Unit to be updated received:', data);
+			game.updateUnit(data, gameID, function(err, unit) {
+				if (err) throw err;
+				else {
+					io.to(gameID).emit('returnUnit', unit);
+				}
+			});
+		});
+
+    socket.on('createBuilding', function(data, gameID) {
+      console.log('Received unit from client:', data);
+
+    })
+
+		socket.on('removeUnit', function(data) {
+			console.log('Removing unit from DB:', data);
+			game.removeUnit(data, function(err, unitID) {
+				if (err) throw err;
+				else {
+					socket.emit('removeUnit', unitID);
+				}
+			});
+		});
+		
+		socket.on('updateWallet', function(data) {
+			console.log('Updating wallet:', data);
+			game.updateWallet(data, function(err, player) {
+				if (err) throw err;
+				else {
+					socket.emit('updateWallet', player);
+				}
+			});
+		});
+
+		socket.on('updatePlayerTurn', function(data) {
+			console.log('Updating player turn.', data);
+			game.updatePlayerTurn(data, function(err, nextPlayerTurn) {
+				if (err) throw err;
+				else {
+					socket.emit('updatePlayerTurn', nextPlayerTurn);
+				}
+			})
+		});
+
+		//Disconnect.
+		socket.on('disconnect', data => {
+			console.log('A client disconnected.')
+		});
+
+	})
 }
 
 module.exports = {init}
