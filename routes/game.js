@@ -141,7 +141,7 @@ var getUnitsByGameID = function(gameID, callback) {
 //Exports
 module.exports = router;
 
-module.exports.getGameByID = function(gameID, callback) {
+module.exports.getGameByID = getGameByID = function(gameID, callback) {
 	db.one('SELECT * FROM games WHERE id = $1', [gameID])
 		.then(data => {
 			var unitList = getUnitsByGameID(gameID, function(err, unitList) {
