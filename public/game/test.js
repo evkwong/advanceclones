@@ -31,7 +31,6 @@ socket.on('gameInfo', function(data) {
 		//Load current game state.
 		for (i = 0; i < unitList.length; i++) {
 			unit = unitList[i];
-			console.log('Here is this fkn unit:', unit);
 			var tempUnit = new Unit(unit.id, unit.gameid, unit.owner, unit.xpos, unit.ypos, unit.type);
 			addUnitToClient(tempUnit);
 		}
@@ -264,6 +263,7 @@ function selectBuilding(e) {
 };
 
 function updateAll() {
+		console.log('Updating all!');
 		context.drawImage(background, 0, 0);
 		for(var i in units) {
 				drawUnit(context, units[i]);
@@ -439,6 +439,21 @@ var addUnitToClient = function(unit) {
 	drawUnit(context, unit);
 	units.push(unit);
 }
+
+socket.on('updateUnit', function(unit) {
+	console.log('Unit sent back:', unit);
+	var tempUnit = new Unit(unit.id, unit.gameid, unit.owner, unit.xpos, unit.ypos, unit.type);
+
+	console.log('Here are all the units:', units);
+	for (i = 0; i < units.length; i++) {
+		if (units[i].id == tempUnit.id) {
+			units[i].xPos = tempUnit.xPos;
+			units[i].yPos = tempUnit.yPos;
+		}
+	}
+
+	updateAll();
+});
 
 socket.on('removeUnit', function(unitID) {
 	//Implement unit deletion here.

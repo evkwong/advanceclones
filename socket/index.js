@@ -63,7 +63,7 @@ var init = (app, server) => {
 			game.updateUnit(data, gameID, function(err, unit) {
 				if (err) throw err;
 				else {
-					io.to(gameID).emit('returnUnit', unit);
+					io.to(gameID).emit('updateUnit', unit);
 				}
 			});
 		});
