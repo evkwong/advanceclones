@@ -4,6 +4,7 @@
  */
 
 console.log('GameID:', gameID);
+console.log('You are player:', player);
 
 //SocketIO setup.
 var socket = io();

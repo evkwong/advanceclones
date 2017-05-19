@@ -99,12 +99,11 @@ router.post('/rejoin_game', function(req, res) {
 	var userID = req.user.id;
 
 	db.one('SELECT * FROM players WHERE gameID = $1 AND userID = $2', [gameID, userID])
-		.then(data => {
+		.then(player => {
 			getGameByID(gameID, function(err, game, unitList) {
 				if (err) throw err;
 				if (!game) console.log('Error: No game found!');
 				else {
-					db.one()
 					res.render('testGame', {title: game.title, gameID: gameID, player: player});
 				}
 			})
@@ -112,8 +111,6 @@ router.post('/rejoin_game', function(req, res) {
 		.catch(error => {
 			throw error;
 		})
-	
-	
 })
 
 router.post('/delete_game', function(req, res) {
