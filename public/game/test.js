@@ -69,8 +69,20 @@ window.onload = function() {
 		};
 };
 
-$('#gameDraw').on('click', selectUnit);
+function clickControl() {
+		if(player.playernumber != currentPlayerTurn) {
+				console.log("WAIT YOUR TURN! FOOL!");
+				return;
+		}
+
+		console.log("This guy is VIP");
+		$('#gameDraw').click(selectUnit);
+		$('#gameDraw').click(selectBuilding);
+};
+
 function selectUnit(e) {
+		console.log("WE IN THE CLUB");
+
 		var clickedX = e.pageX - this.offsetLeft;
 		var clickedY = e.pageY - this.offsetTop;
 
