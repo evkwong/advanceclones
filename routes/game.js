@@ -105,6 +105,29 @@ router.post('/rejoin_game', function(req, res) {
 	
 })
 
+router.post('/delete_game', function(req, res) {
+	var gameID = req.body.gameID;
+
+	db.one('DELETE FROM games WHERE id = $1 RETURNING *', [gameID])
+		.then(game => {
+			console.log('Game', game.id, 'removed from DB.');
+
+			db.none('DELETE FROM players WHERE gameid = $1', [game.id])
+				.then(data => {
+					console.log('Deleted players.');
+					res.redirect('/lobby');
+				})
+				.catch(error => {
+					throw error;
+				})
+		})
+		.catch(error => {
+			throw error;
+		});
+});
+
+
+//Helper functions.
 var insertPlayer = function(username, gameID, userID, callback) {
 	var username = username;
 	var gameID = gameID;
@@ -126,8 +149,6 @@ var insertPlayer = function(username, gameID, userID, callback) {
 		});
 }
 
-
-//Helper functions.
 var getUnitsByGameID = function(gameID, callback) {
 	db.manyOrNone('SELECT * FROM units WHERE gameID = $1', [gameID])
 		.then(data => {
@@ -239,8 +260,8 @@ module.exports.startGame = function(gameID) {
 module.exports.addUnit = function(data, gameID, callback) {
 	var gameID = gameID;
 	var owner = data.owner;
-	var xPos = data.xPos;
-	var yPos = data.yPos;
+	var xPos = data.xpos;
+	var yPos = data.ypos;
 	var health = 10; //Get health from DB.
 	var type = data.type;
 
@@ -254,6 +275,22 @@ module.exports.addUnit = function(data, gameID, callback) {
 			callback(error, false);
 		})
 };
+
+module.exports.updateUnit = function(data, gameID, callback) {
+	var unitID = data.id;
+	var xPos = data.xpos;
+	var yPos = data.ypos;
+	var health = data.health;
+
+	db.one('UPDATE units SET xpos = $1, ypos = $2, health = $3 WHERE id = $4 RETURNING *', [xPos, yPos, health, unitID])
+		.then(unit => {
+			console.log('The unit has been updated:', unit);
+			callback(null, unit);
+		})
+		.catch(err => {
+			callback(err, false);
+		})
+}
 
 module.exports.removeUnit = function(data, callback) {
 	var id = data.id;
