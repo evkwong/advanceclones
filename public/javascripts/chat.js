@@ -4,10 +4,9 @@ window.onload = function() {
   var messages = [];
   var field = document.getElementById('field');
   var sendButton = document.getElementById('send');
-  var testButton = document.getElementById('testButton');
   var content = document.getElementById('content');
   
-  socket.on('message', function (data) {
+  socket.on('getChatMessage', function (data) {
     if(data.message) {
       messages.push(data);
       var html = '';
@@ -23,7 +22,7 @@ window.onload = function() {
 
   sendButton.onclick = sendMessage = function() {
     var text = field.value;
-    socket.emit('send', {message: text});
+    socket.emit('sendChatMessage', {message: text});
     field.value = '';
   };
 

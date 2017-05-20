@@ -54,10 +54,10 @@ socket.on('gameInfo', function(data) {
 });
 
 //Map setup.
-//0 = plains, 1 = forest, 2 = city, 3 = mountain, 4 = river, 5 = road.
+//0 = plains, 1 = forest, 2 = city, 3 = mountain, 4 = river, 5 = road, 6 = HQ.
 var mapTerrain = [
 [1, 1, 3, 3, 3, 4, 3, 3, 1, 0, 2, 2, 1, 4, 2, 2, 0, 5, 0],
-[0, 0, 1, 3, 3, 4, 3, 2, 1, 0, 0, 0, 1, 4, 1, 0, 2, 5, 2],
+[0, 0, 1, 3, 3, 4, 3, 2, 1, 0, 0, 0, 1, 4, 1, 0, 2, 5, 6],
 [0, 0, 0, 2, 3, 4, 3, 0, 0, 0, 3, 5, 5, 5, 5, 5, 5, 5, 5],
 [0, 0, 1, 3, 3, 4, 1, 0, 0, 3, 3, 5, 2, 4, 4, 2, 2, 5, 2],
 [0, 1, 3, 3, 3, 4, 1, 2, 0, 3, 3, 5, 0, 3, 4, 0, 0, 5, 0],
@@ -65,7 +65,7 @@ var mapTerrain = [
 [0, 0, 0, 1, 4, 4, 0, 0, 0, 3, 1, 5, 0, 3, 4, 1, 0, 5, 0],
 [2, 0, 0, 0, 4, 0, 0, 0, 0, 3, 5, 5, 3, 3, 4, 1, 0, 5, 0],
 [0, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 3, 3, 3, 4, 3, 1, 5, 1],
-[2, 0, 2, 0, 4, 1, 0, 2, 2, 1, 3, 3, 3, 3, 4, 3, 3, 2, 3]
+[6, 0, 2, 0, 4, 1, 0, 2, 2, 1, 3, 3, 3, 3, 4, 3, 3, 2, 3]
 ]
 
 var currentPlayerTurnDisplay = document.getElementById('currentPlayerTurnDisplay');
@@ -431,8 +431,8 @@ function setDefaultState() {
 
 //Socket.io for updating game state.
 endTurnButton.onclick = function() {
-  console.log('Attempting to update player turn.');
-  socket.emit('updatePlayerTurn', currentPlayerTurn, gameID);
+  	console.log('Attempting to update player turn.');
+  	socket.emit('updatePlayerTurn', currentPlayerTurn, gameID);
 };
 
 socket.on('updatePlayerTurn', function(nextPlayerTurn) {
@@ -463,6 +463,12 @@ socket.on('clientConsoleMessage', function(data) {
 	console.log('Message received:', data.message);
 })
 
+socket.on('returnUnit', function(unit) {
+	console.log('Unit sent back:', unit);
+	var tempUnit = new Unit(unit.id, unit.gameid, unit.owner, unit.xpos, unit.ypos, unit.type);
+	addUnitToClient(tempUnit);
+});
+
 socket.on('returnBuilding', function(building) {
 	console.log('Building sent back:', building);
 	var tempBuild = new Building(building.id, building.gameid, building.owner, building.xpos, 
@@ -476,9 +482,9 @@ socket.on('returnUnit', function(unit) {
 });
 
 var addBuildToClient = function(building) {
-		//console.log('Adding building to client:', building);
-		drawBuilding(context, building);
-		buildings.push(building);
+	console.log('Adding building to client:', building);
+	drawBuilding(context, building);
+	buildings.push(building);
 }
 var addUnitToClient = function(unit) {
 	console.log('Adding unit to client:', unit);
@@ -507,4 +513,40 @@ socket.on('removeUnit', function(unitID) {
 
 socket.on('returnPlayer', function(player) {
 	//Implement player update here.
+});
+
+//Chat functionality.
+var messages = [];
+var field = document.getElementById('field');
+var sendButton = document.getElementById('send');
+var content = document.getElementById('content');
+
+socket.on('getChatMessage', function (data) {
+	console.log('Chat data received from server:', data);
+    if(data.message) {
+		messages.push(data);
+		var html = '';
+		for(var i = 0; i < messages.length; i++) {
+			html += messages[i].user + ': ' + messages[i].message + '<br />';
+		}
+		content.innerHTML = html;
+
+    } else {
+		console.log('Data did not contain a message:', data);
+    }
+});
+
+sendButton.onclick = sendMessage = function() {
+    var text = field.value;
+    var user = player.username;
+    socket.emit('sendChatMessage', {user: user, message: text}, gameID);
+    field.value = '';
+};
+
+$(document).ready(function() {
+	$('#field').keyup(function(e) {
+ 		if(e.keyCode == 13) {
+   			sendMessage();
+ 		}
+	});
 });

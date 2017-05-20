@@ -26,28 +26,29 @@ var init = (app, server) => {
 		})
 
 		//Chat. 
-		socket.on('send', function(data) {
-			socket.emit('message', data);
+		socket.on('sendChatMessage', function(data, gameID) {
+			console.log('Chat data received:', data);
+			io.to(gameID).emit('getChatMessage', data);
 		})
 
 		//Game state.
-    socket.on('getGameInfo', function(gameID) {
-      game.getGameByID(gameID, function(err, game, unitList, buildingList) {
-        if (err) throw err;
-        else {
-          socket.emit('gameInfo', {game: game, unitlist: unitList, buildingList});
-        }
-      })
-    })
+	    socket.on('getGameInfo', function(gameID) {
+	      game.getGameByID(gameID, function(err, game, unitList, buildingList) {
+	        if (err) throw err;
+	        else {
+	          socket.emit('gameInfo', {game: game, unitlist: unitList, buildingList});
+	        }
+	      })
+	    })
 
 		socket.on('startGame', function(gameID) {
-      console.log('Attempting to start game', gameID);
-      game.startGame(gameID);
-    })
+	      console.log('Attempting to start game', gameID);
+	      game.startGame(gameID);
+	    })
 
 		socket.on('createUnit', function(data, gameID) {
 			console.log('Received unit from client:', data);
-      console.log('Room:', gameID);
+  			console.log('Room:', gameID);
 			game.addUnit(data, gameID, function(err, unit) {
 				if (err) throw err;
 				if (!data) console.log('No data returned.');
@@ -68,18 +69,16 @@ var init = (app, server) => {
 			});
 		});
 
-    socket.on('createBuilding', function(data, gameID) {
-      console.log('Received unit from client:', data);
-			console.log('Room:', gameID);
+	    socket.on('createBuilding', function(data, gameID) {
+	      	console.log('Received building from client:', data);
 			game.addBuilding(data, gameID, function(err, building) {
-					if (err) throw err;
-					if (!data) console.log('No data returned');
-					else {
-							console.log('Returning', building, 'to', gameID);
-							io.to(gameID).emit('returnBuilding', building);
-					}
+				if (err) throw err;
+				else {
+					console.log('Returning', building, 'to', gameID);
+					io.to(gameID).emit('returnBuilding', building);
+				}
 			});
-    });
+	    });
 
 		socket.on('removeUnit', function(data, gameID) {
 			console.log('Removing unit from DB:', data);
