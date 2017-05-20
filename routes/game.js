@@ -46,7 +46,7 @@ router.post('/new_game', function(req, res) {
 						//Send variables to game js.
 						//res.send(path.basename('/images/map_' + map + '.png'));
 						var mapPath = path.basename('/images/map_' + mapID + '.png');
-						res.render('testGame', {title: title, mapPath: mapPath, gameID: gameID, player: player});
+						res.render('testGame', {title: title, mapPath: mapPath, gameID: gameID, player: player, user: req.user});
 					}
 				});
 			})
@@ -64,30 +64,39 @@ router.post('/join_game', function(req, res) {
 		var userID = req.user.id;
 		var playerNumber = 1;
 
-		db.one('UPDATE games SET totalplayers = totalplayers+1 WHERE id = $1 RETURNING *', [gameID])
-			.then(data => {
-				console.log(username, 'added to players of game:', gameID, 'Current number of players:', data.totalplayers);
+		db.one('SELECT * FROM games WHERE id = $1', [gameID])
+			.then(game => {
+				if (game.totalplayers < game.maxplayers) {
+					db.one('UPDATE games SET totalplayers = totalplayers+1 WHERE id = $1 RETURNING *', [gameID])
+						.then(data => {
+							insertPlayer(username, gameID, userID, playerNumber, function(err, player) {
+								if (err) throw err;
+								if (!player) console.log('No player found.');
+								else {
+									console.log(username, 'has joined the game.');
+
+									getGameByID(gameID, function(err, game, unitList, buildingList) {
+										if (err) throw err;
+										if (!game) console.log('Error: No game found!');
+										else {
+											res.render('testGame', {title: game.title, gameID: gameID, player: player, user: req.user});
+										}
+									})
+									
+								}
+							});
+						})
+						.catch(error => {
+							throw error;
+						})
+				}
+				else {
+					site.gameFull();
+				}
 			})
 			.catch(error => {
 				throw error;
 			})
-
-		insertPlayer(username, gameID, userID, playerNumber, function(err, player) {
-			if (err) throw err;
-			if (!player) console.log('No player found.');
-			else {
-				console.log(username, 'has joined the game.');
-
-				getGameByID(gameID, function(err, game, unitList) {
-					if (err) throw err;
-					if (!game) console.log('Error: No game found!');
-					else {
-						res.render('testGame', {title: game.title, gameID: gameID, player: player});
-					}
-				})
-				
-			}
-		});
 	}
 	else {
 		site.notLoggedIn(res);
@@ -100,11 +109,11 @@ router.post('/rejoin_game', function(req, res) {
 
 	db.one('SELECT * FROM players WHERE gameID = $1 AND userID = $2', [gameID, userID])
 		.then(player => {
-			getGameByID(gameID, function(err, game, unitList) {
+			getGameByID(gameID, function(err, game, unitList, buildingList) {
 				if (err) throw err;
 				if (!game) console.log('Error: No game found!');
 				else {
-					res.render('testGame', {title: game.title, gameID: gameID, player: player});
+					res.render('testGame', {title: game.title, gameID: gameID, player: player, user: req.user});
 				}
 			})
 		})
@@ -168,6 +177,16 @@ var getUnitsByGameID = function(gameID, callback) {
 		})
 }
 
+var getBuildingsByGameID = function(gameID, callback) {
+	db.manyOrNone('SELECT * FROM buildings WHERE gameID = $1', [gameID])
+		.then(data => {
+			callback(null, data);
+		})
+		.catch(error => {
+			callback(error, false);
+		})
+}
+
 //Exports
 module.exports = router;
 
@@ -177,7 +196,13 @@ module.exports.getGameByID = getGameByID = function(gameID, callback) {
 			getUnitsByGameID(gameID, function(err, unitList) {
 				if (err) throw err;
 				else {
-					callback(null, data, unitList);
+					getBuildingsByGameID(gameID, function(err, buildingList) {
+						if (err) throw err;
+						else {
+							callback(null, data, unitList, buildingList);
+						}
+					})
+					
 				}
 			})
 			

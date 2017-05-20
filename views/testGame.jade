@@ -9,6 +9,11 @@ html
 
 				canvas#gameDraw(onclick='clickControl()')
 
+				if (player.playernumber == 0)
+					h4= "Red Player"
+				else
+					h4= "Blue Player"
+
 				input(type='button', value='End Turn', id='endTurnButton')
 
 				form(method='post', action='/game/delete_game', name='delete-game')
