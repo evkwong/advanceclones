@@ -283,19 +283,26 @@ function updateAll() {
 		console.log('Updating all!');
 		context.drawImage(background, 0, 0);
 		for(var i in buildings) {
-				buildings[i].xPos = snap32(buildings[i].xPos);
-				buildings[i].yPos = snap32(buildings[i].yPos);
+				buildings[i].xPos = snapRound(buildings[i].xPos);
+				buildings[i].yPos = snapRound(buildings[i].yPos);
 				drawBuilding(context, buildings[i]);
 		}
 		for(var i in units) {
-				units[i].xPos = snap32(units[i].xPos);
-				units[i].yPos = snap32(units[i].yPos);
+				units[i].xPos = snapCeil(units[i].xPos);
+				units[i].yPos = snapCeil(units[i].yPos);
 				drawUnit(context, units[i]);
 		}
 };
 
-function snap32(value) {
-	var result = Math.floor(value / 32) * 32;
+function snapRound(value) {
+	var result = Math.round(value / 32) * 32;
+	if (result == 0) result++;
+
+	return result;
+}
+
+function snapCeil(value) {
+	var result = Math.ceil(value / 32) * 32;
 	if (result == 0) result++;
 
 	return result;
@@ -433,16 +440,16 @@ function setDefaultState() {
 		createBuilding(context, gameID, 1, 579, 101, "factory");
 
 		//Build Neutral Building
-		createBuilding(context, gameID, -1, 388, 163, "factory");
+		createBuilding(context, gameID, -1, 383, 159, "factory");
 		createBuilding(context, gameID, -1, 127, 95, "city");
-		createBuilding(context, gameID, -1, 229, 29, "city");
-		createBuilding(context, gameID, -1, 228, 123, "city");
-		createBuilding(context, gameID, -1, 228, 286, "city");
-		createBuilding(context, gameID, -1, 261, 286, "city");
-		createBuilding(context, gameID, -1, 324, 2, "city");
-		createBuilding(context, gameID, -1, 357, 2, "city");
-		createBuilding(context, gameID, -1, 389, 94, "city");
-		createBuilding(context, gameID, -1, 547, 285, "city");
+		createBuilding(context, gameID, -1, 223, 31, "city");
+		createBuilding(context, gameID, -1, 223, 123, "city");
+		createBuilding(context, gameID, -1, 223, 287, "city");
+		createBuilding(context, gameID, -1, 255, 287, "city");
+		createBuilding(context, gameID, -1, 319, 2, "city");
+		createBuilding(context, gameID, -1, 351, 2, "city");
+		createBuilding(context, gameID, -1, 383, 95, "city");
+		createBuilding(context, gameID, -1, 543, 287, "city");
 
 		//Default Units
 		console.log('Creating test units!');
