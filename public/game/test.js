@@ -41,8 +41,9 @@ socket.on('gameInfo', function(data) {
 			addUnitToClient(tempUnit);
 		}
 
-		for (i in buildingList) {
+		for (i = 0; i <  buildingList.length; i++) {
 				building = buildingList[i]
+				console.log(building);
 				var tempBuild = new Build(building.id, building.gameid, building.owner, building.xpos, building.ypos, building.type);
 				addBuildToClient(tempBuild);
 		}

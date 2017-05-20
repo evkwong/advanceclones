@@ -315,7 +315,7 @@ module.exports.addBuilding = function(data, gameID, callback) {
 	var yPos = data.xPos;
 	var type = data.type;
 
-	db.one('INSERT INTO buildings(gameid, owner, xpos, ypos, type) VALUES ($1, $2, $3, $4) RETURNING *', [gameID, owner, xPos, yPos, type])
+	db.one('INSERT INTO buildings(gameid, owner, xpos, ypos, type) VALUES ($1, $2, $3, $4, $5) RETURNING *', [gameID, owner, xPos, yPos, type])
 		.then(building => {
 			console.log('Stored a building in the DB:', building);
 			callback(null, building);
