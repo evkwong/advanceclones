@@ -106,17 +106,17 @@ var init = (app, server) => {
 			game.updateIncome(income, playerNumber, gameID, function(err, player) {
 				if (err) throw err;
 				else {
-					io.to(gameID).emit('updateIncome', player);
+					socket.emit('updateIncome', player);
 				}
 			});
 		});
 		
-		socket.on('updateWallet', function(playerNumber, gameID) {
+		socket.on('updateWallet', function(money, playerNumber, gameID) {
 			console.log('Updating wallet.');
-			game.updateWallet(playerNumber, gameID, function(err, player) {
+			game.updateWallet(money, playerNumber, gameID, function(err, player) {
 				if (err) throw err;
 				else {
-					io.to(gameID).emit('updateWallet', player);
+					socket.emit('updateWallet', player);
 				}
 			});
 		});
