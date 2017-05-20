@@ -380,8 +380,8 @@ module.exports.updateIncome = function(income, playerNumber, gameID, callback) {
 		})
 }
 
-module.exports.updateWallet = function(playerID, gameID, callback) {
-	db.one('UPDATE players SET wallet = wallet + income WHERE playerid = $1 AND gameid = $2 RETURNING *', [playerID, gameID])
+module.exports.updateWallet = function(playerNumber, gameID, callback) {
+	db.one('UPDATE players SET wallet = wallet + income WHERE playernumber = $1 AND gameid = $2 RETURNING *', [playerNumber, gameID])
 		.then(player => {
 			console.log('Player wallet updated:', player);
 			callback(null, player);
