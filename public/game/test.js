@@ -158,17 +158,33 @@ function orderUnit(selectedUnit, unitPosInArray) {
 								clickedX < buildings[i].xPos + 32 &&
 								clickedY > buildings[i].yPos &&
 								clickedY < buildings[i].yPos + 32 &&
-								selectedUnit.owner != buildings[i].owner) {
+								selectedUnit.owner != buildings[i].owner &&
+								buildings[i].type == "city") {
 
 								captureBuilding(selectedUnit, i);
 								break;
 						}
+
+						else if (clickedX > buildings[i].xPos &&
+								clickedX < buildings[i].xPos + 32 &&
+								clickedY > buildings[i].yPos &&
+								clickedY < buildings[i].yPos + 64 &&
+								selectedUnit.owner != buildings[i].owner &&
+								buildings[i].type == "hq") {
+									console.log("Macaroni");
+									captureHeadquarters();
+									return;
+								}
+
 				}
 
 				if(entireArray > units.length - 1) {
-						units[unitPosInArray].xPos = clickedX;
-						units[unitPosInArray].yPos = clickedY;
-						units[unitPosInArray].moved = true;
+						if(clickedX < units[unitPosInArray].xPos + units[unitPosInArray].distance && 
+							clickedY < units[unitPosInArray].yPos + units[unitPosInArray].distance) {
+								units[unitPosInArray].xPos = clickedX;
+								units[unitPosInArray].yPos = clickedY;
+								units[unitPosInArray].moved = true;
+							}
 				}
 
 				//Socket io unit update.
@@ -570,6 +586,24 @@ socket.on('updateUnit', function(unit) {
 
 	updateAll();
 });
+
+
+function captureHeadquarters() {
+		console.log("Aay lmao");
+		if(player.playernumber == currentPlayerTurn) {
+				socket.emit("winner", gameID);
+				//send them to winner url
+				console.log("Winner");
+				context.font = "48px Calibri";
+				context.strokeText('HELLO WINNER', width/4, height/4);
+		}
+
+}
+socket.on('loser', function() {
+		//redirect to lose page
+		context.font = "48px, Calibri";
+		context.strokeText('HELLO LOSER', width/4, height/4);
+})
 
 socket.on('updateBuilding', function (building) {
 		var tempBuilding = new Building(building.id, building.gameid, building.owner, building.xpos, building.ypos, building.type);
