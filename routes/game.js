@@ -127,12 +127,9 @@ router.post('/delete_game', function(req, res) {
 
 	db.one('DELETE FROM games WHERE id = $1 RETURNING *', [gameID])
 		.then(game => {
-			console.log('Game', game.id, 'removed from DB.');
-
 			db.none('DELETE FROM players WHERE gameid = $1', [game.id])
 				.then(data => {
 					console.log('Deleted players.');
-					res.redirect('/lobby');
 				})
 				.catch(error => {
 					throw error;
@@ -141,6 +138,8 @@ router.post('/delete_game', function(req, res) {
 		.catch(error => {
 			throw error;
 		});
+
+	res.redirect('/lobby');
 });
 
 
@@ -381,8 +380,8 @@ module.exports.updateIncome = function(income, playerNumber, gameID, callback) {
 		})
 }
 
-module.exports.updateWallet = function(playerNumber, gameID, callback) {
-	db.one('UPDATE players SET wallet = wallet + income WHERE playernumber = $1 AND gameid = $2 RETURNING *', [playerNumber, gameID])
+module.exports.updateWallet = function(money, playerNumber, gameID, callback) {
+	db.one('UPDATE players SET wallet = wallet + $1 WHERE playernumber = $2 AND gameid = $3 RETURNING *', [money, playerNumber, gameID])
 		.then(player => {
 			console.log('Player wallet updated:', player);
 			callback(null, player);

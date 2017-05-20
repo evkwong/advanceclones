@@ -14,6 +14,8 @@ html
 				else
 					h4= "Blue Player"
 
+				strong#walletDisplay "Money: 0, Income: 0"
+
 				input(type='button', value='End Turn', id='endTurnButton')
 
 				form(method='post', action='/game/delete_game', name='delete-game')

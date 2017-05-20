@@ -68,6 +68,8 @@ var mapTerrain = [
 
 var currentPlayerTurnDisplay = document.getElementById('currentPlayerTurnDisplay');
 var endTurnButton = document.getElementById('endTurnButton');
+var walletDisplay = document.getElementById('walletDisplay');
+walletDisplay.innerHTML = 'Money: ' + player.wallet + ', Income: ' + player.income;
 
 var canvas = document.getElementById('gameDraw');
 var context = canvas.getContext('2d');
@@ -203,6 +205,11 @@ function buyUnits(selectedBuild) {
 		drawBuyUnits(currentPlayerTurn);
 
 		$('#gameDraw').one('click', function(e) {
+				var infantryPrice = 1000;
+				var mechPrice = 3000;
+				var reconPrice = 4000;
+				var tankPrice = 7000;
+
 				var clickedX = e.pageX - this.offsetLeft;
 				var clickedY = e.pageY - this.offsetTop;
 
@@ -219,23 +226,26 @@ function buyUnits(selectedBuild) {
 						spawnY = selectedBuild.yPos;
 				}
 
-				if(clickedX > 160 && clickedX < 200 && clickedY > 256 && clickedY < 296 && player.wallet > 1000) {
+				if(clickedX > 160 && clickedX < 200 && clickedY > 256 && clickedY < 296 && player.wallet >= infantryPrice) {
 						createUnit(context, gameID, currentPlayerTurn, spawnX, spawnY, "infantry");
+						socket.emit("updateWallet", -infantryPrice, currentPlayerTurn, gameID);
 				}
 
-				if(clickedX > 225 && clickedX < 265 && clickedY > 256 && clickedY < 296 && player.wallet > 3000) {
+				if(clickedX > 225 && clickedX < 265 && clickedY > 256 && clickedY < 296 && player.wallet >= mechPrice) {
 						createUnit(context, gameID, currentPlayerTurn, spawnX, spawnY, "mech");
+						socket.emit("updateWallet", -mechPrice, currentPlayerTurn, gameID);
 				}
 
-				if(clickedX > 287 && clickedX < 327 && clickedY > 256 && clickedY < 296 && player.wallet > 4000) {
+				if(clickedX > 287 && clickedX < 327 && clickedY > 256 && clickedY < 296 && player.wallet >= reconPrice) {
 						createUnit(context, gameID, currentPlayerTurn, spawnX, spawnY, "recon");
+						socket.emit("updateWallet", -reconPrice, currentPlayerTurn, gameID);
 				}
 
-				if(clickedX > 353 && clickedX < 393 && clickedY > 256 && clickedY < 296 && player.wallet > 7000) {
+				if(clickedX > 353 && clickedX < 393 && clickedY > 256 && clickedY < 296 && player.wallet >= tankPrice) {
 						createUnit(context, gameID, currentPlayerTurn, spawnX, spawnY, "tank");
+						socket.emit("updateWallet", -tankPrice, currentPlayerTurn, gameID);
 				}
 
-				socket.emit("updateWallet", currentPlayerTurn, gameID);
 				updateAll();
 				return;
 		});
@@ -495,6 +505,11 @@ function setDefaultState() {
 //Socket.io for updating game state.
 endTurnButton.onclick = function() {
   	console.log('Attempting to update player turn.');
+
+  	var income = calculatePlayerIncome();
+  	socket.emit('updateIncome', income, currentPlayerTurn, gameID);
+  	socket.emit('updateWallet', income, currentPlayerTurn, gameID);
+
   	socket.emit('updatePlayerTurn', currentPlayerTurn, gameID);
 };
 
@@ -509,9 +524,6 @@ socket.on('updatePlayerTurn', function(nextPlayerTurn) {
 	}
 
 	updatePlayerTurnDisplay();
-	var income = calculatePlayerIncome();
-	socket.emit('updateIncome', income, currentPlayerTurn, gameID);
-	socket.emit('updateWallet', currentPlayerTurn, gameID);
 })
 
 var updatePlayerTurnDisplay = function() {
@@ -531,6 +543,14 @@ var updatePlayerTurnDisplay = function() {
 		endTurnButton.style.visibility = 'visible';
 	}
 }
+
+socket.on('updateWallet', function(updatedPlayer) {
+	if (updatedPlayer.playernumber == player.playernumber) {
+		player.wallet = updatedPlayer.wallet;
+		player.income = updatedPlayer.income;
+		walletDisplay.innerHTML = 'Money: ' + player.wallet + ', Income: ' + player.income;
+	}
+})
 
 socket.on('clientConsoleMessage', function(data) {
 	console.log('Message received:', data.message);
