@@ -23,4 +23,13 @@ html
 				script(type= 'text/javascript').
 					var gameID =!{JSON.stringify(gameID)}
 					var player =!{JSON.stringify(player)}
+
+				div.chat_content
+					h3 Chat
+						p
+							.content(name='chat-content')
+								br
+								input(name='chat-text-area')
+								input(type='button', value='send')
+
 				script(src='/game/test.js')
