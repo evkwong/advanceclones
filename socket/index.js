@@ -99,10 +99,20 @@ var init = (app, server) => {
 				}
 			});
 		});
+
+		socket.on('updateIncome', function(income, playerNumber, gameID) {
+			console.log('Attempting to update player income.');
+			game.updateIncome(income, playerNumber, gameID, function(err, player) {
+				if (err) throw err;
+				else {
+					io.to(gameID).emit('updateIncome', player);
+				}
+			});
+		});
 		
-		socket.on('updateWallet', function(data, gameID) {
-			console.log('Updating wallet:', data);
-			game.updateWallet(data, function(err, player) {
+		socket.on('updateWallet', function(playerNumber, gameID) {
+			console.log('Updating wallet.');
+			game.updateWallet(playerNumber, gameID, function(err, player) {
 				if (err) throw err;
 				else {
 					io.to(gameID).emit('updateWallet', player);

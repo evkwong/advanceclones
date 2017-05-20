@@ -170,8 +170,6 @@ function orderUnit(selectedUnit, unitPosInArray) {
 						units[unitPosInArray].yPos = clickedY;
 				}
 
-				updateAll();
-
 				//Socket io unit update.
 				socket.emit('updateUnit', selectedUnit, gameID);
 
@@ -285,12 +283,23 @@ function updateAll() {
 		console.log('Updating all!');
 		context.drawImage(background, 0, 0);
 		for(var i in buildings) {
+				buildings[i].xPos = snap32(buildings[i].xPos);
+				buildings[i].yPos = snap32(buildings[i].yPos);
 				drawBuilding(context, buildings[i]);
 		}
 		for(var i in units) {
+				units[i].xPos = snap32(units[i].xPos);
+				units[i].yPos = snap32(units[i].yPos);
 				drawUnit(context, units[i]);
 		}
 };
+
+function snap32(value) {
+	var result = Math.floor(value / 32) * 32;
+	if (result == 0) result++;
+
+	return result;
+}
 
 var drawUnit = function(context, unitObject) {
 		var unitImage = new Image();
@@ -425,7 +434,7 @@ function setDefaultState() {
 
 		//Build Neutral Building
 		createBuilding(context, gameID, -1, 388, 163, "factory");
-		createBuilding(context, gameID, -1, 99, 63, "city");
+		createBuilding(context, gameID, -1, 127, 95, "city");
 		createBuilding(context, gameID, -1, 229, 29, "city");
 		createBuilding(context, gameID, -1, 228, 123, "city");
 		createBuilding(context, gameID, -1, 228, 286, "city");
@@ -439,6 +448,8 @@ function setDefaultState() {
 		console.log('Creating test units!');
 		createUnit(context, gameID, currentPlayerTurn, 1, 1, "infantry");
 		createUnit(context, gameID, 1, 550, 1, "infantry");
+
+		updateAll();
 
 		console.log(buildings);
 }
@@ -489,20 +500,15 @@ socket.on('returnBuilding', function(building) {
 		building.ypos, building.type);
 	addBuildToClient(tempBuild);
 })
-socket.on('returnUnit', function(unit) {
-	//console.log('Unit sent back:', unit);
-	var tempUnit = new Unit(unit.id, unit.gameid, unit.owner, unit.xpos, unit.ypos, unit.type);
-	addUnitToClient(tempUnit);
-});
 
 var addBuildToClient = function(building) {
 	console.log('Adding building to client:', building);
-	drawBuilding(context, building);
+	updateAll();
 	buildings.push(building);
 }
 var addUnitToClient = function(unit) {
 	console.log('Adding unit to client:', unit);
-	drawUnit(context, unit);
+	updateAll();
 	units.push(unit);
 }
 
