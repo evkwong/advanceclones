@@ -180,11 +180,15 @@ function orderUnit(selectedUnit, unitPosInArray) {
 		console.log("Health: ", units[receiving].health);
 		units[attacking].xPos = units[receiving].xPos - 32;
 		units[attacking].yPos = units[receiving].yPos;
+		socket.emit('updateUnit', units[attacking], gameID);
+		socket.emit('updateUnit', units[receiving], gameID);
 
 		if(units[receiving].health < 0) {
 				console.log("You ams Dead");
 				units[attacking].xPos = units[receiving].xPos;
 				units[attacking].yPos = units[receiving].yPos;
+				socket.emit('removeUnit', units[receiving], gameID);
+				socket.emit('updateUnit', units[attacking], gameID);
 				units.splice(receiving, 1);
 		}
 
