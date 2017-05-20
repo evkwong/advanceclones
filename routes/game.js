@@ -384,7 +384,7 @@ module.exports.updateWallet = function(data, callback) {
 };
 
 module.exports.updatePlayerTurn = function(currentPlayerTurn, gameID, callback) {
-	if (currentPlayerurn == 0) var nextPlayerTurn = 1;
+	if (currentPlayerTurn == 0) var nextPlayerTurn = 1;
 	else var nextPlayerTurn = 0;
 
 	db.none('UPDATE games SET currentplayerturn = $1 WHERE id = $2', [nextPlayerTurn, gameID])

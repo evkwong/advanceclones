@@ -292,6 +292,19 @@ function updateAll() {
 		}
 };
 
+function calculatePlayerIncome() {
+		console.log('Time to update wallet');
+		var totalIncome = 0;
+		for(i in buildings) {
+			if(buildings[i].owner == currentPlayerTurn) {
+					totalIncome += 1000;
+			}
+		}
+
+		console.log("TotalIncome: ", totalIncome);
+		return totalIncome;
+}
+
 var drawUnit = function(context, unitObject) {
 		var unitImage = new Image();
 		
@@ -425,7 +438,7 @@ function setDefaultState() {
 
 		//Build Neutral Building
 		createBuilding(context, gameID, -1, 388, 163, "factory");
-		createBuilding(context, gameID, -1, 99, 63, "city");
+		createBuilding(context, gameID, -1, 96, 64, "city");
 		createBuilding(context, gameID, -1, 229, 29, "city");
 		createBuilding(context, gameID, -1, 228, 123, "city");
 		createBuilding(context, gameID, -1, 228, 286, "city");
@@ -453,6 +466,9 @@ socket.on('updatePlayerTurn', function(nextPlayerTurn) {
 	console.log('Received new player turn from DB:', nextPlayerTurn);
 	currentPlayerTurn = nextPlayerTurn;
 	updatePlayerTurnDisplay();
+	var income = calculatePlayerIncome();
+	socket.emit('updateIncome', income, currentPlayerTurn, gameID);
+	socket.emit('updateWallet', currentPlayerTurn, gameID);
 })
 
 var updatePlayerTurnDisplay = function() {
