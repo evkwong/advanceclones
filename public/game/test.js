@@ -109,7 +109,7 @@ function selectThing(e) {
 
 		console.log("x: ", clickedX , 'y: ', clickedY);
 
-		for(i in units) { 
+		for(var i in units) { 
 				if (clickedX > units[i].xPos && clickedX < units[i].xPos + 32 && 
 						clickedY > units[i].yPos && clickedY < units[i].yPos + 32 &&
 						units[i].owner == player.playernumber && units[i].moved == false) {
@@ -117,7 +117,7 @@ function selectThing(e) {
 								orderUnit(units[i], i);
 				}
 		}
-		for(i in buildings) {
+		for(var i in buildings) {
 				if(clickedX > buildings[i].xPos && clickedX < buildings[i].xPos + 32 &&
 					 clickedY > buildings[i].yPos && clickedY < buildings[i].yPos + 64 &&
 						buildings[i].type == "hq" && buildings[i].owner == player.playernumber) {
@@ -290,8 +290,8 @@ function updateAll() {
 				drawBuilding(context, buildings[i]);
 		}
 		for(var i in units) {
-				//units[i].xPos = snapCeil(units[i].xPos);
-				//units[i].yPos = snapCeil(units[i].yPos);
+				units[i].xPos = snapCeil(units[i].xPos);
+				units[i].yPos = snapCeil(units[i].yPos);
 				drawUnit(context, units[i]);
 		}
 };
@@ -473,6 +473,7 @@ endTurnButton.onclick = function() {
 socket.on('updatePlayerTurn', function(nextPlayerTurn) {
 	console.log('Received new player turn from DB:', nextPlayerTurn);
 	currentPlayerTurn = nextPlayerTurn;
+	
 	for(var i in units) {
 		if (units[i].owner == currentPlayerTurn) {
 			units[i].moved = false;
@@ -519,25 +520,26 @@ socket.on('returnBuilding', function(building) {
 
 var addBuildToClient = function(building) {
 	console.log('Adding building to client:', building);
-	updateAll();
 	buildings.push(building);
+	drawBuilding(context, building);
+	//updateAll();
 }
 var addUnitToClient = function(unit) {
 	console.log('Adding unit to client:', unit);
-	updateAll();
 	units.push(unit);
+	drawUnit(context, unit);
+	//updateAll();
 }
 
 socket.on('updateUnit', function(unit) {
-	console.log('Unit sent back:', unit);
-	var tempUnit = new Unit(unit.id, unit.gameid, unit.owner, unit.xpos, unit.ypos, unit.type);
+	console.log('Unit updated:', unit);
 
 	console.log('Here are all the units:', units);
 	for (i = 0; i < units.length; i++) {
-		if (units[i].id == tempUnit.id) {
-			units[i].xPos = tempUnit.xPos;
-			units[i].yPos = tempUnit.yPos;
-			units[i].health = tempUnit.health;
+		if (units[i].id == unit.id) {
+			units[i].xPos = unit.xpos;
+			units[i].yPos = unit.ypos;
+			units[i].health = unit.health;
 			units[i].moved = unit.moved;
 		}
 	}
