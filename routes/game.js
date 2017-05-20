@@ -168,9 +168,8 @@ var insertPlayer = function(username, gameID, userID, playerNumber, callback) {
 }
 
 var getUnitsByGameID = function(gameID, callback) {
-	db.manyOrNone('SELECT * FROM units u, unittypes t WHERE gameID = $1 AND u.type = t.type', [gameID])
+	db.manyOrNone('SELECT * FROM units WHERE gameID = $1', [gameID])
 		.then(data => {
-			console.log('Modified units:', data);
 			callback(null, data);
 		})
 		.catch(error => {
@@ -298,9 +297,10 @@ module.exports.addUnit = function(data, gameID, callback) {
 	var yPos = data.yPos;
 	var health = 10; //Get health from DB.
 	var type = data.type;
+	var moved = data.moved;
 
-	db.one('INSERT INTO units(gameid, owner, xpos, ypos, health, type) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
-		[gameID, owner, xPos, yPos, health, type])
+	db.one('INSERT INTO units(gameid, owner, xpos, ypos, health, type, moved) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
+		[gameID, owner, xPos, yPos, health, type, moved])
 		.then(unit => {
 			console.log('Unit inserted into DB:', unit);
 			callback(null, unit);
@@ -345,8 +345,9 @@ module.exports.updateUnit = function(data, gameID, callback) {
 	var xPos = data.xPos;
 	var yPos = data.yPos;
 	var health = data.health;
+	var moved = data.moved;
 
-	db.one('UPDATE units SET xpos = $1, ypos = $2, health = $3 WHERE id = $4 RETURNING *', [xPos, yPos, health, unitID])
+	db.one('UPDATE units SET xpos = $1, ypos = $2, health = $3, moved = $4 WHERE id = $5 RETURNING *', [xPos, yPos, health, moved, unitID])
 		.then(unit => {
 			console.log('The unit has been updated:', unit);
 			callback(null, unit);
@@ -397,7 +398,13 @@ module.exports.updatePlayerTurn = function(currentPlayerTurn, gameID, callback) 
 
 	db.none('UPDATE games SET currentplayerturn = $1 WHERE id = $2', [nextPlayerTurn, gameID])
 		.then(data => {
-			callback(null, nextPlayerTurn);
+			db.none('UPDATE units SET moved = FALSE WHERE owner = $1 AND gameid = $2', [nextPlayerTurn, gameID])
+				.then(data => {
+					callback(null, nextPlayerTurn);
+				})
+				.catch(error => {
+					callback(error, false);
+				})
 		})
 		.catch(error => {
 			callback(error, nextPlayerTurn);
