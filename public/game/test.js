@@ -44,7 +44,7 @@ socket.on('gameInfo', function(data) {
 		for (i = 0; i <  buildingList.length; i++) {
 				building = buildingList[i]
 				console.log(building);
-				var tempBuild = new Build(building.id, building.gameid, building.owner, building.xpos, building.ypos, building.type);
+				var tempBuild = new Building(building.id, building.gameid, building.owner, building.xpos, building.ypos, building.type);
 				addBuildToClient(tempBuild);
 		}
 		
@@ -117,7 +117,6 @@ function selectThing(e) {
 								orderUnit(units[i], i);
 				}
 		}
-		console.log(buildings);
 		for(i in buildings) {
 				if(clickedX > buildings[i].xPos && clickedX < buildings[i].xPos + 32 &&
 					 clickedY > buildings[i].yPos && clickedY < buildings[i].yPos + 64 &&
@@ -340,6 +339,21 @@ var drawBuilding = function(context, buildObject) {
 				}
 		}
 
+		else if(buildObject.type == 'city' || buildObject.type == 'factory') {
+				
+				if(buildObject.owner == 0) {
+						buildImage.src = "/images/city_red.png";
+				}
+
+				else if(buildObject.owner == 1) {
+						buildImage.src = "/images/city_blue.png";
+				}
+
+				else if(buildObject.owner == -1) {
+						buildImage.src = "/images/city_neutral.png";
+				}
+		}
+
 		buildImage.onload = function() {
 				context.drawImage(buildImage, buildObject.xPos, buildObject.yPos);
 		}
@@ -456,13 +470,13 @@ socket.on('returnBuilding', function(building) {
 	addBuildToClient(tempBuild);
 })
 socket.on('returnUnit', function(unit) {
-	console.log('Unit sent back:', unit);
+	//console.log('Unit sent back:', unit);
 	var tempUnit = new Unit(unit.id, unit.gameid, unit.owner, unit.xpos, unit.ypos, unit.type);
 	addUnitToClient(tempUnit);
 });
 
 var addBuildToClient = function(building) {
-		console.log('Adding building to client:', building);
+		//console.log('Adding building to client:', building);
 		drawBuilding(context, building);
 		buildings.push(building);
 }
