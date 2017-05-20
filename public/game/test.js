@@ -153,6 +153,18 @@ function orderUnit(selectedUnit, unitPosInArray) {
 						}
 				}
 
+				for(var i in buildings) {
+						if (clickedX > buildings[i].xPos &&
+								clickedX < buildings[i].xPos + 32 &&
+								clickedY > buildings[i].yPos &&
+								clickedY < buildings[i].yPos + 32 &&
+								selectedUnit.owner != buildings[i].owner) {
+
+								captureBuilding(selectedUnit, i);
+								break;
+						}
+				}
+
 				if(entireArray > units.length - 1) {
 						units[unitPosInArray].xPos = clickedX;
 						units[unitPosInArray].yPos = clickedY;
@@ -180,6 +192,8 @@ function orderUnit(selectedUnit, unitPosInArray) {
 
 		updateAll();
 		return;
+} function captureBuilding(selectedUnit, buildPos) {
+		socket.emit('updateBuilding', buildings[buildPos], selectedUnit.owner, gameID);
 }
 
 function buyUnits(selectedBuild) {
@@ -270,11 +284,11 @@ function buyUnits(selectedBuild) {
 function updateAll() {
 		console.log('Updating all!');
 		context.drawImage(background, 0, 0);
-		for(var i in units) {
-				drawUnit(context, units[i]);
-		}
 		for(var i in buildings) {
 				drawBuilding(context, buildings[i]);
+		}
+		for(var i in units) {
+				drawUnit(context, units[i]);
 		}
 };
 
@@ -505,6 +519,19 @@ socket.on('updateUnit', function(unit) {
 	}
 
 	updateAll();
+});
+
+socket.on('updateBuilding', function (building, unitOwner) {
+		console.log('Building sent back:', building);
+		var tempBuilding = new Building(building.id, building.gameid, building.owner, building.xpos, building.ypos, building.type);
+
+		for(var i in buildings) {
+				if(buildings[i].id == tempBuilding.id) {
+						buildings[i].owner = unitOwner;
+				}
+		}
+
+		updateAll();
 });
 
 socket.on('removeUnit', function(unitID) {
