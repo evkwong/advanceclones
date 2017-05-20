@@ -46,7 +46,7 @@ router.post('/new_game', function(req, res) {
 						//Send variables to game js.
 						//res.send(path.basename('/images/map_' + map + '.png'));
 						var mapPath = path.basename('/images/map_' + mapID + '.png');
-						res.render('testGame', {title: title, mapPath: mapPath, gameID: gameID, player: player});
+						res.render('testGame', {title: title, mapPath: mapPath, gameID: gameID, player: player, user: req.user});
 					}
 				});
 			})
@@ -64,30 +64,39 @@ router.post('/join_game', function(req, res) {
 		var userID = req.user.id;
 		var playerNumber = 1;
 
-		db.one('UPDATE games SET totalplayers = totalplayers+1 WHERE id = $1 RETURNING *', [gameID])
-			.then(data => {
-				console.log(username, 'added to players of game:', gameID, 'Current number of players:', data.totalplayers);
+		db.one('SELECT * FROM games WHERE id = $1', [gameID])
+			.then(game => {
+				if (game.totalplayers < game.maxplayers) {
+					db.one('UPDATE games SET totalplayers = totalplayers+1 WHERE id = $1 RETURNING *', [gameID])
+						.then(data => {
+							insertPlayer(username, gameID, userID, playerNumber, function(err, player) {
+								if (err) throw err;
+								if (!player) console.log('No player found.');
+								else {
+									console.log(username, 'has joined the game.');
+
+									getGameByID(gameID, function(err, game, unitList, buildingList) {
+										if (err) throw err;
+										if (!game) console.log('Error: No game found!');
+										else {
+											res.render('testGame', {title: game.title, gameID: gameID, player: player, user: req.user});
+										}
+									})
+									
+								}
+							});
+						})
+						.catch(error => {
+							throw error;
+						})
+				}
+				else {
+					site.gameFull();
+				}
 			})
 			.catch(error => {
 				throw error;
 			})
-
-		insertPlayer(username, gameID, userID, playerNumber, function(err, player) {
-			if (err) throw err;
-			if (!player) console.log('No player found.');
-			else {
-				console.log(username, 'has joined the game.');
-
-				getGameByID(gameID, function(err, game, unitList) {
-					if (err) throw err;
-					if (!game) console.log('Error: No game found!');
-					else {
-						res.render('testGame', {title: game.title, gameID: gameID, player: player});
-					}
-				})
-				
-			}
-		});
 	}
 	else {
 		site.notLoggedIn(res);
@@ -100,11 +109,11 @@ router.post('/rejoin_game', function(req, res) {
 
 	db.one('SELECT * FROM players WHERE gameID = $1 AND userID = $2', [gameID, userID])
 		.then(player => {
-			getGameByID(gameID, function(err, game, unitList) {
+			getGameByID(gameID, function(err, game, unitList, buildingList) {
 				if (err) throw err;
 				if (!game) console.log('Error: No game found!');
 				else {
-					res.render('testGame', {title: game.title, gameID: gameID, player: player});
+					res.render('testGame', {title: game.title, gameID: gameID, player: player, user: req.user});
 				}
 			})
 		})
@@ -141,8 +150,8 @@ var insertPlayer = function(username, gameID, userID, playerNumber, callback) {
 	var gameID = gameID;
 	var userID = userID;
 	var playerNumber = playerNumber;
-	var income = 1000;
-	var wallet = 0;
+	var income = 4000;
+	var wallet = 4000;
 	var co = 0;
 	var specialMeter = 0;
 
@@ -159,7 +168,18 @@ var insertPlayer = function(username, gameID, userID, playerNumber, callback) {
 }
 
 var getUnitsByGameID = function(gameID, callback) {
-	db.manyOrNone('SELECT * FROM units WHERE gameID = $1', [gameID])
+	db.manyOrNone('SELECT * FROM units u, unittypes t WHERE gameID = $1 AND u.type = t.type', [gameID])
+		.then(data => {
+			console.log('Modified units:', data);
+			callback(null, data);
+		})
+		.catch(error => {
+			callback(error, false);
+		})
+}
+
+var getBuildingsByGameID = function(gameID, callback) {
+	db.manyOrNone('SELECT * FROM buildings WHERE gameID = $1', [gameID])
 		.then(data => {
 			callback(null, data);
 		})
@@ -177,7 +197,13 @@ module.exports.getGameByID = getGameByID = function(gameID, callback) {
 			getUnitsByGameID(gameID, function(err, unitList) {
 				if (err) throw err;
 				else {
-					callback(null, data, unitList);
+					getBuildingsByGameID(gameID, function(err, buildingList) {
+						if (err) throw err;
+						else {
+							callback(null, data, unitList, buildingList);
+						}
+					})
+					
 				}
 			})
 			
@@ -267,7 +293,6 @@ module.exports.startGame = function(gameID) {
 }
 
 module.exports.addUnit = function(data, gameID, callback) {
-	var gameID = gameID;
 	var owner = data.owner;
 	var xPos = data.xPos;
 	var yPos = data.yPos;
@@ -284,6 +309,36 @@ module.exports.addUnit = function(data, gameID, callback) {
 			callback(error, false);
 		})
 };
+
+module.exports.addBuilding = function(data, gameID, callback) {
+	var owner = data.owner;
+	var xPos = data.xPos;
+	var yPos = data.yPos;
+	var type = data.type;
+
+	db.one('INSERT INTO buildings(gameid, owner, xpos, ypos, type) VALUES ($1, $2, $3, $4, $5) RETURNING *', [gameID, owner, xPos, yPos, type])
+		.then(building => {
+			console.log('Stored a building in the DB:', building);
+			callback(null, building);
+		})
+		.catch(error => {
+			callback(error, false);
+		})
+}
+
+module.exports.updateBuilding = function(data, unitOwner, gameID, callback) {
+		var newBuildingOwner = unitOwner;
+		var buildingID = data.id;
+
+		db.one('UPDATE buildings SET owner = $1 WHERE id = $2 RETURNING *', [newBuildingOwner, buildingID])
+				.then(building => {
+					console.log('The building has been updated:', building);
+					callback(null, building);
+				})
+				.catch(err => {
+					callback(err, false);
+				})
+}
 
 module.exports.updateUnit = function(data, gameID, callback) {
 	var unitID = data.id;
@@ -314,13 +369,21 @@ module.exports.removeUnit = function(data, callback) {
 		});
 };
 
-module.exports.updateWallet = function(data, callback) {
-	var value = data.value;
-	var playerID = data.playerID;
-
-	db.one('UPDATE games SET wallet = wallet+$1 WHERE id = $2 RETURNING *', [value, playerID])
+module.exports.updateIncome = function(income, playerNumber, gameID, callback) {
+	db.one('UPDATE players SET income = $1 WHERE playernumber = $2 AND gameid = $3 RETURNING *', [income, playerNumber, gameID])
 		.then(player => {
-			console.log('Player wallet updated:', data.wallet);
+			console.log('Player from game', gameID, 'income updated.');
+			callback(null, player);
+		})
+		.catch(error => {
+			callback(error, false);
+		})
+}
+
+module.exports.updateWallet = function(playerID, gameID, callback) {
+	db.one('UPDATE players SET wallet = wallet + income WHERE playerid = $1 AND gameid = $2 RETURNING *', [playerID, gameID])
+		.then(player => {
+			console.log('Player wallet updated:', player);
 			callback(null, player);
 		})
 		.catch(error => {
@@ -328,10 +391,9 @@ module.exports.updateWallet = function(data, callback) {
 		});
 };
 
-module.exports.updatePlayerTurn = function(data, callback) {
-	if (data.currentplayerturn == 0) var nextPlayerTurn = 1;
+module.exports.updatePlayerTurn = function(currentPlayerTurn, gameID, callback) {
+	if (currentPlayerTurn == 0) var nextPlayerTurn = 1;
 	else var nextPlayerTurn = 0;
-	var gameID = data.gameid;
 
 	db.none('UPDATE games SET currentplayerturn = $1 WHERE id = $2', [nextPlayerTurn, gameID])
 		.then(data => {

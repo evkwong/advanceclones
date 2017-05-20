@@ -59,7 +59,8 @@ CREATE TABLE IF NOT EXISTS units
   xpos INTEGER,
   ypos INTEGER,
   health INTEGER,
-  type VARCHAR(25)
+  type VARCHAR(25),
+  moved BOOLEAN
 );
 
 -- UnitTypes Table
@@ -67,7 +68,6 @@ CREATE TABLE IF NOT EXISTS unitTypes
 (
   id SERIAL PRIMARY KEY,
   type VARCHAR(25),
-  sprite VARCHAR(100),
   cost INTEGER,
   damage INTEGER,
   health INTEGER,
@@ -82,21 +82,19 @@ CREATE TABLE IF NOT EXISTS buildings
 (
   id SERIAL PRIMARY KEY,
   gameID INTEGER,
-  buildingID INTEGER,
   owner INTEGER,
-  posX INTEGER,
-  posY INTEGER,
-  health INTEGER,
-  type INTEGER
+  xPos INTEGER,
+  yPos INTEGER,
+  type VARCHAR(25)
 );
 
 -- BuildingTypes Table
 CREATE TABLE IF NOT EXISTS buildingTypes
 (
   id SERIAL PRIMARY KEY,
-  name VARCHAR(25),
+  type VARCHAR(25),
   sprite VARCHAR(100),
-  income INTEGER
+  income VARCHAR(25)
 );
 
 -- Maps Table
