@@ -82,11 +82,9 @@ CREATE TABLE IF NOT EXISTS buildings
 (
   id SERIAL PRIMARY KEY,
   gameID INTEGER,
-  buildingID INTEGER,
   owner INTEGER,
-  posX INTEGER,
-  posY INTEGER,
-  health INTEGER,
+  xPos INTEGER,
+  yPos INTEGER,
   type VARCHAR(25)
 );
 
@@ -94,7 +92,7 @@ CREATE TABLE IF NOT EXISTS buildings
 CREATE TABLE IF NOT EXISTS buildingTypes
 (
   id SERIAL PRIMARY KEY,
-  name VARCHAR(25),
+  type VARCHAR(25),
   sprite VARCHAR(100),
   income VARCHAR(25)
 );
