@@ -207,7 +207,6 @@ function orderUnit(selectedUnit, unitPosInArray) {
 				units[attacking].xPos = units[receiving].xPos;
 				units[attacking].yPos = units[receiving].yPos;
 				socket.emit('removeUnit', units[receiving], gameID);
-				socket.emit('updateUnit', units[attacking], gameID);
 				units.splice(receiving, 1);
 		}
 
@@ -639,6 +638,12 @@ socket.on('updateBuilding', function (building) {
 
 socket.on('removeUnit', function(unitID) {
 	//Implement unit deletion here.
+		for(i in units) {
+				if(units[i].id == unitID) {
+						units.splice(i, 1);
+						break;
+				}
+		}
 });
 
 socket.on('returnPlayer', function(player) {

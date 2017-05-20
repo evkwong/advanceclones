@@ -133,10 +133,7 @@ var init = (app, server) => {
 
 		socket.on('winner', function(gameID) {
 			console.log('Game ', gameID, 'finished');
-			if (err) throw err;
-			else {
-				io.to(gameID).emit('loser');
-			}
+			io.to(gameID).emit('loser');
 		});
 
 		//Disconnect.
