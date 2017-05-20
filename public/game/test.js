@@ -112,7 +112,7 @@ function selectThing(e) {
 		for(i in units) { 
 				if (clickedX > units[i].xPos && clickedX < units[i].xPos + 32 && 
 						clickedY > units[i].yPos && clickedY < units[i].yPos + 32 &&
-						units[i].owner == player.playernumber) {
+						units[i].owner == player.playernumber && units[i].moved == false) {
 								console.log("Clicked on unit", units[i].xPos, units[i].yPos);
 								orderUnit(units[i], i);
 				}
@@ -169,6 +169,8 @@ function orderUnit(selectedUnit, unitPosInArray) {
 						units[unitPosInArray].xPos = clickedX;
 						units[unitPosInArray].yPos = clickedY;
 				}
+
+				selectedUnit.moved = true;
 
 				//Socket io unit update.
 				socket.emit('updateUnit', selectedUnit, gameID);
@@ -287,13 +289,13 @@ function updateAll() {
 		console.log('Updating all!');
 		context.drawImage(background, 0, 0);
 		for(var i in buildings) {
-				buildings[i].xPos = snap32(buildings[i].xPos);
-				buildings[i].yPos = snap32(buildings[i].yPos);
+				buildings[i].xPos = snapRound(buildings[i].xPos);
+				buildings[i].yPos = snapRound(buildings[i].yPos);
 				drawBuilding(context, buildings[i]);
 		}
 		for(var i in units) {
-				units[i].xPos = snap32(units[i].xPos);
-				units[i].yPos = snap32(units[i].yPos);
+				//units[i].xPos = snapCeil(units[i].xPos);
+				//units[i].yPos = snapCeil(units[i].yPos);
 				drawUnit(context, units[i]);
 		}
 };
@@ -310,7 +312,14 @@ function calculatePlayerIncome() {
 		console.log("TotalIncome: ", totalIncome);
 		return totalIncome;
 }
-function snap32(value) {
+function snapRound(value) {
+	var result = Math.round(value / 32) * 32;
+	if (result == 0) result++;
+
+	return result;
+}
+
+function snapCeil(value) {
 	var result = Math.floor(value / 32) * 32;
 	if (result == 0) result++;
 
@@ -415,6 +424,7 @@ var Unit = function(id, gameID, owner, xPos, yPos, type) {
 		this.gameID = gameID;
 		this.owner = owner;
 		this.type = type;
+		this.moved = true;
 
 		if(this.type == "infantry") {
 				this.health = 50;
@@ -449,16 +459,16 @@ function setDefaultState() {
 		createBuilding(context, gameID, 1, 579, 101, "factory");
 
 		//Build Neutral Building
-		createBuilding(context, gameID, -1, 388, 163, "factory");
-		createBuilding(context, gameID, -1, 127, 95, "city");
-		createBuilding(context, gameID, -1, 229, 29, "city");
-		createBuilding(context, gameID, -1, 228, 123, "city");
-		createBuilding(context, gameID, -1, 228, 286, "city");
-		createBuilding(context, gameID, -1, 261, 286, "city");
-		createBuilding(context, gameID, -1, 324, 2, "city");
-		createBuilding(context, gameID, -1, 357, 2, "city");
-		createBuilding(context, gameID, -1, 389, 94, "city");
-		createBuilding(context, gameID, -1, 547, 285, "city");
+		createBuilding(context, gameID, -1, 383, 159, "factory");
+		createBuilding(context, gameID, -1, 96, 64, "city");
+		createBuilding(context, gameID, -1, 223, 31, "city");
+		createBuilding(context, gameID, -1, 223, 123, "city");
+		createBuilding(context, gameID, -1, 223, 287, "city");
+		createBuilding(context, gameID, -1, 255, 287, "city");
+		createBuilding(context, gameID, -1, 319, 2, "city");
+		createBuilding(context, gameID, -1, 351, 2, "city");
+		createBuilding(context, gameID, -1, 383, 95, "city");
+		createBuilding(context, gameID, -1, 543, 287, "city");
 
 		//Default Units
 		console.log('Creating test units!');
@@ -479,6 +489,12 @@ endTurnButton.onclick = function() {
 socket.on('updatePlayerTurn', function(nextPlayerTurn) {
 	console.log('Received new player turn from DB:', nextPlayerTurn);
 	currentPlayerTurn = nextPlayerTurn;
+	for(var i in units) {
+		if (units[i].owner == currentPlayerTurn) {
+			units[i].moved = false;
+		}
+	}
+
 	updatePlayerTurnDisplay();
 	var income = calculatePlayerIncome();
 	socket.emit('updateIncome', income, currentPlayerTurn, gameID);
@@ -540,6 +556,8 @@ socket.on('updateUnit', function(unit) {
 		if (units[i].id == tempUnit.id) {
 			units[i].xPos = tempUnit.xPos;
 			units[i].yPos = tempUnit.yPos;
+			units[i].health = tempUnit.health;
+			units[i].moved = unit.moved;
 		}
 	}
 
@@ -566,6 +584,7 @@ socket.on('removeUnit', function(unitID) {
 socket.on('returnPlayer', function(player) {
 	//Implement player update here.
 });
+
 
 //Chat functionality.
 var messages = [];
