@@ -15,10 +15,11 @@ socket.on('socketInfo', function(data) {
 });
 
 //Game setup.
+var game = null;
 var currentPlayerTurn = 0;
 socket.emit('getGameInfo', gameID);
 socket.on('gameInfo', function(data) {
-	var game = data.game;
+	game = data.game;
 	var unitList = data.unitlist;
 	var buildingList = data.buildingList;
 	console.log('Game data received:', game);
@@ -32,7 +33,6 @@ socket.on('gameInfo', function(data) {
 	{
 		//Load current game state.
 		currentPlayerTurn = game.currentplayerturn;
-		updatePlayerTurnDisplay();
 
 		//Load units.
 		for (i = 0; i < unitList.length; i++) {
@@ -48,6 +48,8 @@ socket.on('gameInfo', function(data) {
 		}
 		
 	}
+
+	updatePlayerTurnDisplay();
 });
 
 //Map setup.
@@ -426,13 +428,15 @@ socket.on('updatePlayerTurn', function(nextPlayerTurn) {
 
 var updatePlayerTurnDisplay = function() {
 	if (currentPlayerTurn == 0) {
-		var player = 'Red';
+		var playerColor = 'Red';
 	}
 	else {
-		var player = 'Blue';
+		var playerColor = 'Blue';
 	}
-	currentPlayerTurnDisplay.innerHTML = player + ' player\'s turn!';
-	if (player.playerNumber != currentPlayerTurn) {
+
+	currentPlayerTurnDisplay.innerHTML = playerColor + ' player\'s turn!';
+
+	if (player.playernumber != currentPlayerTurn) {
 		endTurnButton.style.visibility = 'hidden';
 	}
 	else {

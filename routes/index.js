@@ -5,7 +5,7 @@ var site = require('./site');
 
 //Landing Page
 router.get('/', function(req, res, next) {
-  res.render('index.jade', { title: 'Advance Clones' });
+  res.render('index.jade', { title: 'Advance Clones', user: req.user });
 });
 
 //Registration Page
@@ -19,20 +19,20 @@ router.get('/lobby', function(req,res, next) {
 		if (err) throw err;
 		if (!gameList) console.log('Error: No data returned.');
 		else {
-			res.render('lobby.jade', {title: 'Lobby', games: gameList});
+			res.render('lobby.jade', {title: 'Lobby', games: gameList, user: req.user});
 		}
 
 	});
 });
 
-//Comment this out?
+
 router.get('/game', function(req, res, next) {
-	res.render('testGame.jade', { title: 'Game'});
+	res.render('testGame.jade', { title: 'Game', user: req.user});
 });
 
 //Create Game Page
 router.get('/createGame', function(req, res, next) {
-	res.render('createGame.jade', {title: 'Create Game'});
+	res.render('createGame.jade', {title: 'Create Game', user: req.user});
 });
 
 router.get('/profile', function(req, res, next) {

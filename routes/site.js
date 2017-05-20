@@ -9,3 +9,9 @@ module.exports.loggedOut = function(res) {
 	var messages = [message];
 	res.render('index', {messages: messages});
 }
+
+module.exports.gameFull = function(res) {
+	var error = {msg: 'That game is currently full.'};
+	var errors = [error];
+	res.render('lobby', {errors: errors});
+}
