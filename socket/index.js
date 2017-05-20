@@ -68,6 +68,7 @@ var init = (app, server) => {
 				}
 			});
 		});
+	
 
 		socket.on('createBuilding', function(data, gameID) {
 			console.log('Received building from client:', data);
