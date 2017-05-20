@@ -84,8 +84,8 @@ CREATE TABLE IF NOT EXISTS buildings
   gameID INTEGER,
   buildingID INTEGER,
   owner INTEGER,
-  posX INTEGER,
-  posY INTEGER,
+  xpos INTEGER,
+  ypos INTEGER,
   health INTEGER,
   type VARCHAR(25)
 );
