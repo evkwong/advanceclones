@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS unitTypes
   type VARCHAR(25),
   cost INTEGER,
   damage INTEGER,
-  health INTEGER,
+  maxhealth INTEGER,
   range INTEGER,
   speed INTEGER,
   movementType VARCHAR(25)
