@@ -59,7 +59,8 @@ CREATE TABLE IF NOT EXISTS units
   xpos INTEGER,
   ypos INTEGER,
   health INTEGER,
-  type VARCHAR(25)
+  type VARCHAR(25),
+  moved BOOLEAN
 );
 
 -- UnitTypes Table
@@ -67,7 +68,6 @@ CREATE TABLE IF NOT EXISTS unitTypes
 (
   id SERIAL PRIMARY KEY,
   type VARCHAR(25),
-  sprite VARCHAR(100),
   cost INTEGER,
   damage INTEGER,
   health INTEGER,
