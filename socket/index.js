@@ -81,32 +81,32 @@ var init = (app, server) => {
 			});
     });
 
-		socket.on('removeUnit', function(data) {
+		socket.on('removeUnit', function(data, gameID) {
 			console.log('Removing unit from DB:', data);
 			game.removeUnit(data, function(err, unitID) {
 				if (err) throw err;
 				else {
-					socket.emit('removeUnit', unitID);
+					io.to(gameID).emit('removeUnit', unitID);
 				}
 			});
 		});
 		
-		socket.on('updateWallet', function(data) {
+		socket.on('updateWallet', function(data, gameID) {
 			console.log('Updating wallet:', data);
 			game.updateWallet(data, function(err, player) {
 				if (err) throw err;
 				else {
-					socket.emit('updateWallet', player);
+					io.to(gameID).emit('updateWallet', player);
 				}
 			});
 		});
 
-		socket.on('updatePlayerTurn', function(data) {
-			console.log('Updating player turn.', data);
-			game.updatePlayerTurn(data, function(err, nextPlayerTurn) {
+		socket.on('updatePlayerTurn', function(currentPlayerTurn, gameID) {
+			console.log('Updating player turn for game:', currentPlayerTurn);
+			game.updatePlayerTurn(currentPlayerTurn, gameID, function(err, nextPlayerTurn) {
 				if (err) throw err;
 				else {
-					socket.emit('updatePlayerTurn', nextPlayerTurn);
+					io.to(gameID).emit('updatePlayerTurn', nextPlayerTurn);
 				}
 			})
 		});

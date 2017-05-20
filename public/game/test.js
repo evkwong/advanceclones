@@ -418,7 +418,7 @@ function setDefaultState() {
 //Socket.io for updating game state.
 endTurnButton.onclick = function() {
   console.log('Attempting to update player turn.');
-  socket.emit('updatePlayerTurn', {currentplayerturn: currentPlayerTurn, gameid: gameID});
+  socket.emit('updatePlayerTurn', currentPlayerTurn, gameID);
 };
 
 socket.on('updatePlayerTurn', function(nextPlayerTurn) {
