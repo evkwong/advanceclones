@@ -325,6 +325,20 @@ module.exports.addBuilding = function(data, gameID, callback) {
 		})
 }
 
+module.exports.updateBuilding = function(data, owner, gameID, callback) {
+		var newBuildingOwner = owner;
+		var buildingID = data.id;
+
+		db.one('UPDATE buildings SET owner = $1 WHERE id = $2 RETURNING *', [newBuildingOwner, buildingID])
+				.then(building => {
+						console.log('The building has been updated:', building);
+						callback(null, building);
+				})
+				.catch(err => {
+					callback(err, false);
+				})
+}
+
 module.exports.updateUnit = function(data, gameID, callback) {
 	var unitID = data.id;
 	var xPos = data.xPos;
