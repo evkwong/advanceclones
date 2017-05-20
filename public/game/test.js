@@ -20,6 +20,7 @@ socket.emit('getGameInfo', gameID);
 socket.on('gameInfo', function(data) {
 	var game = data.game;
 	var unitList = data.unitlist;
+	var buildingList = data.buildingList;
 	console.log('Game data received:', game);
 	console.log('Unit list:', unitList);
 	if (!game.started) {
@@ -38,6 +39,12 @@ socket.on('gameInfo', function(data) {
 			unit = unitList[i];
 			var tempUnit = new Unit(unit.id, unit.gameid, unit.owner, unit.xpos, unit.ypos, unit.type);
 			addUnitToClient(tempUnit);
+		}
+
+		for (i in buildingList) {
+				building = buildingList[i]
+				var tempBuild = new Build(building.id, building.gameid, building.owner, building.xpos, building.ypos, building.type);
+				addBuildToClient(tempBuild);
 		}
 		
 	}
@@ -437,12 +444,23 @@ socket.on('clientConsoleMessage', function(data) {
 	console.log('Message received:', data.message);
 })
 
+socket.on('returnBuilding', function(building) {
+	console.log('Building sent back:', building);
+	var tempBuild = new Building(building.id, building.gameid, building.owner, building.xpos, 
+		building.ypos, building.type);
+	addBuildToClient(tempBuild);
+})
 socket.on('returnUnit', function(unit) {
 	console.log('Unit sent back:', unit);
 	var tempUnit = new Unit(unit.id, unit.gameid, unit.owner, unit.xpos, unit.ypos, unit.type);
 	addUnitToClient(tempUnit);
 });
 
+var addBuildToClient = function(building) {
+		console.log('Adding building to client:', building);
+		drawBuilding(context, building);
+		buildings.push(building);
+}
 var addUnitToClient = function(unit) {
 	console.log('Adding unit to client:', unit);
 	drawUnit(context, unit);

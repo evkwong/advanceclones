@@ -32,10 +32,10 @@ var init = (app, server) => {
 
 		//Game state.
     socket.on('getGameInfo', function(gameID) {
-      game.getGameByID(gameID, function(err, game, unitList) {
+      game.getGameByID(gameID, function(err, game, unitList, buildingList) {
         if (err) throw err;
         else {
-          socket.emit('gameInfo', {game: game, unitlist: unitList});
+          socket.emit('gameInfo', {game: game, unitlist: unitList, buildingList});
         }
       })
     })
