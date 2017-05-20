@@ -168,8 +168,9 @@ var insertPlayer = function(username, gameID, userID, playerNumber, callback) {
 }
 
 var getUnitsByGameID = function(gameID, callback) {
-	db.manyOrNone('SELECT * FROM units WHERE gameID = $1', [gameID])
+	db.manyOrNone('SELECT * FROM units u, unittypes t WHERE gameID = $1 AND u.type = t.type', [gameID])
 		.then(data => {
+			console.log('Modified units:', data);
 			callback(null, data);
 		})
 		.catch(error => {
@@ -325,14 +326,14 @@ module.exports.addBuilding = function(data, gameID, callback) {
 		})
 }
 
-module.exports.updateBuilding = function(data, owner, gameID, callback) {
-		var newBuildingOwner = owner;
+module.exports.updateBuilding = function(data, unitOwner, gameID, callback) {
+		var newBuildingOwner = unitOwner;
 		var buildingID = data.id;
 
 		db.one('UPDATE buildings SET owner = $1 WHERE id = $2 RETURNING *', [newBuildingOwner, buildingID])
 				.then(building => {
-						console.log('The building has been updated:', building);
-						callback(null, building);
+					console.log('The building has been updated:', building);
+					callback(null, building);
 				})
 				.catch(err => {
 					callback(err, false);

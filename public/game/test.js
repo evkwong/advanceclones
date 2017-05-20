@@ -521,13 +521,13 @@ socket.on('updateUnit', function(unit) {
 	updateAll();
 });
 
-socket.on('updateBuilding', function (building, unitOwner) {
+socket.on('updateBuilding', function (building) {
 		console.log('Building sent back:', building);
 		var tempBuilding = new Building(building.id, building.gameid, building.owner, building.xpos, building.ypos, building.type);
 
 		for(var i in buildings) {
 				if(buildings[i].id == tempBuilding.id) {
-						buildings[i].owner = unitOwner;
+						buildings[i].owner = building.owner;
 				}
 		}
 

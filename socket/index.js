@@ -80,9 +80,9 @@ var init = (app, server) => {
 			});
 });
 
-		socket.on('updateBuilding', function(data, owner, gameID) {
+		socket.on('updateBuilding', function(data, unitOwner, gameID) {
 				console.log('Building to be updated received: ', data);
-				game.updateBuilding(data, owner, gameID, function(err, building) {
+				game.updateBuilding(data, unitOwner, gameID, function(err, building) {
 					if (err) throw err;
 					else {
 						io.to(gameID).emit('updateBuilding', building);
