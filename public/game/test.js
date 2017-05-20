@@ -23,9 +23,8 @@ socket.on('gameInfo', function(data) {
 	var unitList = data.unitlist;
 	var buildingList = data.buildingList;
 	console.log('Game data received:', game);
-	console.log('Unit list:', unitList);
+	//console.log('Unit list:', unitList);
 	if (!game.started) {
-		console.log('Attempting to start game.');
 		setDefaultState();
 		socket.emit('startGame', gameID);
 	}
@@ -43,7 +42,6 @@ socket.on('gameInfo', function(data) {
 
 		for (i = 0; i <  buildingList.length; i++) {
 				building = buildingList[i]
-				console.log(building);
 				var tempBuild = new Building(building.id, building.gameid, building.owner, building.xpos, building.ypos, building.type);
 				addBuildToClient(tempBuild);
 		}
@@ -109,20 +107,22 @@ function selectThing(e) {
 
 		console.log("x: ", clickedX , 'y: ', clickedY);
 
-		for(i in units) { 
+		for(var i in units) { 
 				if (clickedX > units[i].xPos && clickedX < units[i].xPos + 32 && 
 						clickedY > units[i].yPos && clickedY < units[i].yPos + 32 &&
 						units[i].owner == player.playernumber && units[i].moved == false) {
 								console.log("Clicked on unit", units[i].xPos, units[i].yPos);
 								orderUnit(units[i], i);
+								break;
 				}
 		}
-		for(i in buildings) {
+		for(var i in buildings) {
 				if(clickedX > buildings[i].xPos && clickedX < buildings[i].xPos + 32 &&
 					 clickedY > buildings[i].yPos && clickedY < buildings[i].yPos + 64 &&
 						buildings[i].type == "hq" && buildings[i].owner == player.playernumber) {
 							console.log("Clicked on building", buildings[i].xPos, buildings[i].yPos);
 							buyUnits(buildings[i]);
+							break;
 				}
 
 		}
@@ -149,7 +149,7 @@ function orderUnit(selectedUnit, unitPosInArray) {
 								clickedX < units[i].xPos + 32 && 
 								clickedY > units[i].yPos && 
 								clickedY < units[i].yPos + 32 )) {
-								entireArray++;	
+								entireArray++;
 						}
 				}
 
@@ -168,12 +168,11 @@ function orderUnit(selectedUnit, unitPosInArray) {
 				if(entireArray > units.length - 1) {
 						units[unitPosInArray].xPos = clickedX;
 						units[unitPosInArray].yPos = clickedY;
+						units[unitPosInArray].moved = true;
 				}
 
-				selectedUnit.moved = true;
-
 				//Socket io unit update.
-				socket.emit('updateUnit', selectedUnit, gameID);
+				socket.emit('updateUnit', units[unitPosInArray], gameID);
 
 				return;
 		});
@@ -220,22 +219,23 @@ function buyUnits(selectedBuild) {
 						spawnY = selectedBuild.yPos;
 				}
 
-				if(clickedX > 160 && clickedX < 200 && clickedY > 256 && clickedY < 296) {
+				if(clickedX > 160 && clickedX < 200 && clickedY > 256 && clickedY < 296 && player.wallet > 1000) {
 						createUnit(context, gameID, currentPlayerTurn, spawnX, spawnY, "infantry");
 				}
 
-				if(clickedX > 225 && clickedX < 265 && clickedY > 256 && clickedY < 296) {
+				if(clickedX > 225 && clickedX < 265 && clickedY > 256 && clickedY < 296 && player.wallet > 3000) {
 						createUnit(context, gameID, currentPlayerTurn, spawnX, spawnY, "mech");
 				}
 
-				if(clickedX > 287 && clickedX < 327 && clickedY > 256 && clickedY < 296) {
+				if(clickedX > 287 && clickedX < 327 && clickedY > 256 && clickedY < 296 && player.wallet > 4000) {
 						createUnit(context, gameID, currentPlayerTurn, spawnX, spawnY, "recon");
 				}
 
-				if(clickedX > 353 && clickedX < 393 && clickedY > 256 && clickedY < 296) {
+				if(clickedX > 353 && clickedX < 393 && clickedY > 256 && clickedY < 296 && player.wallet > 7000) {
 						createUnit(context, gameID, currentPlayerTurn, spawnX, spawnY, "tank");
 				}
 
+				socket.emit("updateWallet", currentPlayerTurn, gameID);
 				updateAll();
 				return;
 		});
@@ -286,7 +286,6 @@ function buyUnits(selectedBuild) {
 };
 
 function updateAll() {
-		console.log('Updating all!');
 		context.drawImage(background, 0, 0);
 		for(var i in buildings) {
 				buildings[i].xPos = snapRound(buildings[i].xPos);
@@ -294,14 +293,13 @@ function updateAll() {
 				drawBuilding(context, buildings[i]);
 		}
 		for(var i in units) {
-				//units[i].xPos = snapCeil(units[i].xPos);
-				//units[i].yPos = snapCeil(units[i].yPos);
+				units[i].xPos = snapCeil(units[i].xPos);
+				units[i].yPos = snapCeil(units[i].yPos);
 				drawUnit(context, units[i]);
 		}
 };
 
 function calculatePlayerIncome() {
-		console.log('Time to update wallet');
 		var totalIncome = 0;
 		for(i in buildings) {
 			if(buildings[i].owner == currentPlayerTurn) {
@@ -309,7 +307,6 @@ function calculatePlayerIncome() {
 			}
 		}
 
-		console.log("TotalIncome: ", totalIncome);
 		return totalIncome;
 }
 function snapRound(value) {
@@ -427,8 +424,27 @@ var Unit = function(id, gameID, owner, xPos, yPos, type) {
 		this.moved = true;
 
 		if(this.type == "infantry") {
-				this.health = 50;
-				this.damage = 20;
+				this.health = 1;
+				this.damage = 1;
+				this.distance = 96;
+		}
+
+		if(this.type == "mech") {
+				this.health = 2;
+				this.damage = 2;
+				this.distance = 64;
+		}
+
+		if(this.type == "recon") {
+				this.health = 3;
+				this.damage = 1;
+				this.distance = 256;
+		}
+
+		if(this.type == "tank") {
+				this.health = 4;
+				this.damage = 4;
+				this.distance = 160;
 		}
 };
 
@@ -443,7 +459,6 @@ var createUnit = function(context, gameID, owner, xPos, yPos, type) {
 };
 
 function setDefaultState() {
-		console.log('Setting up map.');
 
 		createBuilding(context, gameID, 0, 1, 256, "hq");
 		createBuilding(context, gameID, 1, 577, 1, "hq");
@@ -471,13 +486,10 @@ function setDefaultState() {
 		createBuilding(context, gameID, -1, 543, 287, "city");
 
 		//Default Units
-		console.log('Creating test units!');
 		createUnit(context, gameID, currentPlayerTurn, 1, 1, "infantry");
 		createUnit(context, gameID, 1, 550, 1, "infantry");
 
 		updateAll();
-
-		console.log(buildings);
 }
 
 //Socket.io for updating game state.
@@ -524,39 +536,32 @@ socket.on('clientConsoleMessage', function(data) {
 })
 
 socket.on('returnUnit', function(unit) {
-	console.log('Unit sent back:', unit);
 	var tempUnit = new Unit(unit.id, unit.gameid, unit.owner, unit.xpos, unit.ypos, unit.type);
 	addUnitToClient(tempUnit);
 });
 
 socket.on('returnBuilding', function(building) {
-	console.log('Building sent back:', building);
 	var tempBuild = new Building(building.id, building.gameid, building.owner, building.xpos, 
 		building.ypos, building.type);
 	addBuildToClient(tempBuild);
 })
 
 var addBuildToClient = function(building) {
-	console.log('Adding building to client:', building);
-	updateAll();
 	buildings.push(building);
+	updateAll();
 }
 var addUnitToClient = function(unit) {
-	console.log('Adding unit to client:', unit);
-	updateAll();
 	units.push(unit);
+	updateAll();
 }
 
 socket.on('updateUnit', function(unit) {
-	console.log('Unit sent back:', unit);
-	var tempUnit = new Unit(unit.id, unit.gameid, unit.owner, unit.xpos, unit.ypos, unit.type);
-
 	console.log('Here are all the units:', units);
 	for (i = 0; i < units.length; i++) {
-		if (units[i].id == tempUnit.id) {
-			units[i].xPos = tempUnit.xPos;
-			units[i].yPos = tempUnit.yPos;
-			units[i].health = tempUnit.health;
+		if (units[i].id == unit.id) {
+			units[i].xPos = unit.xpos;
+			units[i].yPos = unit.ypos;
+			units[i].health = unit.health;
 			units[i].moved = unit.moved;
 		}
 	}
@@ -565,7 +570,6 @@ socket.on('updateUnit', function(unit) {
 });
 
 socket.on('updateBuilding', function (building) {
-		console.log('Building sent back:', building);
 		var tempBuilding = new Building(building.id, building.gameid, building.owner, building.xpos, building.ypos, building.type);
 
 		for(var i in buildings) {
