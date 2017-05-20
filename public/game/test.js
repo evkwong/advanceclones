@@ -501,6 +501,7 @@ endTurnButton.onclick = function() {
 socket.on('updatePlayerTurn', function(nextPlayerTurn) {
 	console.log('Received new player turn from DB:', nextPlayerTurn);
 	currentPlayerTurn = nextPlayerTurn;
+	
 	for(var i in units) {
 		if (units[i].owner == currentPlayerTurn) {
 			units[i].moved = false;
@@ -548,11 +549,12 @@ socket.on('returnBuilding', function(building) {
 
 var addBuildToClient = function(building) {
 	buildings.push(building);
-	updateAll();
+	drawBuilding(context, building);
 }
 var addUnitToClient = function(unit) {
 	units.push(unit);
-	updateAll();
+	drawUnit(context, unit);
+	
 }
 
 socket.on('updateUnit', function(unit) {

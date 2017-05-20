@@ -168,9 +168,8 @@ var insertPlayer = function(username, gameID, userID, playerNumber, callback) {
 }
 
 var getUnitsByGameID = function(gameID, callback) {
-	db.manyOrNone('SELECT * FROM units u, unittypes t WHERE gameID = $1 AND u.type = t.type', [gameID])
+	db.manyOrNone('SELECT * FROM units WHERE gameID = $1', [gameID])
 		.then(data => {
-			console.log('Modified units:', data);
 			callback(null, data);
 		})
 		.catch(error => {
