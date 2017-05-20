@@ -150,8 +150,8 @@ var insertPlayer = function(username, gameID, userID, playerNumber, callback) {
 	var gameID = gameID;
 	var userID = userID;
 	var playerNumber = playerNumber;
-	var income = 1000;
-	var wallet = 0;
+	var income = 4000;
+	var wallet = 4000;
 	var co = 0;
 	var specialMeter = 0;
 
@@ -369,13 +369,21 @@ module.exports.removeUnit = function(data, callback) {
 		});
 };
 
-module.exports.updateWallet = function(data, callback) {
-	var value = data.value;
-	var playerID = data.playerID;
-
-	db.one('UPDATE games SET wallet = wallet+$1 WHERE id = $2 RETURNING *', [value, playerID])
+module.exports.updateIncome = function(income, playerNumber, gameID, callback) {
+	db.one('UPDATE players SET income = $1 WHERE playernumber = $2 AND gameid = $3 RETURNING *', [income, playerNumber, gameID])
 		.then(player => {
-			console.log('Player wallet updated:', data.wallet);
+			console.log('Player from game', gameID, 'income updated.');
+			callback(null, player);
+		})
+		.catch(error => {
+			callback(error, false);
+		})
+}
+
+module.exports.updateWallet = function(playerNumber, gameID, callback) {
+	db.one('UPDATE players SET wallet = wallet + income WHERE playernumber = $1 AND gameid = $2 RETURNING *', [playerNumber, gameID])
+		.then(player => {
+			console.log('Player wallet updated:', player);
 			callback(null, player);
 		})
 		.catch(error => {
