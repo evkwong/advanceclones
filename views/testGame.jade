@@ -26,10 +26,9 @@ html
 
 				div.chat_content
 					h3 Chat
-						p
-							.content(name='chat-content')
-								br
-								input(name='chat-text-area')
-								input(type='button', value='send')
+					.content(name='chat-content', id='content')
+					br
+					input(name='chat-text-area', id='field')
+					input(type='button', value='send', id='send')
 
 				script(src='/game/test.js')

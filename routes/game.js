@@ -312,7 +312,7 @@ module.exports.addUnit = function(data, gameID, callback) {
 module.exports.addBuilding = function(data, gameID, callback) {
 	var owner = data.owner;
 	var xPos = data.xPos;
-	var yPos = data.xPos;
+	var yPos = data.yPos;
 	var type = data.type;
 
 	db.one('INSERT INTO buildings(gameid, owner, xpos, ypos, type) VALUES ($1, $2, $3, $4, $5) RETURNING *', [gameID, owner, xPos, yPos, type])

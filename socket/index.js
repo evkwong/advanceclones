@@ -26,8 +26,9 @@ var init = (app, server) => {
 		})
 
 		//Chat. 
-		socket.on('send', function(data, gameID) {
-			io.to(gameID).emit('chatMessage', data);
+		socket.on('sendChatMessage', function(data, gameID) {
+			console.log('Chat data received:', data);
+			io.to(gameID).emit('getChatMessage', data);
 		})
 
 		//Game state.
@@ -69,16 +70,14 @@ var init = (app, server) => {
 		});
 
 	    socket.on('createBuilding', function(data, gameID) {
-	      console.log('Received unit from client:', data);
-				console.log('Room:', gameID);
-				game.addBuilding(data, gameID, function(err, building) {
-						if (err) throw err;
-						if (!data) console.log('No data returned');
-						else {
-								console.log('Returning', building, 'to', gameID);
-								io.to(gameID).emit('returnBuilding', building);
-						}
-				});
+	      	console.log('Received building from client:', data);
+			game.addBuilding(data, gameID, function(err, building) {
+				if (err) throw err;
+				else {
+					console.log('Returning', building, 'to', gameID);
+					io.to(gameID).emit('returnBuilding', building);
+				}
+			});
 	    });
 
 		socket.on('removeUnit', function(data, gameID) {
